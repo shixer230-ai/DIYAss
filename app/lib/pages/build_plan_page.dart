@@ -8,10 +8,8 @@ import '../cloud/cloud_sync.dart';
 import '../analysis/value_index.dart';
 import '../data/hardware_library.dart';
 import '../models/build_plan.dart';
-import '../models/hardware_item.dart';
 import '../models/hardware_spec.dart';
 import '../storage/build_plan_store.dart';
-import '../storage/hardware_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
 import 'component_picker_page.dart';
@@ -427,128 +425,6 @@ class _BuildPlanPageState extends State<BuildPlanPage>
     });
   }
 
-  Future<void> _saveToItems() async {
-    final plan = _current;
-    if (plan == null || plan.components.isEmpty) return;
-    if (plan.total <= 0) {
-      _snack('整机价格不能为 0，请先为配件填写价格');
-      return;
-    }
-
-    final store = HardwareStore();
-    final items = await store.loadAll();
-    if (!mounted) return;
-    final existingIndex = items.indexWhere((e) => e.planId == plan.id);
-
-    // 首次保存：确认后直接新增
-    if (existingIndex < 0) {
-      final ok = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('保存到清单'),
-          content: Text('把整机方案「${_planName(plan)}」作为一个整体加入「我的硬件清单」吗？'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('取消'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('保存'),
-            ),
-          ],
-        ),
-      );
-      if (ok != true) return;
-      await store.add(_newItem(plan, _planName(plan)));
-      _snack('已把「${_planName(plan)}」加入清单');
-      return;
-    }
-
-    // 已经保存过这个方案：让用户选「覆盖原来的 / 另存为新名称 / 取消」
-    final choice = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('清单里已有这个方案'),
-        content: Text('清单里已经保存过「${_planName(plan)}」，要覆盖原来的条目，还是另存一份新名称的？'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'overwrite'),
-            child: const Text('覆盖原来的'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, 'new'),
-            style: capsuleButtonStyle(Theme.of(context), fullWidth: false),
-            child: const Text('另存为新名称'),
-          ),
-        ],
-      ),
-    );
-    if (choice == null) return;
-    if (!mounted) return;
-
-    if (choice == 'overwrite') {
-      // 覆盖：保留原条目的 id 和录入时间，刷新价格/摘要/名称
-      final old = items[existingIndex];
-      items[existingIndex] = HardwareItem(
-        id: old.id,
-        category: '整机方案',
-        brand: '',
-        model: _planName(plan),
-        price: plan.total,
-        platform: '',
-        spec: _summary(plan),
-        planId: plan.id,
-        createdAt: old.createdAt,
-      );
-      await store.saveAll(items);
-      _snack('已更新清单里的「${_planName(plan)}」');
-    } else {
-      // 另存为新名称：新建一条快照条目，仍关联同一个方案
-      final name = await showDialog<String>(
-        context: context,
-        builder: (_) => _NameDialog(title: '新名称', initial: _planName(plan)),
-      );
-      if (name == null || name.isEmpty) return;
-      await store.add(_newItem(plan, name));
-      _snack('已把「$name」加入清单');
-    }
-  }
-
-  /// 按槽位顺序列出配件摘要「品类 型号」（硬盘多块逐个列出）
-  String _summary(BuildPlan plan) {
-    final parts = <String>[];
-    for (final s in kBuildSlots) {
-      if (s.key == 'storage') {
-        for (final c in plan.storages) {
-          parts.add('${c.category} ${c.model}');
-        }
-      } else {
-        final c = plan[s.key];
-        if (c != null) parts.add('${c.category} ${c.model}');
-      }
-    }
-    return parts.join(' · ');
-  }
-
-  HardwareItem _newItem(BuildPlan plan, String model) {
-    return HardwareItem(
-      id: '${DateTime.now().microsecondsSinceEpoch}',
-      category: '整机方案',
-      brand: '',
-      model: model,
-      price: plan.total,
-      platform: '',
-      spec: _summary(plan),
-      planId: plan.id,
-      createdAt: DateTime.now(),
-    );
-  }
-
   void _snack(String msg) {
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(msg)));
@@ -864,14 +740,6 @@ class _BuildPlanPageState extends State<BuildPlanPage>
         _slotsCard(plan),
         const SizedBox(height: 12),
         _powerCard(plan),
-        const SizedBox(height: 16),
-        FilledButton.icon(
-          onPressed: plan.components.isEmpty ? null : _saveToItems,
-          icon: const Icon(Icons.save_alt),
-          label: const Text('保存到我的清单'),
-          // 与「加入我的清单」等主按钮统一：胶囊圆角 + 半透明底色
-          style: capsuleButtonStyle(theme),
-        ),
       ],
     );
   }

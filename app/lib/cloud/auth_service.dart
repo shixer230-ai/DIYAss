@@ -207,11 +207,12 @@ class AuthService extends ChangeNotifier {
     }
   }
 
-  /// 首次识别到捐赠时发一条感谢通知（只发一次）
+  /// 首次识别到捐赠时发一条感谢通知（只发一次）；权限没开就不记次数，下次再试
   Future<void> _maybeThankDonator() async {
     final prefs = await SharedPreferences.getInstance();
     if (prefs.getBool('donator_notified') ?? false) return;
-    await prefs.setBool('donator_notified', true);
-    await NotificationService.instance.show('感谢捐赠', '感谢支持 DIYAss！٩(◕‿◕｡)۶');
+    final shown = await NotificationService.instance
+        .show('感谢捐赠', '感谢支持 DIYAss！٩(◕‿◕｡)۶');
+    if (shown) await prefs.setBool('donator_notified', true);
   }
 }

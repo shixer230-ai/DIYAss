@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../models/build_plan.dart';
 import '../models/hardware_item.dart';
 import '../storage/build_plan_store.dart';
 import '../storage/hardware_store.dart';
@@ -25,6 +26,7 @@ class _HardwareListPageState extends State<HardwareListPage>
     with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
   final _store = HardwareStore();
   List<HardwareItem> _items = [];
+  List<BuildPlan> _plans = [];
   bool _loading = true;
 
   // 清单分类 Tab 的顺序（可左右滑动切换）
@@ -74,9 +76,11 @@ class _HardwareListPageState extends State<HardwareListPage>
 
   Future<void> _load() async {
     final items = await _store.loadAll();
+    final plans = await BuildPlanStore().loadAll();
     if (!mounted) return;
     setState(() {
       _items = items;
+      _plans = plans;
       _loading = false;
     });
   }
@@ -89,9 +93,7 @@ class _HardwareListPageState extends State<HardwareListPage>
     if (saved == true) _load();
   }
 
-  Future<void> _openPlan(HardwareItem item) async {
-    final id = item.planId;
-    if (id == null) return;
+  Future<void> _openPlanById(String id) async {
     await BuildPlanStore().saveCurrentId(id);
     widget.onOpenPlan?.call();
   }
@@ -196,6 +198,7 @@ class _HardwareListPageState extends State<HardwareListPage>
   }
 
   Widget _categoryTab(String category) {
+    if (category == '整机方案') return _planTab();
     final items = _items.where((e) => e.category == category).toList();
     if (items.isEmpty) return _emptyCategory(category);
     return ListView.builder(
@@ -215,7 +218,42 @@ class _HardwareListPageState extends State<HardwareListPage>
         return _HardwareCard(
           item: item,
           onDelete: () => _confirmDelete(item),
-          onTap: item.planId != null ? () => _openPlan(item) : null,
+          onTap: null,
+        );
+      },
+    );
+  }
+
+  /// 整机方案分类：直接读整机方案（BuildPlanStore），自动出现在清单里
+  Widget _planTab() {
+    if (_plans.isEmpty) return _emptyCategory('整机方案');
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        12,
+        12,
+        12 + bottomNavClearance(context),
+      ),
+      itemCount: _plans.length,
+      itemBuilder: (context, index) {
+        final plan = _plans[index];
+        return _HardwareCard(
+          item: HardwareItem(
+            id: plan.id,
+            category: '整机方案',
+            brand: '',
+            model: plan.name.isEmpty ? '未命名方案' : plan.name,
+            price: plan.total,
+            platform: '',
+            spec: '',
+            planId: plan.id,
+            createdAt: DateTime.fromMillisecondsSinceEpoch(0),
+          ),
+          onDelete: null,
+          onTap: () => _openPlanById(plan.id),
         );
       },
     );
@@ -256,10 +294,10 @@ class _HardwareListPageState extends State<HardwareListPage>
 }
 
 class _HardwareCard extends StatelessWidget {
-  const _HardwareCard({required this.item, required this.onDelete, this.onTap});
+  const _HardwareCard({required this.item, this.onDelete, this.onTap});
 
   final HardwareItem item;
-  final VoidCallback onDelete;
+  final VoidCallback? onDelete;
   final VoidCallback? onTap;
 
   String _formatPrice(double p) {
@@ -330,11 +368,12 @@ class _HardwareCard extends StatelessWidget {
                       color: theme.colorScheme.primary,
                     ),
                   ),
-                  IconButton(
-                    onPressed: onDelete,
-                    tooltip: '删除',
-                    icon: const Icon(Icons.delete_outline, size: 20),
-                  ),
+                  if (onDelete != null)
+                    IconButton(
+                      onPressed: onDelete,
+                      tooltip: '删除',
+                      icon: const Icon(Icons.delete_outline, size: 20),
+                    ),
                 ],
               ),
             ],
