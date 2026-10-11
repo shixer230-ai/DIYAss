@@ -224,23 +224,21 @@ class _HardwareListPageState extends State<HardwareListPage>
     );
   }
 
-  /// 整机方案分类：直接读整机方案（BuildPlanStore），自动出现在清单里
+  /// 整机方案分类：直接读整机方案（BuildPlanStore）自动出现；
+  /// 「保存到清单」产生的快照在方案删除后仍保留，作为孤儿条目列出（可删）
   Widget _planTab() {
-    if (_plans.isEmpty) return _emptyCategory('整机方案');
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(
-        parent: AlwaysScrollableScrollPhysics(),
-      ),
-      padding: EdgeInsets.fromLTRB(
-        12,
-        12,
-        12,
-        12 + bottomNavClearance(context),
-      ),
-      itemCount: _plans.length,
-      itemBuilder: (context, index) {
-        final plan = _plans[index];
-        return _HardwareCard(
+    final liveIds = _plans.map((p) => p.id).toSet();
+    final orphans = _items
+        .where((e) =>
+            e.category == '整机方案' &&
+            e.planId != null &&
+            !liveIds.contains(e.planId))
+        .toList();
+    if (_plans.isEmpty && orphans.isEmpty) return _emptyCategory('整机方案');
+
+    final entries = <Widget>[
+      for (final plan in _plans)
+        _HardwareCard(
           item: HardwareItem(
             id: plan.id,
             category: '整机方案',
@@ -254,8 +252,27 @@ class _HardwareListPageState extends State<HardwareListPage>
           ),
           onDelete: null,
           onTap: () => _openPlanById(plan.id),
-        );
-      },
+        ),
+      for (final snap in orphans)
+        _HardwareCard(
+          item: snap,
+          onDelete: () => _confirmDelete(snap),
+          onTap: null,
+        ),
+    ];
+
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        12,
+        12,
+        12 + bottomNavClearance(context),
+      ),
+      itemCount: entries.length,
+      itemBuilder: (context, index) => entries[index],
     );
   }
 

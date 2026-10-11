@@ -115,6 +115,20 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
     Navigator.pop(context, true);
   }
 
+  /// 统一的无边框、无填充输入样式：把胶囊输入框换成大卡片内的纯行
+  InputDecoration _plain(String label, {String? hint, String? helperText}) {
+    return InputDecoration(
+      labelText: label,
+      hintText: hint,
+      helperText: helperText,
+      border: InputBorder.none,
+      enabledBorder: InputBorder.none,
+      focusedBorder: InputBorder.none,
+      filled: false,
+      isDense: true,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -136,10 +150,9 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
                   children: [
                     GlassDropdown<String>(
                       initialValue: _category,
-                      decoration: InputDecoration(
-                        labelText: '品类',
+                      decoration: _plain(
+                        '品类',
                         helperText: _categoryLocked ? '已锁定为当前分类' : null,
-                        border: InputBorder.none,
                       ),
                       items: _categories
                           .map((c) => DropdownMenuItem(value: c, child: Text(c)))
@@ -151,33 +164,21 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
                     const Divider(height: 1),
                     TextFormField(
                       controller: _modelController,
-                      decoration: const InputDecoration(
-                        labelText: '型号 *',
-                        hintText: '例如：i5-13600KF',
-                        border: InputBorder.none,
-                      ),
+                      decoration: _plain('型号 *', hint: '例如：i5-13600KF'),
                       validator: (v) =>
                           (v == null || v.trim().isEmpty) ? '请填写型号' : null,
                     ),
                     const Divider(height: 1),
                     TextFormField(
                       controller: _brandController,
-                      decoration: const InputDecoration(
-                        labelText: '品牌',
-                        hintText: '例如：Intel / 华硕',
-                        border: InputBorder.none,
-                      ),
+                      decoration: _plain('品牌', hint: '例如：Intel / 华硕'),
                     ),
                     const Divider(height: 1),
                     TextFormField(
                       controller: _priceController,
                       keyboardType:
                           const TextInputType.numberWithOptions(decimal: true),
-                      decoration: const InputDecoration(
-                        labelText: '价格（元）*',
-                        hintText: '例如：1399',
-                        border: InputBorder.none,
-                      ),
+                      decoration: _plain('价格（元）*', hint: '例如：1399'),
                       validator: (v) {
                         final t = v?.trim() ?? '';
                         if (t.isEmpty) return '请填写价格';
@@ -190,10 +191,7 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
                     const Divider(height: 1),
                     GlassDropdown<String>(
                       initialValue: _platform,
-                      decoration: const InputDecoration(
-                        labelText: '购买平台',
-                        border: InputBorder.none,
-                      ),
+                      decoration: _plain('购买平台'),
                       items: _platforms
                           .map((p) => DropdownMenuItem(value: p, child: Text(p)))
                           .toList(),
@@ -202,11 +200,7 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
                     const Divider(height: 1),
                     TextFormField(
                       controller: _specController,
-                      decoration: const InputDecoration(
-                        labelText: '参数备注',
-                        hintText: '例如：LGA1700 / DDR5',
-                        border: InputBorder.none,
-                      ),
+                      decoration: _plain('参数备注', hint: '例如：LGA1700 / DDR5'),
                     ),
                     if (_valueItems.isNotEmpty) ...[
                       const Divider(height: 1),
@@ -260,12 +254,7 @@ class _HardwareFormPageState extends State<HardwareFormPage> {
             padding: const EdgeInsets.only(bottom: 8),
             child: TextField(
               controller: _valueControllers[item.label],
-              decoration: InputDecoration(
-                labelText: item.label,
-                hintText: '如：约 10500',
-                border: InputBorder.none,
-                isDense: true,
-              ),
+              decoration: _plain(item.label, hint: '如：约 10500'),
             ),
           ),
       ],

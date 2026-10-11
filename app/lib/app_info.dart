@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '3.0.1';
+const String kAppVersion = '3.0.2';
 
 /// 捐赠/支持开发的赞助链接（爱发电等网页）；留空时「支持开发」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,10 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('3.0.2', [
+    '修复「硬件清单」录入硬件表单内部仍残留胶囊输入框，品类/型号/价格等改为无边框行',
+    '恢复「保存到我的清单」按钮：与整机方案自动出现并存，快照在方案删除后仍保留',
+  ]),
   VersionLogEntry('3.0.1', [
     '硬件清单「整机方案」分类改为直接读取方案数据，创建后自动出现，移除多余「保存到清单」按钮',
     '修复捐赠感谢通知可能收不到的问题：通知权限延后到真正发送时再申请',
