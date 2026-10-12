@@ -558,6 +558,13 @@ class ProfilePage extends StatelessWidget {
               );
             },
           ),
+          ListTile(
+            leading: const Icon(Icons.gavel_outlined),
+            title: const Text('免责声明'),
+            subtitle: const Text('性价比分析、数据准确性、云服务与 AI 功能的说明'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _openDisclaimer(context),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(16, 4, 16, 12),
             child: Row(
@@ -627,6 +634,13 @@ class ProfilePage extends StatelessWidget {
     );
   }
 
+  void _openDisclaimer(BuildContext context) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => const _DisclaimerPage()),
+    );
+  }
+
   Widget _sectionTitle(ThemeData theme, String title) {
     return Padding(
       padding: const EdgeInsets.fromLTRB(4, 8, 4, 8),
@@ -658,6 +672,72 @@ class ProfilePage extends StatelessWidget {
           : null,
       selected: selected,
       onTap: () => ThemeController.instance.setMode(value),
+    );
+  }
+}
+
+/// 免责声明整页：说明性价比分析、数据准确性、云服务与 AI 功能的边界
+class _DisclaimerPage extends StatelessWidget {
+  const _DisclaimerPage();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    return Scaffold(
+      appBar: AppBar(title: const Text('免责声明')),
+      body: ListView(
+        padding: const EdgeInsets.all(16),
+        children: [
+          Text(
+            '使用本应用前，请阅读以下说明。',
+            style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+          ),
+          const SizedBox(height: 16),
+          _section(theme, '一、性价比分析', [
+            '本应用的性价比排行、AI 分析、可靠性分析、整机功耗估算等结果，均为基于算法与参考数据的估算，仅供参考，不构成任何购买建议或承诺。',
+            '请在购买前自行核实产品信息、价格与兼容性，独立做出判断。',
+          ]),
+          _section(theme, '二、数据准确性', [
+            '应用内的硬件型号、价格、跑分、功耗、规格等数据，来自公开资料整理与用户录入，可能存在误差或滞后。',
+            '价格会随市场波动，实际以购买平台展示为准；跑分与功耗为参考约值，随平台、驱动、测试环境不同会有差异。',
+            '应用不保证数据绝对准确、完整或实时，因数据偏差造成的任何损失，应用方不承担责任。',
+          ]),
+          _section(theme, '三、云服务与 AI 功能', [
+            '账号云同步、AI 分析、donator 权益等功能，依赖云服务器与第三方服务（如 DeepSeek、爱发电等）。',
+            '受项目资金、维护成本、第三方政策等因素影响，上述功能可能随时调整、限流或停用，不构成持续提供的承诺。',
+            '若相关功能停用，本地已保存的数据（整机方案、硬件清单等）不会丢失，核心的本地功能仍可正常使用。',
+          ]),
+          _section(theme, '四、其他', [
+            '本应用为独立开发者项目，若因使用本应用产生任何直接或间接损失，应用方不承担法律责任。',
+            '最终解释权归开发者所有。',
+          ]),
+        ],
+      ),
+    );
+  }
+
+  Widget _section(ThemeData theme, String title, List<String> paragraphs) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          title,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        const SizedBox(height: 8),
+        for (final p in paragraphs)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: Text(
+              p,
+              style: theme.textTheme.bodyMedium?.copyWith(height: 1.6),
+            ),
+          ),
+        const SizedBox(height: 12),
+      ],
     );
   }
 }

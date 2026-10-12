@@ -1,0 +1,9 @@
+{
+  "name": "cleanupPlans",
+  "version": "1.0.0",
+  "description": "定时清理云方案：删除 0 赞且发布满 7 天的旧方案",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.9.0"
+  }
+}

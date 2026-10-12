@@ -57,6 +57,9 @@ class _BuildPlanPageState extends State<BuildPlanPage>
   // 云同步防连点
   bool _syncing = false;
 
+  // 上传到云方案的防连点
+  bool _publishing = false;
+
   // 进入方案编辑时的快照 + 是否有未保存改动（退出时据此询问是否保存）
   BuildPlan? _editSnapshot;
   bool _dirty = false;
@@ -519,6 +522,33 @@ class _BuildPlanPageState extends State<BuildPlanPage>
     }
   }
 
+  /// 上传方案到公开的「云方案」栏目（登录 + 内容合规由云函数处理）
+  Future<void> _publishPlan(BuildPlan plan) async {
+    if (!AuthService.instance.isLoggedIn) {
+      _snack('请先在「我的」页登录，再上传方案');
+      return;
+    }
+    if (plan.components.isEmpty) {
+      _snack('方案还没有配件，无法上传');
+      return;
+    }
+    if (plan.total <= 0) {
+      _snack('整机价格不能为 0，请先为配件填写价格');
+      return;
+    }
+    setState(() => _publishing = true);
+    try {
+      await CloudSync.publishPlan(plan);
+      if (!mounted) return;
+      _snack('上传成功，已发布到「硬件库 → 云方案」');
+    } catch (e) {
+      if (!mounted) return;
+      _snack(e.toString().replaceFirst('Exception: ', ''));
+    } finally {
+      if (mounted) setState(() => _publishing = false);
+    }
+  }
+
   /// 按槽位顺序列出配件摘要「品类 型号」（硬盘多块逐个列出）
   String _summary(BuildPlan plan) {
     final parts = <String>[];
@@ -870,6 +900,13 @@ class _BuildPlanPageState extends State<BuildPlanPage>
           icon: const Icon(Icons.save_alt),
           label: const Text('保存到我的清单'),
           style: capsuleButtonStyle(theme),
+        ),
+        const SizedBox(height: 12),
+        OutlinedButton.icon(
+          onPressed: _publishing ? null : () => _publishPlan(plan),
+          icon: const Icon(Icons.cloud_upload_outlined),
+          label: const Text('上传到云方案'),
+          style: capsuleOutlinedButtonStyle(theme),
         ),
       ],
     );

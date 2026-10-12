@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
+import '../cloud/auth_service.dart';
+import '../cloud/cloud_sync.dart';
 import '../data/hardware_catalog.dart';
 import '../data/hardware_library.dart';
+import '../models/cloud_plan.dart';
 import '../models/hardware_spec.dart';
 import '../storage/hardware_catalog_store.dart';
 import '../storage/user_spec_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
 import 'catalog_detail_page.dart';
+import 'cloud_plan_detail_page.dart';
 import 'user_spec_form_page.dart';
 
 /// 硬件库：顶部关键词搜索；按品类分 Tab，左右滑动切换；首个 Tab 是「我的添加」
@@ -27,6 +31,10 @@ class _CatalogPageState extends State<CatalogPage>
   List<HardwareSpec> _cloudSpecs = [];
   bool _cloudSynced = false;
   String _query = '';
+
+  // 公开的云方案列表（用户上传到「云方案」栏目）
+  List<CloudPlan> _cloudPlans = [];
+  bool _loadingPlans = false;
 
   // 预置库的品类顺序（即各 Tab 的顺序）
   static const _categories = ['CPU', '显卡', '主板', '内存', '硬盘', '电源', '机箱'];
@@ -51,7 +59,7 @@ class _CatalogPageState extends State<CatalogPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: _categories.length + 1, vsync: this);
+    _tabController = TabController(length: _categories.length + 2, vsync: this);
     _searchController.addListener(_onQueryChanged);
     _load();
   }
@@ -77,6 +85,7 @@ class _CatalogPageState extends State<CatalogPage>
       _cloudSpecs = cloud;
     });
     _refreshCloud();
+    _loadCloudPlans();
   }
 
   /// 后台拉最新云端硬件并刷新（每次进入硬件库只同步一次）
@@ -105,6 +114,180 @@ class _CatalogPageState extends State<CatalogPage>
     );
     if (saved == true) _load();
   }
+
+  /// 拉取公开的云方案列表；失败保持现状（可能未登录或无网络）
+  Future<void> _loadCloudPlans() async {
+    if (_loadingPlans) return;
+    setState(() => _loadingPlans = true);
+    try {
+      final plans = await CloudSync.downloadCloudPlans();
+      if (!mounted) return;
+      setState(() => _cloudPlans = plans);
+    } catch (_) {
+      // 拉取失败保持现状
+    } finally {
+      if (mounted) setState(() => _loadingPlans = false);
+    }
+  }
+
+  void _openCloudPlan(CloudPlan p) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (_) => CloudPlanDetailPage(plan: p)),
+    );
+  }
+
+  Future<void> _toggleLike(CloudPlan p) async {
+    if (!AuthService.instance.isLoggedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请先在「我的」页登录，再点赞')),
+      );
+      return;
+    }
+    final uid = AuthService.instance.uid!;
+    try {
+      final r = await CloudSync.likePlan(p.id);
+      if (!mounted) return;
+      setState(() {
+        final newLikers = List<String>.from(p.likers);
+        if (r.liked) {
+          if (!newLikers.contains(uid)) newLikers.add(uid);
+        } else {
+          newLikers.remove(uid);
+        }
+        final i = _cloudPlans.indexWhere((x) => x.id == p.id);
+        if (i >= 0) _cloudPlans[i] = p.copyWith(likers: newLikers);
+      });
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+      );
+    }
+  }
+
+  Widget _buildCloudPlansTab() {
+    if (_loadingPlans) {
+      return const Center(child: CircularProgressIndicator());
+    }
+    if (_cloudPlans.isEmpty) return _emptyCloudPlans();
+    return ListView.builder(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        12,
+        12,
+        12 + bottomNavClearance(context),
+      ),
+      itemCount: _cloudPlans.length,
+      itemBuilder: (context, i) => _cloudPlanCard(_cloudPlans[i]),
+    );
+  }
+
+  Widget _emptyCloudPlans() {
+    return Center(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          const Icon(Icons.cloud_outlined, size: 48, color: Colors.grey),
+          const SizedBox(height: 8),
+          const Text('还没有公开的云方案'),
+          const SizedBox(height: 4),
+          Text(
+            '在「整机方案」里点「上传到云方案」，就能把方案分享到这里',
+            textAlign: TextAlign.center,
+            style: Theme.of(context).textTheme.bodySmall
+                ?.copyWith(color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _cloudPlanCard(CloudPlan p) {
+    final theme = Theme.of(context);
+    final uid = AuthService.instance.uid;
+    final liked = uid != null && p.likedBy(uid);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(kCardRadius),
+        onTap: () => _openCloudPlan(p),
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Row(
+            children: [
+              const CategoryBadge(category: '整机方案'),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      p.name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${p.filledCount} 件 · ${p.date}',
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '¥${_fmtPrice(p.total)}',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16,
+                  color: theme.colorScheme.primary,
+                ),
+              ),
+              const SizedBox(width: 8),
+              _likeButton(theme, p, liked),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _likeButton(ThemeData theme, CloudPlan p, bool liked) {
+    return InkWell(
+      borderRadius: BorderRadius.circular(999),
+      onTap: () => _toggleLike(p),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 8),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              liked ? Icons.favorite : Icons.favorite_border,
+              size: 22,
+              color: liked ? Colors.pink : theme.colorScheme.onSurfaceVariant,
+            ),
+            const SizedBox(height: 2),
+            Text(
+              '${p.likeCount}',
+              style: theme.textTheme.labelSmall?.copyWith(color: Colors.grey),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _fmtPrice(double p) =>
+      p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
 
   bool get _searching => _query.trim().isNotEmpty;
 
@@ -158,6 +341,7 @@ class _CatalogPageState extends State<CatalogPage>
                         .onSurfaceVariant,
                     dividerColor: Colors.transparent,
                     tabs: [
+                      const Tab(text: '云方案'),
                       const Tab(text: '我的添加'),
                       for (final c in _categories) Tab(text: c),
                     ],
@@ -167,6 +351,7 @@ class _CatalogPageState extends State<CatalogPage>
                   child: TabBarView(
                     controller: _tabController,
                     children: [
+                      _buildCloudPlansTab(),
                       _buildMineTab(),
                       for (final c in _categories) _buildCategoryTab(c),
                     ],

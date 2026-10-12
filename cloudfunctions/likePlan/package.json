@@ -1,0 +1,9 @@
+{
+  "name": "likePlan",
+  "version": "1.0.0",
+  "description": "点赞云方案：登录校验 + 切换点赞状态，更新 likers",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.9.0"
+  }
+}

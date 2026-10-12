@@ -1,0 +1,9 @@
+{
+  "name": "publishPlan",
+  "version": "1.0.0",
+  "description": "方案上传：登录校验 + 每日限额 + 关键词内容合规检测 + 写入 cloud_plans",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.9.0"
+  }
+}

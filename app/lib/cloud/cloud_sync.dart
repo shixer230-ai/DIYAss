@@ -3,8 +3,10 @@ import 'dart:convert';
 import 'package:cloudbase_flutter/cloudbase_flutter.dart';
 
 import '../models/build_plan.dart';
+import '../models/cloud_plan.dart';
 import '../models/custom_item.dart';
 import '../models/hardware_spec.dart';
+import '../utils/json_safe.dart';
 import 'auth_service.dart';
 import 'cloud_app.dart';
 
@@ -223,5 +225,68 @@ class CloudSync {
     if (map?['ok'] != true) {
       throw Exception('开通失败，请重试');
     }
+  }
+
+  /// 把云函数返回结果解析成 Map（result 可能是 Map 或 JSON 字符串）
+  static Map<String, dynamic> _parseResult(dynamic result) {
+    if (result is Map) return Map<String, dynamic>.from(result);
+    if (result is String) {
+      try {
+        final d = jsonDecode(result);
+        if (d is Map) return Map<String, dynamic>.from(d);
+      } catch (_) {
+        // 非 JSON 按无结果处理
+      }
+    }
+    return const {};
+  }
+
+  /// 上传方案到公开的「云方案」栏目（云函数做每日限额 + 关键词内容合规检测）
+  static Future<void> publishPlan(BuildPlan plan) async {
+    _requireUid();
+    final res = await CloudApp.app.callFunction(
+      name: 'publishPlan',
+      data: {'plan': plan.toJson()},
+    );
+    if (!res.isSuccess) {
+      throw Exception(res.message ?? '上传失败');
+    }
+    final map = _parseResult(res.result);
+    final error = map['error'];
+    if (error is String && error.isNotEmpty) throw Exception(error);
+    if (map['ok'] != true) throw Exception('上传失败，请重试');
+  }
+
+  /// 点赞 / 取消点赞某个云方案，返回最新点赞状态与数量
+  static Future<({bool liked, int likeCount})> likePlan(String planId) async {
+    _requireUid();
+    final res = await CloudApp.app.callFunction(
+      name: 'likePlan',
+      data: {'planId': planId},
+    );
+    if (!res.isSuccess) {
+      throw Exception(res.message ?? '操作失败');
+    }
+    final map = _parseResult(res.result);
+    final error = map['error'];
+    if (error is String && error.isNotEmpty) throw Exception(error);
+    if (map['ok'] != true) throw Exception('操作失败，请重试');
+    return (liked: map['liked'] == true, likeCount: asInt(map['likeCount']));
+  }
+
+  /// 拉取公开的云方案列表，按点赞数降序、同赞按时间倒序
+  static Future<List<CloudPlan>> downloadCloudPlans() async {
+    final db = CloudApp.app.database();
+    final res = await db.collection('cloud_plans').limit(200).get();
+    if (!res.isSuccess) {
+      throw Exception('拉取云方案失败：${res.message ?? res.code}');
+    }
+    final list = res.data.map((e) => CloudPlan.fromJson(e)).toList();
+    list.sort((a, b) {
+      final byLikes = b.likeCount.compareTo(a.likeCount);
+      if (byLikes != 0) return byLikes;
+      return b.createdAt.compareTo(a.createdAt);
+    });
+    return list;
   }
 }
