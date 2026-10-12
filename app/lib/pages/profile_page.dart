@@ -17,6 +17,7 @@ import '../storage/build_plan_store.dart';
 import '../theme/app_theme.dart';
 import '../theme/theme_controller.dart';
 import '../utils/category_icons.dart';
+import '../utils/version_check.dart';
 import 'account_page.dart';
 import 'build_plan_page.dart' show kBuildSlots;
 
@@ -516,11 +517,7 @@ class ProfilePage extends StatelessWidget {
     return Card(
       child: Column(
         children: [
-          ListTile(
-            leading: const Icon(Icons.info_outline),
-            title: const Text('版本'),
-            trailing: Text(kAppVersion),
-          ),
+          const _VersionTile(),
           ListTile(
             leading: const Icon(Icons.receipt_long_outlined),
             title: const Text('版本更新日志'),
@@ -530,7 +527,7 @@ class ProfilePage extends StatelessWidget {
           ListTile(
             leading: const Icon(Icons.favorite, color: Colors.pink),
             title: const Text('支持开发'),
-            subtitle: const Text('捐赠后可获得 donator 专属标识，AI 分析次数提高到每天 50 次'),
+            subtitle: const Text('捐赠后可获得 donator 专属标识、AI 分析每天 50 次、云方案上传每天 5 次'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _openDonate(context),
           ),
@@ -548,7 +545,7 @@ class ProfilePage extends StatelessWidget {
                 title: Text(isDonator ? 'donator 已开通' : '开通 donator'),
                 subtitle: Text(
                   isDonator
-                      ? '感谢支持，专属标识与 50 次/天已生效'
+                      ? '感谢支持，专属标识、50 次 AI、5 次云方案已生效'
                       : '捐赠后填订单号，自动开通专属标识与权益',
                 ),
                 trailing: isDonator
@@ -889,6 +886,68 @@ class _DonatorDialogState extends State<_DonatorDialog> {
           child: const Text('开通'),
         ),
       ],
+    );
+  }
+}
+
+/// 「版本」条目：显示当前版本，后台检测 GitHub 最新 release，有新版本时提示
+class _VersionTile extends StatefulWidget {
+  const _VersionTile();
+
+  @override
+  State<_VersionTile> createState() => _VersionTileState();
+}
+
+class _VersionTileState extends State<_VersionTile> {
+  String? _latest;
+
+  @override
+  void initState() {
+    super.initState();
+    _check();
+  }
+
+  Future<void> _check() async {
+    final v = await VersionCheck.latestVersion();
+    if (!mounted) return;
+    setState(() => _latest = v);
+  }
+
+  Future<void> _openUpdate() async {
+    final uri = Uri.tryParse(VersionCheck.kReleasesUrl);
+    if (uri == null) return;
+    await launchUrl(uri, mode: LaunchMode.externalApplication);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final latest = _latest;
+    final hasUpdate =
+        latest != null && VersionCheck.isNewer(latest, kAppVersion);
+    return ListTile(
+      leading: const Icon(Icons.info_outline),
+      title: const Text('版本'),
+      subtitle: hasUpdate ? Text('发现新版本 v$latest，点击前往下载') : null,
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          if (hasUpdate)
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              decoration: BoxDecoration(
+                color: Colors.red.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(6),
+              ),
+              child: const Text(
+                '有新版',
+                style: TextStyle(color: Colors.red, fontSize: 11),
+              ),
+            ),
+          const SizedBox(width: 8),
+          Text(kAppVersion),
+        ],
+      ),
+      onTap: hasUpdate ? _openUpdate : null,
     );
   }
 }

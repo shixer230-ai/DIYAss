@@ -21,6 +21,9 @@ class AuthService extends ChangeNotifier {
   /// 注册第二步的验证回调（第一步发验证码时暂存）
   Future<SignInRes> Function(VerifyOtpParams)? _pendingVerify;
 
+  /// 验证码登录第二步的回调（第一步发验证码时暂存）
+  Future<SignInRes> Function(VerifyOtpParams)? _pendingCodeLogin;
+
   User? get user => _user;
 
   bool get isLoggedIn => _user != null;
@@ -161,10 +164,37 @@ class AuthService extends ChangeNotifier {
     await refreshDonator();
   }
 
+  /// 验证码登录第一步：发验证码到邮箱（该邮箱没注册会自动注册并登录）
+  Future<void> sendLoginCode(String email) async {
+    final res = await CloudApp.app.auth.signInWithOtp(
+      SignInWithOtpReq(email: email),
+    );
+    if (res.error != null) throw Exception(res.error!.message);
+    _pendingCodeLogin = res.data?.verifyOtp;
+    if (_pendingCodeLogin == null) {
+      throw Exception('发送验证码失败，请检查邮箱是否正确');
+    }
+  }
+
+  /// 验证码登录第二步：用验证码登录（没注册会自动注册）
+  Future<void> confirmLoginCode(String code) async {
+    final verify = _pendingCodeLogin;
+    if (verify == null) throw StateError('请先点击「发送验证码」');
+    final res = await verify(VerifyOtpParams(token: code));
+    if (res.error != null) throw Exception(res.error!.message);
+    _pendingCodeLogin = null;
+    _user = res.data?.user ?? res.data?.session?.user;
+    notifyListeners();
+    _adoptNickname();
+    _syncAvatar();
+    await refreshDonator();
+  }
+
   Future<void> signOut() async {
     await CloudApp.app.auth.signOut();
     _user = null;
     _pendingVerify = null;
+    _pendingCodeLogin = null;
     _isDonator = false;
     notifyListeners();
   }

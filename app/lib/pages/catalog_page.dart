@@ -130,11 +130,54 @@ class _CatalogPageState extends State<CatalogPage>
     }
   }
 
-  void _openCloudPlan(CloudPlan p) {
-    Navigator.push(
+  Future<void> _openCloudPlan(CloudPlan p) async {
+    final deleted = await Navigator.push<bool>(
       context,
       MaterialPageRoute(builder: (_) => CloudPlanDetailPage(plan: p)),
     );
+    if (deleted == true) _loadCloudPlans();
+  }
+
+  /// 删除自己上传的云方案（长按卡片触发）
+  Future<void> _deleteCloudPlan(CloudPlan p) async {
+    if (!AuthService.instance.isLoggedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请先在「我的」页登录，再删除')),
+      );
+      return;
+    }
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('删除云方案'),
+        content: Text('确定删除「${p.name}」吗？删除后无法恢复。'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('取消'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: capsuleButtonStyle(Theme.of(context), fullWidth: false),
+            child: const Text('删除'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    try {
+      await CloudSync.deleteCloudPlan(p.id);
+      if (!mounted) return;
+      setState(() => _cloudPlans.removeWhere((x) => x.id == p.id));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('已删除')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+      );
+    }
   }
 
   Future<void> _toggleLike(CloudPlan p) async {
@@ -210,11 +253,13 @@ class _CatalogPageState extends State<CatalogPage>
     final theme = Theme.of(context);
     final uid = AuthService.instance.uid;
     final liked = uid != null && p.likedBy(uid);
+    final isOwner = uid != null && p.owner == uid;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(kCardRadius),
         onTap: () => _openCloudPlan(p),
+        onLongPress: isOwner ? () => _deleteCloudPlan(p) : null,
         child: Padding(
           padding: const EdgeInsets.all(12),
           child: Row(

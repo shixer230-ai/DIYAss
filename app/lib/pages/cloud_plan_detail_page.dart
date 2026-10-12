@@ -1,20 +1,79 @@
 import 'package:flutter/material.dart';
 
+import '../cloud/auth_service.dart';
+import '../cloud/cloud_sync.dart';
 import '../models/cloud_plan.dart';
+import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
 import 'build_plan_page.dart' show kBuildSlots;
 
-/// 云方案详情：展示方案名、日期、点赞数与完整配件清单
-class CloudPlanDetailPage extends StatelessWidget {
+/// 云方案详情：展示方案名、日期、点赞数与完整配件清单；本人上传的可删除
+class CloudPlanDetailPage extends StatefulWidget {
   const CloudPlanDetailPage({super.key, required this.plan});
 
   final CloudPlan plan;
 
   @override
+  State<CloudPlanDetailPage> createState() => _CloudPlanDetailPageState();
+}
+
+class _CloudPlanDetailPageState extends State<CloudPlanDetailPage> {
+  bool _deleting = false;
+
+  bool get _isOwner =>
+      AuthService.instance.uid != null &&
+      AuthService.instance.uid == widget.plan.owner;
+
+  Future<void> _delete() async {
+    final plan = widget.plan;
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('删除云方案'),
+        content: Text('确定删除「${plan.name}」吗？删除后无法恢复。'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('取消'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            style: capsuleButtonStyle(Theme.of(context), fullWidth: false),
+            child: const Text('删除'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true || !mounted) return;
+    setState(() => _deleting = true);
+    try {
+      await CloudSync.deleteCloudPlan(plan.id);
+      if (!mounted) return;
+      Navigator.pop(context, true);
+    } catch (e) {
+      if (!mounted) return;
+      setState(() => _deleting = false);
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final plan = widget.plan;
     return Scaffold(
-      appBar: AppBar(title: Text(plan.name)),
+      appBar: AppBar(
+        title: Text(plan.name),
+        actions: [
+          if (_isOwner)
+            IconButton(
+              onPressed: _deleting ? null : _delete,
+              icon: const Icon(Icons.delete_outline),
+            ),
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
@@ -56,7 +115,7 @@ class CloudPlanDetailPage extends StatelessWidget {
 
   /// 按槽位顺序列出已选配件（跳过空槽位），行间用分割线隔开
   List<Widget> _rows(ThemeData theme) {
-    final p = plan.plan;
+    final p = widget.plan.plan;
     final rows = <Widget>[];
     for (final slot in kBuildSlots) {
       if (slot.key == 'storage') {

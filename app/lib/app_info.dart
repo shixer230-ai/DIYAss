@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '3.1.0';
+const String kAppVersion = '3.1.2';
 
 /// 捐赠/支持开发的赞助链接（爱发电等网页）；留空时「支持开发」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,9 +16,14 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('3.1.2', [
+    '新增验证码登录：输入邮箱收验证码即可登录，没注册的邮箱自动注册，防止恶意刷号',
+    '云方案支持删除自己上传的方案',
+    '「我的」页新增版本更新检测，有新版本时提示',
+  ]),
   VersionLogEntry('3.1.0', [
     '新增方案上传：登录用户可把整机方案上传到「硬件库 → 云方案」公开分享',
-    '上传前关键词自动检测内容合规（色情 / 广告等无关内容会拦截），每日限额普通 3 次、donator 5 次',
+    '云方案每日上传限额：普通 3 次、donator 5 次',
     '云方案支持点赞，按获赞数排序，显示发布日期',
   ]),
   VersionLogEntry('3.0.2', [

@@ -274,6 +274,22 @@ class CloudSync {
     return (liked: map['liked'] == true, likeCount: asInt(map['likeCount']));
   }
 
+  /// 删除自己上传的云方案（云函数校验归属 + 计入每日次数）
+  static Future<void> deleteCloudPlan(String planId) async {
+    _requireUid();
+    final res = await CloudApp.app.callFunction(
+      name: 'deleteCloudPlan',
+      data: {'planId': planId},
+    );
+    if (!res.isSuccess) {
+      throw Exception(res.message ?? '删除失败');
+    }
+    final map = _parseResult(res.result);
+    final error = map['error'];
+    if (error is String && error.isNotEmpty) throw Exception(error);
+    if (map['ok'] != true) throw Exception('删除失败，请重试');
+  }
+
   /// 拉取公开的云方案列表，按点赞数降序、同赞按时间倒序
   static Future<List<CloudPlan>> downloadCloudPlans() async {
     final db = CloudApp.app.database();

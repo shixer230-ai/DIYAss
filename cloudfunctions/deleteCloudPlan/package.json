@@ -1,0 +1,9 @@
+{
+  "name": "deleteCloudPlan",
+  "version": "1.0.0",
+  "description": "删除云方案：登录校验 + 归属校验 + 计入每日次数",
+  "main": "index.js",
+  "dependencies": {
+    "@cloudbase/node-sdk": "^2.9.0"
+  }
+}
