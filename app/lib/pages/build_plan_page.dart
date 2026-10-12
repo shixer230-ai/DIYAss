@@ -443,83 +443,28 @@ class _BuildPlanPageState extends State<BuildPlanPage>
     if (!mounted) return;
     final existingIndex = items.indexWhere((e) => e.planId == plan.id);
 
-    // 首次保存：确认后直接新增
+    // 首次保存：直接新增，无需确认
     if (existingIndex < 0) {
-      final ok = await showDialog<bool>(
-        context: context,
-        builder: (context) => AlertDialog(
-          title: const Text('保存到清单'),
-          content: Text('把整机方案「${_planName(plan)}」作为一个整体加入「我的硬件清单」吗？'),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context, false),
-              child: const Text('取消'),
-            ),
-            TextButton(
-              onPressed: () => Navigator.pop(context, true),
-              child: const Text('保存'),
-            ),
-          ],
-        ),
-      );
-      if (ok != true) return;
       await store.add(_newItem(plan, _planName(plan)));
       _snack('已把「${_planName(plan)}」加入清单');
       return;
     }
 
-    // 已经保存过这个方案：让用户选「覆盖原来的 / 另存为新名称 / 取消」
-    final choice = await showDialog<String>(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('清单里已有这个方案'),
-        content: Text('清单里已经保存过「${_planName(plan)}」，要覆盖原来的条目，还是另存一份新名称的？'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('取消'),
-          ),
-          TextButton(
-            onPressed: () => Navigator.pop(context, 'overwrite'),
-            child: const Text('覆盖原来的'),
-          ),
-          FilledButton(
-            onPressed: () => Navigator.pop(context, 'new'),
-            style: capsuleButtonStyle(Theme.of(context), fullWidth: false),
-            child: const Text('另存为新名称'),
-          ),
-        ],
-      ),
+    // 已保存过：直接覆盖原来的条目，保留原 id 与录入时间
+    final old = items[existingIndex];
+    items[existingIndex] = HardwareItem(
+      id: old.id,
+      category: '整机方案',
+      brand: '',
+      model: _planName(plan),
+      price: plan.total,
+      platform: '',
+      spec: _summary(plan),
+      planId: plan.id,
+      createdAt: old.createdAt,
     );
-    if (choice == null) return;
-    if (!mounted) return;
-
-    if (choice == 'overwrite') {
-      // 覆盖：保留原条目的 id 和录入时间，刷新价格/摘要/名称
-      final old = items[existingIndex];
-      items[existingIndex] = HardwareItem(
-        id: old.id,
-        category: '整机方案',
-        brand: '',
-        model: _planName(plan),
-        price: plan.total,
-        platform: '',
-        spec: _summary(plan),
-        planId: plan.id,
-        createdAt: old.createdAt,
-      );
-      await store.saveAll(items);
-      _snack('已更新清单里的「${_planName(plan)}」');
-    } else {
-      // 另存为新名称：新建一条快照条目，仍关联同一个方案
-      final name = await showDialog<String>(
-        context: context,
-        builder: (_) => _NameDialog(title: '新名称', initial: _planName(plan)),
-      );
-      if (name == null || name.isEmpty) return;
-      await store.add(_newItem(plan, name));
-      _snack('已把「$name」加入清单');
-    }
+    await store.saveAll(items);
+    _snack('已更新清单里的「${_planName(plan)}」');
   }
 
   /// 上传方案到公开的「云方案」栏目（登录 + 内容合规由云函数处理）

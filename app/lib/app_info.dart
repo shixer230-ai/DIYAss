@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '3.1.3';
+const String kAppVersion = '3.1.4';
 
 /// 捐赠/支持开发的赞助链接（爱发电等网页）；留空时「支持开发」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,9 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('3.1.4', [
+    '「保存到我的清单」按钮按下即生效：直接加入清单，已保存过则直接覆盖，无需确认',
+  ]),
   VersionLogEntry('3.1.3', [
     '云方案支持本地关键字搜索：按方案名或配件型号/品牌实时过滤',
   ]),
