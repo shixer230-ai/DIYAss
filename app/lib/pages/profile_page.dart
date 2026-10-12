@@ -933,14 +933,18 @@ class _VersionTileState extends State<_VersionTile> {
         children: [
           if (hasUpdate)
             Container(
-              padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
               decoration: BoxDecoration(
                 color: Colors.red.withValues(alpha: 0.12),
-                borderRadius: BorderRadius.circular(6),
+                borderRadius: BorderRadius.circular(999),
               ),
               child: const Text(
                 '有新版',
-                style: TextStyle(color: Colors.red, fontSize: 11),
+                style: TextStyle(
+                  color: Colors.red,
+                  fontSize: 15,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           const SizedBox(width: 8),
