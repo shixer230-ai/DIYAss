@@ -32,6 +32,10 @@ class _CatalogPageState extends State<CatalogPage>
   bool _cloudSynced = false;
   String _query = '';
 
+  // 云方案本地搜索关键字
+  final _cloudSearchController = TextEditingController();
+  String _cloudQuery = '';
+
   // 公开的云方案列表（用户上传到「云方案」栏目）
   List<CloudPlan> _cloudPlans = [];
   bool _loadingPlans = false;
@@ -68,6 +72,7 @@ class _CatalogPageState extends State<CatalogPage>
   void dispose() {
     _tabController.dispose();
     _searchController.dispose();
+    _cloudSearchController.dispose();
     super.dispose();
   }
 
@@ -214,20 +219,96 @@ class _CatalogPageState extends State<CatalogPage>
       return const Center(child: CircularProgressIndicator());
     }
     if (_cloudPlans.isEmpty) return _emptyCloudPlans();
-    return ListView.builder(
-      physics: const BouncingScrollPhysics(
-        parent: AlwaysScrollableScrollPhysics(),
-      ),
-      padding: EdgeInsets.fromLTRB(
-        12,
-        12,
-        12,
-        12 + bottomNavClearance(context),
-      ),
-      itemCount: _cloudPlans.length,
-      itemBuilder: (context, i) => _cloudPlanCard(_cloudPlans[i]),
+    final filtered = _filteredCloudPlans;
+    return Column(
+      children: [
+        Padding(
+          padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
+          child: GlassField(
+            child: TextField(
+              controller: _cloudSearchController,
+              onChanged: (v) => setState(() => _cloudQuery = v),
+              decoration: InputDecoration(
+                hintText: '搜索方案名 / 配件',
+                prefixIcon: const Icon(Icons.search),
+                suffixIcon: _cloudQuery.trim().isNotEmpty
+                    ? IconButton(
+                        icon: const Icon(Icons.clear),
+                        tooltip: '清空',
+                        onPressed: _cloudSearchController.clear,
+                      )
+                    : null,
+                border: InputBorder.none,
+                enabledBorder: InputBorder.none,
+                focusedBorder: InputBorder.none,
+                filled: false,
+                contentPadding: const EdgeInsets.symmetric(vertical: 14),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          child: filtered.isEmpty
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      const Icon(
+                        Icons.search_off,
+                        size: 48,
+                        color: Colors.grey,
+                      ),
+                      const SizedBox(height: 8),
+                      Text('没有找到「${_cloudQuery.trim()}」相关的云方案'),
+                    ],
+                  ),
+                )
+              : ListView.builder(
+                  physics: const BouncingScrollPhysics(
+                    parent: AlwaysScrollableScrollPhysics(),
+                  ),
+                  padding: EdgeInsets.fromLTRB(
+                    12,
+                    8,
+                    12,
+                    12 + bottomNavClearance(context),
+                  ),
+                  itemCount: filtered.length,
+                  itemBuilder: (context, i) => _cloudPlanCard(filtered[i]),
+                ),
+        ),
+      ],
     );
   }
+
+  /// 按本地关键字过滤云方案：命中方案名或任一配件的型号/品牌/品类即保留
+  List<CloudPlan> get _filteredCloudPlans {
+    final q = _cloudQuery.trim().toLowerCase();
+    if (q.isEmpty) return _cloudPlans;
+    return _cloudPlans.where((p) => _cloudPlanMatches(p, q)).toList();
+  }
+
+  bool _cloudPlanMatches(CloudPlan p, String q) {
+    if (p.name.toLowerCase().contains(q)) return true;
+    for (final c in p.plan.components.values) {
+      if (_compMatches(c.model, q) ||
+          _compMatches(c.brand, q) ||
+          _compMatches(c.category, q)) {
+        return true;
+      }
+    }
+    for (final c in p.plan.storages) {
+      if (_compMatches(c.model, q) ||
+          _compMatches(c.brand, q) ||
+          _compMatches(c.category, q)) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  bool _compMatches(String value, String q) =>
+      value.toLowerCase().contains(q);
 
   Widget _emptyCloudPlans() {
     return Center(
