@@ -27,7 +27,7 @@
 ## 目录结构
 
 ```
-DIYHelper/
+DIYAss/
 ├── app/                    # Flutter 客户端
 │   └── lib/
 │       ├── pages/          # 页面

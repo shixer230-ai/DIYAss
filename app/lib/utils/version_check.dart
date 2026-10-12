@@ -6,7 +6,7 @@ class VersionCheck {
   VersionCheck._();
 
   /// GitHub 仓库（发布 release 用）
-  static const String kRepo = 'shixer230-ai/DIYHelper';
+  static const String kRepo = 'shixer230-ai/DIYAss';
 
   /// 最新 release 页面地址（有新版时点「去下载」跳转）
   static const String kReleasesUrl = 'https://github.com/$kRepo/releases/latest';
@@ -18,7 +18,7 @@ class VersionCheck {
       final req = await client.getUrl(
         Uri.parse('https://api.github.com/repos/$kRepo/releases/latest'),
       );
-      req.headers.set(HttpHeaders.userAgentHeader, 'DIYHelper');
+      req.headers.set(HttpHeaders.userAgentHeader, 'DIYAss');
       req.headers.set(HttpHeaders.acceptHeader, 'application/vnd.github+json');
       final res = await req.close();
       if (res.statusCode != 200) return null;
