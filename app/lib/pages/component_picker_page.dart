@@ -18,11 +18,15 @@ class ComponentPickerPage extends StatefulWidget {
     required this.slotLabel,
     required this.category,
     required this.current,
+    this.preferredSocket,
   });
 
   final String slotLabel;
   final String category;
   final PlanComponent? current;
+
+  /// 选主板时传入的 CPU 插槽（如 LGA1700 / AM5），用于把插槽匹配的主板排在前面
+  final String? preferredSocket;
 
   @override
   State<ComponentPickerPage> createState() => _ComponentPickerPageState();
@@ -66,13 +70,44 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
     return false;
   }
 
-  List<HardwareSpec> get _visibleLibrary => _searching
-      ? _library.where((s) => hardwareMatches(s, _query)).toList()
-      : _library;
+  List<HardwareSpec> get _visibleLibrary {
+    final list = (_searching
+            ? _library.where((s) => hardwareMatches(s, _query))
+            : _library)
+        .toList();
+    final socket = widget.preferredSocket;
+    if (socket != null) {
+      // 插槽匹配 CPU 的型号排在前面（搜索结果里同样优先）
+      list.sort((a, b) {
+        final am = _socketOf(a) == socket ? 0 : 1;
+        final bm = _socketOf(b) == socket ? 0 : 1;
+        return am.compareTo(bm);
+      });
+    }
+    return list;
+  }
 
   List<HardwareItem> get _visibleItems => _searching
       ? _items.where((i) => _itemMatches(i, _query)).toList()
       : _items;
+
+  /// 读取型号的插槽规格值（如 LGA1700 / AM5）
+  String? _socketOf(HardwareSpec spec) {
+    for (final e in spec.specs) {
+      if (e.label == '插槽') return e.value;
+    }
+    return null;
+  }
+
+  /// 插槽匹配 CPU 的型号（优先展示）
+  List<HardwareSpec> get _matchingSpecs => widget.preferredSocket == null
+      ? const []
+      : _library.where((s) => _socketOf(s) == widget.preferredSocket).toList();
+
+  /// 插槽不匹配的型号（排在匹配组之后）
+  List<HardwareSpec> get _otherSpecs => widget.preferredSocket == null
+      ? _library
+      : _library.where((s) => _socketOf(s) != widget.preferredSocket).toList();
 
   Future<void> _load() async {
     final allItems = await _store.loadAll();
@@ -175,29 +210,31 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
       top: false,
       child: Padding(
         padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-        child: FakeGlass(
-          borderRadius: BorderRadius.circular(kNavBarRadius),
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              borderRadius: BorderRadius.circular(kNavBarRadius),
-              onTap: _manual,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.edit, size: 20, color: scheme.primary),
-                    const SizedBox(width: 8),
-                    Text(
-                      '手动填写型号和价格',
-                      style: TextStyle(
-                        fontSize: 15,
-                        fontWeight: FontWeight.w600,
-                        color: scheme.primary,
+        child: GlassPressFeedback(
+          child: FakeGlass(
+            borderRadius: BorderRadius.circular(kNavBarRadius),
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(kNavBarRadius),
+                onTap: _manual,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 16),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.edit, size: 20, color: scheme.primary),
+                      const SizedBox(width: 8),
+                      Text(
+                        '手动填写型号和价格',
+                        style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w600,
+                          color: scheme.primary,
+                        ),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -235,6 +272,8 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
   }
 
   Widget _allList(ThemeData theme) {
+    final matching = _matchingSpecs;
+    final others = _otherSpecs;
     return ListView(
       // 底部留出悬浮按钮高度，避免最后一项被挡住
       padding: EdgeInsets.fromLTRB(12, 12, 12, 12 + bottomNavClearance(context)),
@@ -242,9 +281,15 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
         _sectionTitle(theme, '从硬件库选'),
         if (_library.isEmpty)
           _emptyHint(theme, '硬件库里还没有「${widget.category}」')
-        else
-          for (final sec in _specBrandSections(_library))
+        else ...[
+          if (matching.isNotEmpty) ...[
+            _sectionTitle(theme, '匹配 CPU（插槽 ${widget.preferredSocket}）'),
+            _specBrandCard(theme, '推荐', matching),
+            if (others.isNotEmpty) _sectionTitle(theme, '其它${widget.category}'),
+          ],
+          for (final sec in _specBrandSections(others))
             _specBrandCard(theme, sec.brand, sec.specs),
+        ],
         const SizedBox(height: 8),
         _sectionTitle(theme, '从我的清单选'),
         if (_items.isEmpty)

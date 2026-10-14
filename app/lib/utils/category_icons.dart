@@ -18,6 +18,8 @@ IconData categoryIcon(String category) {
       return LucideIcons.power;
     case '机箱':
       return LucideIcons.pc_case;
+    case '散热':
+      return LucideIcons.fan;
     case '整机方案':
       return LucideIcons.monitor;
     default:
@@ -42,6 +44,8 @@ Color categoryColor(String category) {
       return const Color(0xFFF9A825); // 黄
     case '机箱':
       return const Color(0xFF00838F); // 青
+    case '散热':
+      return const Color(0xFF00ACC1); // 清凉青
     case '整机方案':
       return const Color(0xFF3949AB); // 靛
     default:

@@ -26,8 +26,12 @@ class BuildSlot {
   const BuildSlot(this.key, this.label, this.category, {this.required = true});
 }
 
+/// 默认散热器型号：原装散热（0 元，随 CPU 附赠）
+const kStockCoolerModel = '原装散热';
+
 const kBuildSlots = [
   BuildSlot('cpu', 'CPU', 'CPU'),
+  BuildSlot('cooler', '散热', '散热', required: false),
   BuildSlot('gpu', '显卡', '显卡', required: false),
   BuildSlot('motherboard', '主板', '主板'),
   BuildSlot('ram', '内存', '内存'),
@@ -128,7 +132,18 @@ class _BuildPlanPageState extends State<BuildPlanPage>
       ),
     );
     if (name == null) return;
-    final plan = BuildPlan(name: name);
+    final plan = BuildPlan(name: name)
+      // 默认散热器：原装散热 0 元，之后可在方案里点开更换或删除
+      ..set(
+        'cooler',
+        const PlanComponent(
+          category: '散热',
+          brand: '',
+          model: kStockCoolerModel,
+          price: 0,
+          platform: '',
+        ),
+      );
     setState(() {
       _plans.add(plan);
       _currentId = plan.id;
@@ -299,6 +314,9 @@ class _BuildPlanPageState extends State<BuildPlanPage>
           slotLabel: slot.label,
           category: slot.category,
           current: plan[slot.key],
+          // 选主板时，把已选 CPU 的插槽传过去，优先展示插槽匹配的主板
+          preferredSocket:
+              slot.key == 'motherboard' ? _cpuSocket(plan) : null,
         ),
       ),
     );
@@ -438,25 +456,42 @@ class _BuildPlanPageState extends State<BuildPlanPage>
       return;
     }
 
+    final name = _planName(plan);
+
+    // 先落盘当前方案（含内联改的价格），「硬件清单」里的整机方案总价才会跟着更新；
+    // 顺带同步到云端（若已登录），并清掉「未保存」标记
+    await _store.saveAll(_plans);
+    await _autoUpload(plan);
+    if (!mounted) return;
+    setState(() => _dirty = false);
+
     final store = HardwareStore();
     final items = await store.loadAll();
     if (!mounted) return;
-    final existingIndex = items.indexWhere((e) => e.planId == plan.id);
 
-    // 首次保存：直接新增，无需确认
+    // 优先按方案 id 查重；否则按名称查重，避免「方案删了再建同名方案」时
+    // 清单里残留旧条目、又新增一条，造成重名
+    var existingIndex = items.indexWhere((e) => e.planId == plan.id);
     if (existingIndex < 0) {
-      await store.add(_newItem(plan, _planName(plan)));
-      _snack('已把「${_planName(plan)}」加入清单');
+      existingIndex = items.indexWhere(
+        (e) => e.category == '整机方案' && e.model == name,
+      );
+    }
+
+    // 首次保存（既无同方案也无同名条目）：直接新增
+    if (existingIndex < 0) {
+      await store.add(_newItem(plan, name));
+      _snack('已把「$name」加入清单');
       return;
     }
 
-    // 已保存过：直接覆盖原来的条目，保留原 id 与录入时间
+    // 已有同名 / 同方案条目：覆盖，保留原 id 与录入时间
     final old = items[existingIndex];
     items[existingIndex] = HardwareItem(
       id: old.id,
       category: '整机方案',
       brand: '',
-      model: _planName(plan),
+      model: name,
       price: plan.total,
       platform: '',
       spec: _summary(plan),
@@ -464,7 +499,7 @@ class _BuildPlanPageState extends State<BuildPlanPage>
       createdAt: old.createdAt,
     );
     await store.saveAll(items);
-    _snack('已更新清单里的「${_planName(plan)}」');
+    _snack('已更新清单里的「$name」');
   }
 
   /// 上传方案到公开的「云方案」栏目（登录 + 内容合规由云函数处理）
@@ -582,6 +617,18 @@ class _BuildPlanPageState extends State<BuildPlanPage>
 
   /// 自动的 CPU+显卡 功耗（匹配不到返回 null）
   double? _autoPower(BuildPlan plan) => totalPower(plan, _library);
+
+  /// 读取当前方案 CPU 的插槽（如 LGA1700 / AM5），用于主板筛选；找不到返回 null
+  String? _cpuSocket(BuildPlan plan) {
+    final cpu = plan['cpu'];
+    if (cpu == null) return null;
+    final spec = findSpec('CPU', cpu.model, _library);
+    if (spec == null) return null;
+    for (final e in spec.specs) {
+      if (e.label == '插槽') return e.value;
+    }
+    return null;
+  }
 
   Widget _powerCard(BuildPlan plan) {
     return _PowerEditor(
@@ -1108,8 +1155,14 @@ class _SlotRowState extends State<_SlotRow> {
     text: _priceText(widget.comp),
   );
 
-  static String _priceText(PlanComponent? comp) =>
-      comp == null || comp.price <= 0 ? '' : _fmt(comp.price);
+  static String _priceText(PlanComponent? comp) {
+    if (comp == null) return '';
+    if (comp.price <= 0) {
+      // 原装散热默认 0 元，明确显示「0」；其它配件价格留空待填
+      return comp.model == kStockCoolerModel ? '0' : '';
+    }
+    return _fmt(comp.price);
+  }
 
   @override
   void didUpdateWidget(covariant _SlotRow oldWidget) {
@@ -1419,22 +1472,49 @@ class _NameDialogState extends State<_NameDialog> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
     return AlertDialog(
-      title: Text(widget.title),
-      content: TextField(
-        controller: _c,
-        autofocus: true,
-        decoration: InputDecoration(labelText: '名称', errorText: _error),
-        onSubmitted: (_) => _submit(),
+      backgroundColor: theme.colorScheme.surface,
+      surfaceTintColor: Colors.transparent,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(kCardRadius),
       ),
+      title: Text(widget.title),
+      content: GlassField(
+        child: TextField(
+          controller: _c,
+          autofocus: true,
+          decoration: InputDecoration(
+            labelText: '名称',
+            errorText: _error,
+            prefixIcon: const Icon(Icons.edit_outlined, size: 20),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            filled: false,
+            contentPadding: const EdgeInsets.symmetric(
+              horizontal: 16,
+              vertical: 16,
+            ),
+          ),
+          onSubmitted: (_) => _submit(),
+        ),
+      ),
+      actionsPadding: const EdgeInsets.fromLTRB(20, 0, 20, 16),
       actions: [
         TextButton(
           onPressed: () => Navigator.pop(context),
+          style: TextButton.styleFrom(
+            foregroundColor: theme.colorScheme.onSurfaceVariant,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(kCardRadius),
+            ),
+          ),
           child: const Text('取消'),
         ),
         FilledButton(
           onPressed: _submit,
-          style: capsuleButtonStyle(Theme.of(context), fullWidth: false),
+          style: capsuleButtonStyle(theme, fullWidth: false),
           child: const Text('确定'),
         ),
       ],

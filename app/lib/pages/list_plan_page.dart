@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liquid_glass_bottom_navbar_plus/liquid_glass_bottom_navbar_plus.dart';
 
+import '../theme/app_theme.dart';
 import 'build_plan_page.dart';
 import 'hardware_list_page.dart';
 
@@ -50,29 +51,32 @@ class _ListPlanPageState extends State<ListPlanPage>
             // 顶部胶囊分段：硬件清单 / 整机方案（与底部导航同款液态玻璃）
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-              child: LiquidGlassBottomBar(
-                items: const [
-                  LiquidGlassBarItem(label: '硬件清单'),
-                  LiquidGlassBarItem(label: '整机方案'),
-                ],
-                selectedIndex: _index,
-                onDestinationSelected: (i) => _tab.animateTo(i),
-                height: 48,
-                margin: EdgeInsets.zero,
-                applyBottomInset: false,
-                theme: LiquidGlassBarTheme(
-                  iconColor: scheme.onSurfaceVariant,
-                  selectedIconColor: scheme.primary,
-                  labelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
+              child: GlassPressFeedback(
+                clipRadius: 24,
+                child: LiquidGlassBottomBar(
+                  items: const [
+                    LiquidGlassBarItem(label: '硬件清单'),
+                    LiquidGlassBarItem(label: '整机方案'),
+                  ],
+                  selectedIndex: _index,
+                  onDestinationSelected: (i) => _tab.animateTo(i),
+                  height: 48,
+                  margin: EdgeInsets.zero,
+                  applyBottomInset: false,
+                  theme: LiquidGlassBarTheme(
+                    iconColor: scheme.onSurfaceVariant,
+                    selectedIconColor: scheme.primary,
+                    labelStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    selectedLabelStyle: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    pillColor: scheme.primary.withValues(alpha: 0.14),
+                    showLabels: true,
                   ),
-                  selectedLabelStyle: const TextStyle(
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                  pillColor: scheme.primary.withValues(alpha: 0.14),
-                  showLabels: true,
                 ),
               ),
             ),

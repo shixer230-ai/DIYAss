@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:liquid_glass_bottom_navbar_plus/liquid_glass_bottom_navbar_plus.dart';
 
+import '../theme/app_theme.dart';
 import 'analysis_page.dart';
 import 'catalog_page.dart';
 import 'list_plan_page.dart';
@@ -28,6 +29,8 @@ class _HomeShellState extends State<HomeShell> {
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
+    // 底栏胶囊自带 margin（含底部安全区），高光需按同样的边距裁剪到玻璃内
+    final safeBottom = MediaQuery.of(context).viewPadding.bottom;
     final pages = [
       ListPlanPage(isActive: _index == 0),
       AnalysisPage(isActive: _index == 1),
@@ -39,25 +42,28 @@ class _HomeShellState extends State<HomeShell> {
       extendBody: true,
       body: IndexedStack(index: _index, children: pages),
       // 底部导航：iOS 26 液态玻璃材质（真实折射 + 跟手滑动），对齐酷安的实现方式
-      bottomNavigationBar: LiquidGlassBottomBar(
-        items: _kNavItems,
-        selectedIndex: _index,
-        onDestinationSelected: _switchTo,
-        height: 68,
-        margin: const EdgeInsets.fromLTRB(12, 8, 12, 12),
-        theme: LiquidGlassBarTheme(
-          iconColor: scheme.onSurfaceVariant,
-          selectedIconColor: scheme.primary,
-          labelStyle: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w500,
+      bottomNavigationBar: GlassPressFeedback(
+        clipInsets: EdgeInsets.fromLTRB(12, 8, 12, 12 + safeBottom),
+        child: LiquidGlassBottomBar(
+          items: _kNavItems,
+          selectedIndex: _index,
+          onDestinationSelected: _switchTo,
+          height: 68,
+          margin: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+          theme: LiquidGlassBarTheme(
+            iconColor: scheme.onSurfaceVariant,
+            selectedIconColor: scheme.primary,
+            labelStyle: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+            ),
+            selectedLabelStyle: const TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w600,
+            ),
+            pillColor: scheme.primary.withValues(alpha: 0.14),
+            showLabels: true,
           ),
-          selectedLabelStyle: const TextStyle(
-            fontSize: 11,
-            fontWeight: FontWeight.w600,
-          ),
-          pillColor: scheme.primary.withValues(alpha: 0.14),
-          showLabels: true,
         ),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:ui' as ui;
+
 import 'package:flutter/material.dart';
 
 /// 预设主题色（用户可在「我的」页一键切换）
@@ -157,6 +159,152 @@ class GlassDropdown<T> extends StatelessWidget {
   }
 }
 
+/// 液态玻璃栏 / 按钮的点按反馈：按下时整体略微缩小，并在手指处叠一个
+/// 跟随手指移动的径向高光（spotlight），松手后淡出。
+/// 用 Listener 检测按压与移动（不抢占子组件的点击/滑动手势），高光通过
+/// 叠加层 + 圆角裁剪，形状对齐玻璃胶囊本体（透明边距不受影响）
+class GlassPressFeedback extends StatefulWidget {
+  const GlassPressFeedback({
+    super.key,
+    required this.child,
+    this.scale = 0.97,
+    this.spotlightRadius = 90,
+    this.clipRadius = kNavBarRadius,
+    this.clipInsets = EdgeInsets.zero,
+    this.spotlightColor = Colors.white,
+    this.spotlightIntensity = 0.5,
+  });
+
+  final Widget child;
+
+  /// 按下时的缩放比例（越小收缩越明显）
+  final double scale;
+
+  /// 高光半径（逻辑像素，越大光斑越散）
+  final double spotlightRadius;
+
+  /// 玻璃胶囊的圆角半径，用于裁剪高光、对齐胶囊形状
+  final double clipRadius;
+
+  /// 玻璃胶囊相对外层的边距（底栏自带 margin 时传入，让高光只画在玻璃内）
+  final EdgeInsets clipInsets;
+
+  /// 高光颜色（默认白色）
+  final Color spotlightColor;
+
+  /// 高光中心的最大强度（0~1，越大越亮）
+  final double spotlightIntensity;
+
+  @override
+  State<GlassPressFeedback> createState() => _GlassPressFeedbackState();
+}
+
+class _GlassPressFeedbackState extends State<GlassPressFeedback> {
+  bool _pressed = false;
+  Offset? _pos;
+
+  @override
+  Widget build(BuildContext context) {
+    const duration = Duration(milliseconds: 120);
+    return Listener(
+      onPointerDown: (e) => setState(() {
+        _pressed = true;
+        _pos = e.localPosition;
+      }),
+      onPointerMove: (e) => setState(() => _pos = e.localPosition),
+      onPointerUp: (_) => setState(() => _pressed = false),
+      onPointerCancel: (_) => setState(() => _pressed = false),
+      child: AnimatedScale(
+        scale: _pressed ? widget.scale : 1.0,
+        duration: duration,
+        curve: Curves.easeOut,
+        child: Stack(
+          fit: StackFit.passthrough,
+          children: [
+            widget.child,
+            if (_pos != null)
+              Positioned.fill(
+                child: IgnorePointer(
+                  child: Padding(
+                    padding: widget.clipInsets,
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(widget.clipRadius),
+                      child: TweenAnimationBuilder<double>(
+                        tween: Tween(begin: 0, end: _pressed ? 1.0 : 0.0),
+                        duration: duration,
+                        curve: Curves.easeOut,
+                        builder: (context, t, _) {
+                          return CustomPaint(
+                            painter: _SpotlightPainter(
+                              center: _pos! -
+                                  Offset(
+                                    widget.clipInsets.left,
+                                    widget.clipInsets.top,
+                                  ),
+                              radius: widget.spotlightRadius,
+                              intensity: t,
+                              color: widget.spotlightColor,
+                              maxIntensity: widget.spotlightIntensity,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+/// 跟随手指的径向高光画笔：以 [center] 为中心、[radius] 为半径的白色渐变，
+/// 用加色混合（plus）叠加到玻璃上，产生「被点亮」的效果
+class _SpotlightPainter extends CustomPainter {
+  _SpotlightPainter({
+    required this.center,
+    required this.radius,
+    required this.intensity,
+    required this.color,
+    required this.maxIntensity,
+  });
+
+  final Offset center;
+  final double radius;
+  final double intensity;
+  final Color color;
+  final double maxIntensity;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    if (intensity <= 0) return;
+    final shader = ui.Gradient.radial(
+      center,
+      radius,
+      [
+        color.withValues(alpha: maxIntensity * intensity),
+        color.withValues(alpha: maxIntensity * 0.4 * intensity),
+        color.withValues(alpha: 0),
+      ],
+      [0.0, 0.45, 1.0],
+    );
+    final paint = Paint()
+      ..shader = shader
+      ..blendMode = BlendMode.plus;
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant _SpotlightPainter old) =>
+      old.center != center ||
+      old.radius != radius ||
+      old.intensity != intensity ||
+      old.color != color ||
+      old.maxIntensity != maxIntensity;
+}
+
 class SeedOption {
   const SeedOption(this.name, this.color);
 
@@ -312,7 +460,7 @@ ThemeData _base(ColorScheme scheme, bool transparentBackground) {
     ),
     dialogTheme: DialogThemeData(
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(20)),
+        borderRadius: BorderRadius.all(Radius.circular(kCardRadius)),
       ),
     ),
     // 弹出菜单（PopupMenuButton / showMenu）统一胶囊圆角 + 表面色，去掉原生直角菜单

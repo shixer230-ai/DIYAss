@@ -39,6 +39,8 @@ class _CatalogPageState extends State<CatalogPage>
   // 公开的云方案列表（用户上传到「云方案」栏目）
   List<CloudPlan> _cloudPlans = [];
   bool _loadingPlans = false;
+  // 重新上传自己云方案的防连点
+  bool _republishing = false;
 
   // 预置库的品类顺序（即各 Tab 的顺序）
   static const _categories = ['CPU', '显卡', '主板', '内存', '硬盘', '电源', '机箱'];
@@ -185,6 +187,39 @@ class _CatalogPageState extends State<CatalogPage>
     }
   }
 
+  /// 重新上传自己已发布的云方案：重新发布后删除旧条目，刷新日期与点赞
+  Future<void> _republishCloudPlan(CloudPlan p) async {
+    if (_republishing) return;
+    if (!AuthService.instance.isLoggedIn) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('请先在「我的」页登录，再重新上传')),
+      );
+      return;
+    }
+    setState(() => _republishing = true);
+    try {
+      await CloudSync.publishPlan(p.plan);
+      // 重新发布成功后再删旧条目，避免重复；删除失败不阻断
+      try {
+        await CloudSync.deleteCloudPlan(p.id);
+      } catch (_) {}
+      if (!mounted) return;
+      setState(() => _cloudPlans.removeWhere((x) => x.id == p.id));
+      await _loadCloudPlans();
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('已重新上传')),
+      );
+    } catch (e) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString().replaceFirst('Exception: ', ''))),
+      );
+    } finally {
+      if (mounted) setState(() => _republishing = false);
+    }
+  }
+
   Future<void> _toggleLike(CloudPlan p) async {
     if (!AuthService.instance.isLoggedIn) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -215,11 +250,14 @@ class _CatalogPageState extends State<CatalogPage>
   }
 
   Widget _buildCloudPlansTab() {
-    if (_loadingPlans) {
+    if (_loadingPlans && _cloudPlans.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
     if (_cloudPlans.isEmpty) return _emptyCloudPlans();
-    final filtered = _filteredCloudPlans;
+
+    final others = _filterPlans(_otherCloudPlans);
+    final mine = _filterPlans(_myCloudPlans);
+
     return Column(
       children: [
         Padding(
@@ -248,7 +286,7 @@ class _CatalogPageState extends State<CatalogPage>
           ),
         ),
         Expanded(
-          child: filtered.isEmpty
+          child: others.isEmpty && mine.isEmpty
               ? Center(
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
@@ -263,7 +301,7 @@ class _CatalogPageState extends State<CatalogPage>
                     ],
                   ),
                 )
-              : ListView.builder(
+              : ListView(
                   physics: const BouncingScrollPhysics(
                     parent: AlwaysScrollableScrollPhysics(),
                   ),
@@ -273,19 +311,41 @@ class _CatalogPageState extends State<CatalogPage>
                     12,
                     12 + bottomNavClearance(context),
                   ),
-                  itemCount: filtered.length,
-                  itemBuilder: (context, i) => _cloudPlanCard(filtered[i]),
+                  children: [
+                    if (others.isNotEmpty) ...[
+                      _sectionHeader('大家的方案'),
+                      for (final p in others) _cloudPlanCard(p),
+                    ],
+                    if (mine.isNotEmpty) ...[
+                      _sectionHeader('我上传的方案'),
+                      for (final p in mine) _myCloudPlanCard(p),
+                    ],
+                  ],
                 ),
         ),
       ],
     );
   }
 
+  /// 自己上传的云方案（登录后按 owner 匹配，用于下方单独展示）
+  List<CloudPlan> get _myCloudPlans {
+    final uid = AuthService.instance.uid;
+    if (uid == null) return const [];
+    return _cloudPlans.where((p) => p.owner == uid).toList();
+  }
+
+  /// 其他人上传的云方案（云方案主列表，按点赞数排序）
+  List<CloudPlan> get _otherCloudPlans {
+    final uid = AuthService.instance.uid;
+    if (uid == null) return _cloudPlans;
+    return _cloudPlans.where((p) => p.owner != uid).toList();
+  }
+
   /// 按本地关键字过滤云方案：命中方案名或任一配件的型号/品牌/品类即保留
-  List<CloudPlan> get _filteredCloudPlans {
+  List<CloudPlan> _filterPlans(List<CloudPlan> source) {
     final q = _cloudQuery.trim().toLowerCase();
-    if (q.isEmpty) return _cloudPlans;
-    return _cloudPlans.where((p) => _cloudPlanMatches(p, q)).toList();
+    if (q.isEmpty) return source;
+    return source.where((p) => _cloudPlanMatches(p, q)).toList();
   }
 
   bool _cloudPlanMatches(CloudPlan p, String q) {
@@ -330,59 +390,100 @@ class _CatalogPageState extends State<CatalogPage>
     );
   }
 
+  /// 其他人上传的云方案卡片（点击进详情）
   Widget _cloudPlanCard(CloudPlan p) {
-    final theme = Theme.of(context);
-    final uid = AuthService.instance.uid;
-    final liked = uid != null && p.likedBy(uid);
-    final isOwner = uid != null && p.owner == uid;
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
       child: InkWell(
         borderRadius: BorderRadius.circular(kCardRadius),
         onTap: () => _openCloudPlan(p),
-        onLongPress: isOwner ? () => _deleteCloudPlan(p) : null,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              const CategoryBadge(category: '整机方案'),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      p.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
-                      ),
-                    ),
-                    const SizedBox(height: 4),
-                    Text(
-                      '${p.filledCount} 件 · ${p.date}',
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: Colors.grey),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 8),
-              Text(
-                '¥${_fmtPrice(p.total)}',
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-              const SizedBox(width: 8),
-              _likeButton(theme, p, liked),
-            ],
+        child: _cloudPlanRow(p),
+      ),
+    );
+  }
+
+  /// 自己上传的云方案卡片（点击进详情，下方附「重传 / 删除」管理按钮）
+  Widget _myCloudPlanCard(CloudPlan p) {
+    return Card(
+      margin: const EdgeInsets.only(bottom: 10),
+      child: Column(
+        children: [
+          InkWell(
+            borderRadius: BorderRadius.circular(kCardRadius),
+            onTap: () => _openCloudPlan(p),
+            child: _cloudPlanRow(p),
           ),
-        ),
+          const Divider(height: 1),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 4),
+            child: Row(
+              children: [
+                TextButton.icon(
+                  onPressed: _republishing
+                      ? null
+                      : () => _republishCloudPlan(p),
+                  icon: const Icon(Icons.refresh, size: 18),
+                  label: const Text('重传'),
+                ),
+                const Spacer(),
+                TextButton.icon(
+                  onPressed: () => _deleteCloudPlan(p),
+                  icon: const Icon(Icons.delete_outline, size: 18),
+                  label: const Text('删除'),
+                ),
+              ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 云方案卡片主体行：品类徽标 + 方案名/件数日期 + 总价 + 点赞
+  Widget _cloudPlanRow(CloudPlan p) {
+    final theme = Theme.of(context);
+    final uid = AuthService.instance.uid;
+    final liked = uid != null && p.likedBy(uid);
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Row(
+        children: [
+          const CategoryBadge(category: '整机方案'),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  p.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Text(
+                  '${p.filledCount} 件 · ${p.date}',
+                  style: theme.textTheme.bodySmall
+                      ?.copyWith(color: Colors.grey),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '¥${_fmtPrice(p.total)}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 8),
+          _likeButton(theme, p, liked),
+        ],
       ),
     );
   }

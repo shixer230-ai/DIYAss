@@ -327,27 +327,30 @@ class _AnalysisPageState extends State<AnalysisPage>
     final scheme = theme.colorScheme;
     return Padding(
       padding: const EdgeInsets.fromLTRB(12, 8, 12, 4),
-      child: LiquidGlassBottomBar(
-        items: const [
-          LiquidGlassBarItem(label: '性价比排行'),
-          LiquidGlassBarItem(label: 'AI 分析'),
-          LiquidGlassBarItem(label: '可靠性分析'),
-        ],
-        selectedIndex: _mode,
-        onDestinationSelected: (i) => setState(() => _mode = i),
-        height: 48,
-        margin: EdgeInsets.zero,
-        applyBottomInset: false,
-        theme: LiquidGlassBarTheme(
-          iconColor: scheme.onSurfaceVariant,
-          selectedIconColor: scheme.primary,
-          labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
-          selectedLabelStyle: const TextStyle(
-            fontSize: 14,
-            fontWeight: FontWeight.w600,
+      child: GlassPressFeedback(
+        clipRadius: 24,
+        child: LiquidGlassBottomBar(
+          items: const [
+            LiquidGlassBarItem(label: '性价比排行'),
+            LiquidGlassBarItem(label: 'AI 分析'),
+            LiquidGlassBarItem(label: '可靠性分析'),
+          ],
+          selectedIndex: _mode,
+          onDestinationSelected: (i) => setState(() => _mode = i),
+          height: 48,
+          margin: EdgeInsets.zero,
+          applyBottomInset: false,
+          theme: LiquidGlassBarTheme(
+            iconColor: scheme.onSurfaceVariant,
+            selectedIconColor: scheme.primary,
+            labelStyle: const TextStyle(fontSize: 14, fontWeight: FontWeight.w500),
+            selectedLabelStyle: const TextStyle(
+              fontSize: 14,
+              fontWeight: FontWeight.w600,
+            ),
+            pillColor: scheme.primary.withValues(alpha: 0.14),
+            showLabels: true,
           ),
-          pillColor: scheme.primary.withValues(alpha: 0.14),
-          showLabels: true,
         ),
       ),
     );
