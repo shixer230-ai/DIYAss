@@ -1011,7 +1011,7 @@ String _fmt(double p) =>
 /// 把单个整机方案排版成纯文本配置单
 String configText(BuildPlan plan) {
   final buf = StringBuffer();
-  buf.writeln('【DIYHelper 配置单】${_planName(plan)}');
+  buf.writeln('【DIYAss 配置单】${_planName(plan)}');
   buf.writeln('──────────────');
   for (final slot in kBuildSlots) {
     if (slot.key == 'storage') {
@@ -1028,7 +1028,7 @@ String configText(BuildPlan plan) {
   }
   buf.writeln('──────────────');
   buf.writeln('总价：¥${_fmt(plan.total)}');
-  buf.writeln('—— 来自 DIYHelper ——');
+  buf.writeln('—— 来自 DIYAss ——');
   return buf.toString();
 }
 
@@ -1038,7 +1038,7 @@ BuildPlan? parseConfig(String text) {
   final lines = text.split('\n').map((e) => e.trim()).toList();
 
   String name = '';
-  const marker = '【DIYHelper 配置单】';
+  const marker = '【DIYAss 配置单】';
   for (final l in lines) {
     final i = l.indexOf(marker);
     if (i >= 0) {

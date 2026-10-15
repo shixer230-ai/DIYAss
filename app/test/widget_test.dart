@@ -8,7 +8,7 @@ void main() {
     // 用内存 mock 替代真实的本地存储，避免测试环境缺插件报错。
     SharedPreferences.setMockInitialValues({});
 
-    await tester.pumpWidget(const DiyHelperApp());
+    await tester.pumpWidget(const DiyAssApp());
     await tester.pumpAndSettle();
 
     // 清单页现在按品类分 Tab，空态时首个 Tab（整机方案）显示空提示。

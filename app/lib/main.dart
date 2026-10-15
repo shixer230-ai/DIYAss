@@ -1,5 +1,4 @@
-// DIYHelper —— DIY 硬件性价比助手
-// 版本：1.1.2 Beta
+// DIYAss —— DIY 硬件性价比助手
 // 设计与创作：CreativeDesign ZkeRurQwQ · 蓝色大肥鱼Accomplish
 // 版权署名，请勿盗用
 
@@ -24,11 +23,11 @@ Future<void> main() async {
   await CloudApp.init();
   // 恢复云端登录会话（token 未过期则自动登录）
   await AuthService.instance.restore();
-  runApp(const DiyHelperApp());
+  runApp(const DiyAssApp());
 }
 
-class DiyHelperApp extends StatelessWidget {
-  const DiyHelperApp({super.key});
+class DiyAssApp extends StatelessWidget {
+  const DiyAssApp({super.key});
 
   @override
   Widget build(BuildContext context) {
