@@ -6,6 +6,7 @@ import '../storage/hardware_store.dart';
 import '../storage/user_spec_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
+import 'user_spec_form_page.dart';
 
 const _platforms = ['京东', '淘宝', '拼多多', '天猫', '其他'];
 
@@ -22,6 +23,7 @@ class CatalogDetailPage extends StatefulWidget {
 class _CatalogDetailPageState extends State<CatalogDetailPage> {
   final _store = HardwareStore();
   final _userStore = UserSpecStore();
+  late HardwareSpec _spec = widget.spec;
   bool _inMine = false;
 
   @override
@@ -31,7 +33,7 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
   }
 
   Future<void> _loadMineState() async {
-    final inMine = await _userStore.contains(widget.spec.id);
+    final inMine = await _userStore.contains(_spec.id);
     if (!mounted) return;
     setState(() => _inMine = inMine);
   }
@@ -39,9 +41,9 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
   Future<void> _toggleMine() async {
     final added = !_inMine;
     if (added) {
-      await _userStore.add(widget.spec);
+      await _userStore.add(_spec);
     } else {
-      await _userStore.remove(widget.spec.id);
+      await _userStore.remove(_spec.id);
     }
     if (!mounted) return;
     setState(() => _inMine = added);
@@ -50,35 +52,51 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
     );
   }
 
+  /// 编辑「我的添加」里的型号：复用新增表单，预填并覆盖原条目
+  Future<void> _edit() async {
+    final updated = await Navigator.push<HardwareSpec>(
+      context,
+      MaterialPageRoute(builder: (_) => UserSpecFormPage(spec: _spec)),
+    );
+    if (updated == null || !mounted) return;
+    setState(() {
+      _spec = updated;
+      _inMine = true;
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text('已保存修改')),
+    );
+  }
+
   Future<void> _addToList() async {
     final result = await showDialog<(double, String)>(
       context: context,
-      builder: (context) => _AddPriceDialog(spec: widget.spec),
+      builder: (context) => _AddPriceDialog(spec: _spec),
     );
     if (result == null) return;
     final (price, platform) = result;
 
     final item = HardwareItem(
       id: DateTime.now().microsecondsSinceEpoch.toString(),
-      category: widget.spec.category,
-      brand: widget.spec.brand,
-      model: widget.spec.model,
+      category: _spec.category,
+      brand: _spec.brand,
+      model: _spec.model,
       price: price,
       platform: platform,
-      spec: widget.spec.summary(),
+      spec: _spec.summary(),
       createdAt: DateTime.now(),
     );
     await _store.add(item);
     if (!mounted) return;
     ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('已加入清单：${widget.spec.model}')),
+      SnackBar(content: Text('已加入清单：${_spec.model}')),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final spec = widget.spec;
+    final spec = _spec;
 
     return Scaffold(
       appBar: AppBar(title: Text(spec.model)),
@@ -130,6 +148,15 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
             style: capsuleButtonStyle(theme),
           ),
           const SizedBox(height: 12),
+          if (_inMine) ...[
+            OutlinedButton.icon(
+              onPressed: _edit,
+              icon: const Icon(Icons.edit_outlined),
+              label: const Text('编辑此硬件'),
+              style: capsuleOutlinedButtonStyle(theme),
+            ),
+            const SizedBox(height: 12),
+          ],
           OutlinedButton.icon(
             onPressed: _toggleMine,
             icon: Icon(

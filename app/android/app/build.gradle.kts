@@ -42,6 +42,8 @@ android {
 dependencies {
     // flutter_local_notifications 需要 core library desugaring（Java 8+ 库脱糖）
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
+    // 图片识别：ML Kit 中文 OCR 模型（bundled 内置，国产机无谷歌服务也能用）
+    implementation("com.google.mlkit:text-recognition-chinese:16.0.1")
 }
 
 kotlin {

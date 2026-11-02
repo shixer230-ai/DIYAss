@@ -48,6 +48,19 @@ const RELIABILITY_SYSTEM_PROMPT = `你是一名资深 DIY 装机硬件检测专�
 购买建议:
     - （要点）`;
 
+// 配置单解析提示词（mode='parse' 时用）：从 OCR 文字提取硬件清单，返回 JSON
+const PARSE_SYSTEM_PROMPT = `你是一名硬件配置单解析器。用户会给你一段从电商截图 OCR 识别出的文字，请提取出所有硬件配件的「品类、品牌、型号、价格」，并以严格 JSON 格式返回。
+要求：
+1. 品类 category 只能是这些值之一：CPU、主板、显卡、内存、硬盘、电源、机箱、散热。
+2. 品牌 brand、型号 model 从原文提取，提取不到就填空字符串。
+3. 价格 price 是数字（元），提取不到就填 0。
+4. 只输出 JSON，不要输出任何解释文字，不要用 markdown 代码块包裹。
+
+输出格式示例：
+{"items":[{"category":"CPU","brand":"Intel","model":"酷睿 i9-14900K","price":1899}]}
+
+识别不到任何硬件时返回 {"items":[]}`;
+
 // 每人每天上限（防滥用）
 const DAILY_LIMIT = 20;
 
@@ -172,7 +185,11 @@ exports.main = async (event, context) => {
     // reliability 走可靠性分析，否则常规
     const mode = event && event.mode;
     const systemPrompt =
-      mode === 'reliability' ? RELIABILITY_SYSTEM_PROMPT : SYSTEM_PROMPT;
+      mode === 'reliability'
+        ? RELIABILITY_SYSTEM_PROMPT
+        : mode === 'parse'
+        ? PARSE_SYSTEM_PROMPT
+        : SYSTEM_PROMPT;
     const content = await callDeepSeek(apiKey, prompt, systemPrompt);
     return { content };
   } catch (e) {

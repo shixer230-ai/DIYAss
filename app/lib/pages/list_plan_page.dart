@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liquid_glass_bottom_navbar_plus/liquid_glass_bottom_navbar_plus.dart';
 
 import '../theme/app_theme.dart';
+import '../utils/plan_tab_request.dart';
 import 'build_plan_page.dart';
 import 'hardware_list_page.dart';
 
@@ -27,10 +28,12 @@ class _ListPlanPageState extends State<ListPlanPage>
     super.initState();
     _tab = TabController(length: 2, vsync: this);
     _tab.addListener(_onTabChanged);
+    PlanTabRequest.listenable.addListener(_onPlanTabRequest);
   }
 
   @override
   void dispose() {
+    PlanTabRequest.listenable.removeListener(_onPlanTabRequest);
     _tab.dispose();
     super.dispose();
   }
@@ -38,6 +41,12 @@ class _ListPlanPageState extends State<ListPlanPage>
   void _onTabChanged() {
     if (!mounted || _tab.index == _index) return;
     setState(() => _index = _tab.index);
+  }
+
+  /// 从「我的」导入图片成功后，切到「整机方案」分段
+  void _onPlanTabRequest() {
+    if (!mounted) return;
+    _tab.animateTo(1);
   }
 
   @override

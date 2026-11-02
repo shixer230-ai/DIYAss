@@ -10,8 +10,12 @@ const _categories = ['CPU', '主板', '显卡', '内存', '硬盘', '电源', '�
 
 /// 自定义添加硬件型号到「我的添加」：填品类、型号、品牌、参数规格和性价比跑分
 /// 全部字段合并为一张大圆角卡片，字段间用横线分割，不再用胶囊输入框
+/// 传入 [spec] 时进入编辑模式（预填已有内容，保存时覆盖原条目）
 class UserSpecFormPage extends StatefulWidget {
-  const UserSpecFormPage({super.key});
+  const UserSpecFormPage({super.key, this.spec});
+
+  /// 要编辑的已有型号；null 表示新增
+  final HardwareSpec? spec;
 
   @override
   State<UserSpecFormPage> createState() => _UserSpecFormPageState();
@@ -41,12 +45,57 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
   @override
   void initState() {
     super.initState();
-    // 给一行空输入，方便直接填写
-    _specPairs.add(_EntryPair());
     for (final item in kValueItems) {
       _valueControllers[item.label] = TextEditingController();
     }
-    _brand = _brandOptions.first;
+    final src = widget.spec;
+    if (src == null) {
+      // 新增：给一行空输入，方便直接填写
+      _specPairs.add(_EntryPair());
+      _brand = _brandOptions.first;
+    } else {
+      // 编辑：预填已有内容
+      _category = _categories.contains(src.category) ? src.category : '其它';
+      _brand = _brandOptions.contains(src.brand) ? src.brand : '其它';
+      _modelController.text = src.model;
+      _prefillSpecs(src);
+      _prefillBenches(src);
+    }
+  }
+
+  /// 编辑态：把已有规格拆成「功耗条目 + 参数规格」，功耗单独进功耗输入框
+  void _prefillSpecs(HardwareSpec src) {
+    final powerLabel = _powerLabel;
+    final specs = <SpecEntry>[];
+    for (final e in src.specs) {
+      if (powerLabel != null && e.label == powerLabel) {
+        _powerController.text = e.value;
+      } else {
+        specs.add(e);
+      }
+    }
+    _specPairs.clear();
+    if (specs.isEmpty) {
+      _specPairs.add(_EntryPair());
+    } else {
+      for (final e in specs) {
+        final p = _EntryPair();
+        p.label.text = e.label;
+        p.value.text = e.value;
+        _specPairs.add(p);
+      }
+    }
+  }
+
+  /// 编辑态：把已有跑分按分析约定的条目名回填到对应输入框
+  void _prefillBenches(HardwareSpec src) {
+    for (final item in _valueItems) {
+      for (final b in src.benchmarks) {
+        if (b.label == item.benchLabel) {
+          _valueControllers[item.label]?.text = b.value;
+        }
+      }
+    }
   }
 
   @override
@@ -96,8 +145,12 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
 
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
+    final editing = widget.spec != null;
     final spec = HardwareSpec(
-      id: 'user_${DateTime.now().microsecondsSinceEpoch}',
+      // 编辑复用原 id（store.add 内部 removeWhere+add，实现覆盖）
+      id: editing
+          ? widget.spec!.id
+          : 'user_${DateTime.now().microsecondsSinceEpoch}',
       category: _category,
       brand: _brand,
       model: _modelController.text.trim(),
@@ -107,7 +160,7 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
     setState(() => _saving = true);
     await _store.add(spec);
     if (!mounted) return;
-    Navigator.pop(context, true);
+    Navigator.pop(context, spec);
   }
 
   /// 统一的无边框、无填充输入样式：把胶囊输入框换成大卡片内的纯行
@@ -127,7 +180,9 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
     return Scaffold(
-      appBar: AppBar(title: const Text('自定义添加硬件')),
+      appBar: AppBar(
+        title: Text(widget.spec == null ? '自定义添加硬件' : '编辑自定义硬件'),
+      ),
       body: Form(
         key: _formKey,
         child: ListView(
@@ -201,7 +256,7 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
               onPressed: _saving ? null : _save,
               // 胶囊 + 半透明材质，和清单页「保存」等主按钮保持一致
               style: capsuleButtonStyle(Theme.of(context)),
-              child: const Text('保存到「我的添加」'),
+              child: Text(widget.spec == null ? '保存到「我的添加」' : '保存修改'),
             ),
           ],
         ),

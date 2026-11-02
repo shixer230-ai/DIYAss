@@ -115,11 +115,11 @@ class _CatalogPageState extends State<CatalogPage>
   }
 
   Future<void> _openCustomForm() async {
-    final saved = await Navigator.push<bool>(
+    final saved = await Navigator.push<HardwareSpec>(
       context,
       MaterialPageRoute(builder: (_) => const UserSpecFormPage()),
     );
-    if (saved == true) _load();
+    if (saved != null) _load();
   }
 
   /// 拉取公开的云方案列表；失败保持现状（可能未登录或无网络）
@@ -134,6 +134,25 @@ class _CatalogPageState extends State<CatalogPage>
       // 拉取失败保持现状
     } finally {
       if (mounted) setState(() => _loadingPlans = false);
+    }
+  }
+
+  /// 下拉刷新云方案：拉取与至少 2 秒等待并行，保证刷新动画完整展示
+  Future<void> _refreshCloudPlans() async {
+    await Future.wait([
+      _downloadCloudPlans(),
+      Future.delayed(const Duration(seconds: 2)),
+    ]);
+  }
+
+  /// 拉取最新云方案并更新列表（失败静默保持现状）
+  Future<void> _downloadCloudPlans() async {
+    try {
+      final plans = await CloudSync.downloadCloudPlans();
+      if (!mounted) return;
+      setState(() => _cloudPlans = plans);
+    } catch (_) {
+      // 刷新失败保持现状
     }
   }
 
@@ -253,7 +272,6 @@ class _CatalogPageState extends State<CatalogPage>
     if (_loadingPlans && _cloudPlans.isEmpty) {
       return const Center(child: CircularProgressIndicator());
     }
-    if (_cloudPlans.isEmpty) return _emptyCloudPlans();
 
     final others = _filterPlans(_otherCloudPlans);
     final mine = _filterPlans(_myCloudPlans);
@@ -286,43 +304,53 @@ class _CatalogPageState extends State<CatalogPage>
           ),
         ),
         Expanded(
-          child: others.isEmpty && mine.isEmpty
-              ? Center(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      const Icon(
-                        Icons.search_off,
-                        size: 48,
-                        color: Colors.grey,
-                      ),
-                      const SizedBox(height: 8),
-                      Text('没有找到「${_cloudQuery.trim()}」相关的云方案'),
-                    ],
-                  ),
-                )
-              : ListView(
-                  physics: const BouncingScrollPhysics(
-                    parent: AlwaysScrollableScrollPhysics(),
-                  ),
-                  padding: EdgeInsets.fromLTRB(
-                    12,
-                    8,
-                    12,
-                    12 + bottomNavClearance(context),
-                  ),
-                  children: [
-                    if (others.isNotEmpty) ...[
-                      _sectionHeader('大家的方案'),
-                      for (final p in others) _cloudPlanCard(p),
-                    ],
-                    if (mine.isNotEmpty) ...[
-                      _sectionHeader('我上传的方案'),
-                      for (final p in mine) _myCloudPlanCard(p),
-                    ],
-                  ],
-                ),
+          child: RefreshIndicator(
+            onRefresh: _refreshCloudPlans,
+            child: _cloudPlanBody(others, mine),
+          ),
         ),
+      ],
+    );
+  }
+
+  /// 云方案列表主体：无数据 / 搜索无结果 / 正常列表三种状态，正常与无数据都支持下拉刷新
+  Widget _cloudPlanBody(List<CloudPlan> others, List<CloudPlan> mine) {
+    if (_cloudPlans.isEmpty) return _emptyCloudPlans();
+    if (others.isEmpty && mine.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Icon(
+              Icons.search_off,
+              size: 48,
+              color: Colors.grey,
+            ),
+            const SizedBox(height: 8),
+            Text('没有找到「${_cloudQuery.trim()}」相关的云方案'),
+          ],
+        ),
+      );
+    }
+    return ListView(
+      physics: const BouncingScrollPhysics(
+        parent: AlwaysScrollableScrollPhysics(),
+      ),
+      padding: EdgeInsets.fromLTRB(
+        12,
+        8,
+        12,
+        12 + bottomNavClearance(context),
+      ),
+      children: [
+        if (others.isNotEmpty) ...[
+          _sectionHeader('大家的方案'),
+          for (final p in others) _cloudPlanCard(p),
+        ],
+        if (mine.isNotEmpty) ...[
+          _sectionHeader('我上传的方案'),
+          for (final p in mine) _myCloudPlanCard(p),
+        ],
       ],
     );
   }
@@ -371,21 +399,30 @@ class _CatalogPageState extends State<CatalogPage>
       value.toLowerCase().contains(q);
 
   Widget _emptyCloudPlans() {
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(Icons.cloud_outlined, size: 48, color: Colors.grey),
-          const SizedBox(height: 8),
-          const Text('还没有公开的云方案'),
-          const SizedBox(height: 4),
-          Text(
-            '在「整机方案」里点「上传到云方案」，就能把方案分享到这里',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.bodySmall
-                ?.copyWith(color: Colors.grey),
+    // 空状态也做成可滚动，让下拉刷新在无数据时同样能触发
+    return LayoutBuilder(
+      builder: (context, constraints) => SingleChildScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        child: SizedBox(
+          height: constraints.maxHeight,
+          child: Center(
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                const Icon(Icons.cloud_outlined, size: 48, color: Colors.grey),
+                const SizedBox(height: 8),
+                const Text('还没有公开的云方案'),
+                const SizedBox(height: 4),
+                Text(
+                  '在「整机方案」里点「上传到云方案」，就能把方案分享到这里',
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodySmall
+                      ?.copyWith(color: Colors.grey),
+                ),
+              ],
+            ),
           ),
-        ],
+        ),
       ),
     );
   }

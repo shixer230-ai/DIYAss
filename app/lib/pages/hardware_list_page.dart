@@ -237,20 +237,10 @@ class _HardwareListPageState extends State<HardwareListPage>
     if (_plans.isEmpty && orphans.isEmpty) return _emptyCategory('整机方案');
 
     final entries = <Widget>[
+      // 活方案用「文件夹」风格卡片，与整机方案页的文件夹列表保持一致
       for (final plan in _plans)
-        _HardwareCard(
-          item: HardwareItem(
-            id: plan.id,
-            category: '整机方案',
-            brand: '',
-            model: plan.name.isEmpty ? '未命名方案' : plan.name,
-            price: plan.total,
-            platform: '',
-            spec: '',
-            planId: plan.id,
-            createdAt: DateTime.fromMillisecondsSinceEpoch(0),
-          ),
-          onDelete: null,
+        _PlanFolderCard(
+          plan: plan,
           onTap: () => _openPlanById(plan.id),
         ),
       for (final snap in orphans)
@@ -392,6 +382,83 @@ class _HardwareCard extends StatelessWidget {
                       icon: const Icon(Icons.delete_outline, size: 20),
                     ),
                 ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+/// 硬件清单「整机方案」分类里的活方案卡片：圆形文件夹图标 + 方案名 + 件数 + 总价
+/// 风格与整机方案页的文件夹列表保持一致（点击进入该方案）
+class _PlanFolderCard extends StatelessWidget {
+  const _PlanFolderCard({required this.plan, required this.onTap});
+
+  final BuildPlan plan;
+  final VoidCallback onTap;
+
+  String _fmt(double p) =>
+      p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final name = plan.name.isEmpty ? '未命名方案' : plan.name;
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(kCardRadius),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.folder,
+                  color: theme.colorScheme.primary,
+                  size: 28,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      name,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w700,
+                        fontSize: 16,
+                      ),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '${plan.filledCount} 件',
+                      style: theme.textTheme.bodySmall
+                          ?.copyWith(color: Colors.grey),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 8),
+              Text(
+                '¥${_fmt(plan.total)}',
+                style: theme.textTheme.titleMedium?.copyWith(
+                  fontWeight: FontWeight.w700,
+                  color: theme.colorScheme.primary,
+                ),
               ),
             ],
           ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_lucide/flutter_lucide.dart';
 
+import '../ai/img_import.dart';
 import '../app_info.dart';
 import '../analysis/compat_check.dart';
 import '../cloud/auth_service.dart';
@@ -152,6 +152,15 @@ class _BuildPlanPageState extends State<BuildPlanPage>
     });
     await _store.saveAll(_plans);
     await _store.saveCurrentId(plan.id);
+  }
+
+  /// 从相册选图一键导入方案：选图 → 识别 → 命名 → 生成 → 进详情
+  Future<void> _importFromImage() async {
+    final plan = await importPlanFromGallery(context);
+    if (plan == null || !mounted) return;
+    await _load();
+    if (!mounted) return;
+    await _openPlan(plan);
   }
 
   Future<void> _openPlan(BuildPlan plan) async {
@@ -740,36 +749,8 @@ class _BuildPlanPageState extends State<BuildPlanPage>
     );
   }
 
-  Widget _emptyState(BuildContext context) {
-    final theme = Theme.of(context);
-    return Center(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Icon(LucideIcons.pc_case, size: 64, color: Colors.grey),
-          const SizedBox(height: 12),
-          const Text('还没有整机方案'),
-          const SizedBox(height: 4),
-          const Text(
-            '新建一个方案，选好配件后自动算总价',
-            style: TextStyle(color: Colors.grey, fontSize: 12),
-          ),
-          const SizedBox(height: 16),
-          FilledButton.icon(
-            onPressed: _createPlan,
-            icon: const Icon(Icons.add),
-            label: const Text('新建方案'),
-            // 空状态居中展示，按钮按内容自适应宽度（不是满宽长条）
-            style: capsuleButtonStyle(theme, fullWidth: false),
-          ),
-        ],
-      ),
-    );
-  }
-
   /// 文件夹视图：每个整机方案一行，纵向堆叠展示；点击进入具体配置
   Widget _folderList(BuildContext context) {
-    if (_plans.isEmpty) return _emptyState(context);
     return ListView.builder(
       physics: const BouncingScrollPhysics(
         parent: AlwaysScrollableScrollPhysics(),
@@ -780,8 +761,63 @@ class _BuildPlanPageState extends State<BuildPlanPage>
         12,
         12 + bottomNavClearance(context),
       ),
-      itemCount: _plans.length,
-      itemBuilder: (context, i) => _folderCard(context, _plans[i]),
+      // 第一个位置固定放「图片导入」入口，后面才是方案卡片
+      itemCount: _plans.length + 1,
+      itemBuilder: (context, i) {
+        if (i == 0) return _imageImportCard(context);
+        return _folderCard(context, _plans[i - 1]);
+      },
+    );
+  }
+
+  /// 「图片导入」入口卡片：固定在方案列表第一个位置
+  Widget _imageImportCard(BuildContext context) {
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(kCardRadius),
+        onTap: _importFromImage,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+          child: Row(
+            children: [
+              Container(
+                width: 44,
+                height: 44,
+                alignment: Alignment.center,
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                  shape: BoxShape.circle,
+                ),
+                child: Icon(
+                  Icons.image_outlined,
+                  color: theme.colorScheme.primary,
+                  size: 26,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      '图片导入',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      '从电商截图识别硬件，一键生成方案',
+                      style: TextStyle(color: Colors.grey, fontSize: 12),
+                    ),
+                  ],
+                ),
+              ),
+              const Icon(Icons.chevron_right, color: Colors.grey),
+            ],
+          ),
+        ),
+      ),
     );
   }
 

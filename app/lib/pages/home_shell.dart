@@ -3,6 +3,7 @@ import 'package:flutter_lucide/flutter_lucide.dart';
 import 'package:liquid_glass_bottom_navbar_plus/liquid_glass_bottom_navbar_plus.dart';
 
 import '../theme/app_theme.dart';
+import '../utils/plan_tab_request.dart';
 import 'analysis_page.dart';
 import 'catalog_page.dart';
 import 'list_plan_page.dart';
@@ -26,6 +27,12 @@ class _HomeShellState extends State<HomeShell> {
     setState(() => _index = i);
   }
 
+  /// 「我的」页导入图片成功后跳过来：切到清单 tab，再通知清单页切到整机方案分段
+  void _openPlanTab() {
+    setState(() => _index = 0);
+    PlanTabRequest.request();
+  }
+
   @override
   Widget build(BuildContext context) {
     final scheme = Theme.of(context).colorScheme;
@@ -35,7 +42,7 @@ class _HomeShellState extends State<HomeShell> {
       ListPlanPage(isActive: _index == 0),
       AnalysisPage(isActive: _index == 1),
       const CatalogPage(),
-      const ProfilePage(),
+      ProfilePage(onOpenPlanTab: _openPlanTab),
     ];
     return Scaffold(
       // 让页面内容延伸到导航栏下方，导航栏悬浮在内容之上

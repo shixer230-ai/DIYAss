@@ -51,11 +51,12 @@ double? parseBench(String value) {
   return double.tryParse(m.group(0)!.replaceAll(',', ''));
 }
 
-/// 按「品类+型号」匹配型号；先精确匹配，再互相包含兜底，找不到返回 null
+/// 按「品类+型号」匹配型号；先精确匹配，再互相包含，最后核心 token 兜底，找不到返回 null
 HardwareSpec? findSpec(String category, String model, List<HardwareSpec> lib) {
   final normModel = _norm(model);
   if (normModel.isEmpty) return null;
   HardwareSpec? fallback;
+  HardwareSpec? tokenMatch;
   for (final s in lib) {
     if (s.category != category) continue;
     final normSpec = _norm(s.model);
@@ -64,8 +65,13 @@ HardwareSpec? findSpec(String category, String model, List<HardwareSpec> lib) {
         (normSpec.contains(normModel) || normModel.contains(normSpec))) {
       fallback = s;
     }
+    // 非公版长名（如「蓝宝石 RX 6500 XT 白金版 OC」）既不等于也不包含库里型号，
+    // 用核心数字 token（6500xt）做最后兜底
+    if (tokenMatch == null && _shareCoreToken(normModel, normSpec)) {
+      tokenMatch = s;
+    }
   }
-  return fallback;
+  return fallback ?? tokenMatch;
 }
 
 /// 取部件在指定跑分项下的数值；找不到返回 null
@@ -235,6 +241,23 @@ List<PlanValue> rankCustomPlans(List<BuildPlan> plans, CustomItem item) {
   }
   results.sort((a, b) => b.index.compareTo(a.index));
   return results;
+}
+
+/// 提取型号名里的「数字 + 字母后缀」核心 token（如 6500xt、14900k）
+/// 用来把「蓝宝石 RX 6500 XT 白金版 OC」这类非公长名对齐到库里的标准型号
+Set<String> _coreTokens(String norm) {
+  return RegExp(r'\d+[a-z]*')
+      .allMatches(norm)
+      .map((m) => m.group(0)!)
+      .where((t) => t.length >= 4)
+      .toSet();
+}
+
+/// 两个型号名（已规范化）是否共享核心数字 token，用于非公型号兜底匹配
+bool _shareCoreToken(String a, String b) {
+  final tokens = _coreTokens(a);
+  if (tokens.isEmpty) return false;
+  return tokens.any((t) => b.contains(t));
 }
 
 String _norm(String s) => s.toLowerCase().replaceAll(RegExp(r'\s+'), '');

@@ -503,7 +503,12 @@ class _AnalysisPageState extends State<AnalysisPage>
         if (results.isEmpty)
           _empty(theme)
         else
-          for (final v in results) _capsule(theme, v, topIndex),
+          for (var i = 0; i < results.length; i++)
+            _FlyIn(
+              key: ValueKey('b-${_builtin.label}-$i'),
+              index: i,
+              child: _capsule(theme, results[i], topIndex),
+            ),
         if (results.isNotEmpty && skipped > 0)
           Padding(
             padding: const EdgeInsets.only(top: 8),
@@ -673,6 +678,58 @@ class _AnalysisPageState extends State<AnalysisPage>
           ),
         ),
       ),
+    );
+  }
+}
+
+/// 从底部向上飞入的入场动画包装：滑动 + 淡入，带随索引递增的错峰
+class _FlyIn extends StatefulWidget {
+  const _FlyIn({super.key, required this.child, required this.index});
+
+  final Widget child;
+  final int index;
+
+  @override
+  State<_FlyIn> createState() => _FlyInState();
+}
+
+class _FlyInState extends State<_FlyIn> with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+  late final Animation<Offset> _slide;
+  late final Animation<double> _fade;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 560),
+    );
+    // 每条柱子比上一条晚约 70ms 起飞，形成从下往上依次飞入
+    final start = (widget.index * 0.07).clamp(0.0, 0.8).toDouble();
+    final curved = CurvedAnimation(
+      parent: _controller,
+      curve: Interval(start, 1.0, curve: Curves.easeOutCubic),
+    );
+    _slide = Tween<Offset>(
+      begin: const Offset(0, 1.6),
+      end: Offset.zero,
+    ).animate(curved);
+    _fade = Tween<double>(begin: 0.0, end: 1.0).animate(curved);
+    _controller.forward();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SlideTransition(
+      position: _slide,
+      child: FadeTransition(opacity: _fade, child: widget.child),
     );
   }
 }

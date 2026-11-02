@@ -7,6 +7,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../ai/img_import.dart';
 import '../app_info.dart';
 import '../cloud/auth_service.dart';
 import '../cloud/cloud_sync.dart';
@@ -23,7 +24,10 @@ import 'build_plan_page.dart' show kBuildSlots;
 
 /// 「我的」页：个人信息 + 自定义背景 + 主题色 + 外观（深浅色）+ 关于
 class ProfilePage extends StatelessWidget {
-  const ProfilePage({super.key});
+  const ProfilePage({super.key, this.onOpenPlanTab});
+
+  /// 「我的」页导入图片生成方案后，切到底部「清单 → 整机方案」的回调
+  final VoidCallback? onOpenPlanTab;
 
   Future<void> _pickBackground(BuildContext context) async {
     final file = await ImagePicker().pickImage(
@@ -436,6 +440,13 @@ class ProfilePage extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
+            leading: const Icon(Icons.image_outlined),
+            title: const Text('图片导入'),
+            subtitle: const Text('从电商截图识别硬件，一键生成整机方案'),
+            trailing: const Icon(Icons.chevron_right),
+            onTap: () => _importFromImage(context),
+          ),
+          ListTile(
             leading: const Icon(Icons.ios_share),
             title: const Text('导出配置单'),
             subtitle: const Text('把整机方案生成文本，分享到微信 / 备忘录等'),
@@ -452,6 +463,16 @@ class ProfilePage extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  /// 一键图片导入：选图 → 识别 → 命名 → 生成，成功后切到整机方案
+  Future<void> _importFromImage(BuildContext context) async {
+    final plan = await importPlanFromGallery(context);
+    if (plan == null || !context.mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('已导入「${plan.name}」')),
+    );
+    onOpenPlanTab?.call();
   }
 
   /// 一键导出配置单：列出所有整机方案，选一个后用系统分享面板分享
@@ -526,8 +547,8 @@ class ProfilePage extends StatelessWidget {
           ),
           ListTile(
             leading: const Icon(Icons.favorite, color: Colors.pink),
-            title: const Text('支持开发'),
-            subtitle: const Text('捐赠后可获得 donator 专属标识、AI 分析每天 50 次、云方案上传每天 5 次'),
+            title: const Text('增加云服务额度'),
+            subtitle: const Text('捐赠支持后，增加 AI 分析、云方案等使用额度'),
             trailing: const Icon(Icons.chevron_right),
             onTap: () => _openDonate(context),
           ),
