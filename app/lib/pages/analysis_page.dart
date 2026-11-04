@@ -14,6 +14,7 @@ import '../storage/custom_item_store.dart';
 import '../theme/app_theme.dart';
 import 'ai_analysis_page.dart';
 import 'custom_item_form_page.dart';
+import 'radar_chart_page.dart';
 
 /// 分析页：按所选「性价比项目」（内置跑分/功耗 + 自定义项目）给整机方案排行
 class AnalysisPage extends StatefulWidget {
@@ -38,7 +39,7 @@ class _AnalysisPageState extends State<AnalysisPage>
   String? _customId; // 选中的自定义项目 id（null = 没选自定义）
   bool _loading = true;
   bool _syncing = false; // 云同步防连点
-  int _mode = 0; // 0=性价比排行，1=AI 分析，2=可靠性分析
+  int _mode = 0; // 0=性价比排行，1=AI 分析，2=六维雷达图
   Set<String> _pendingDeletes = {}; // 待补删云端的自定义项目 id
   Set<String> _planPendingDeletes = {}; // 待补删云端的方案 id（与整机方案页共用墓碑）
 
@@ -315,14 +316,14 @@ class _AnalysisPageState extends State<AnalysisPage>
                   ] else if (_mode == 1)
                     Expanded(child: _aiView(theme))
                   else
-                    Expanded(child: _reliabilityView(theme)),
+                    Expanded(child: _radarView(theme)),
                 ],
               ),
             ),
     );
   }
 
-  /// 顶部液态玻璃分段（与「清单」顶部分段一致）：性价比排行 / AI 分析 / 可靠性分析
+  /// 顶部液态玻璃分段（与「清单」顶部分段一致）：性价比排行 / AI 分析 / 六维雷达图
   Widget _glassSegmented(ThemeData theme) {
     final scheme = theme.colorScheme;
     return Padding(
@@ -333,7 +334,7 @@ class _AnalysisPageState extends State<AnalysisPage>
           items: const [
             LiquidGlassBarItem(label: '性价比排行'),
             LiquidGlassBarItem(label: 'AI 分析'),
-            LiquidGlassBarItem(label: '可靠性分析'),
+            LiquidGlassBarItem(label: '六维雷达图'),
           ],
           selectedIndex: _mode,
           onDestinationSelected: (i) => setState(() => _mode = i),
@@ -356,28 +357,28 @@ class _AnalysisPageState extends State<AnalysisPage>
     );
   }
 
-  /// AI 分析模式：列出所有方案，用户点一个进入常规分析
+  /// AI 分析模式：列出所有方案，点一个弹出「AI 分析 / 可靠性分析」两种选择
   Widget _aiView(ThemeData theme) => _planPicker(
         theme,
-        mode: 'general',
         icon: Icons.auto_awesome,
-        hint: '选择一个方案，AI 会分析它的亮点、侧重、局限与超频稳定性',
+        hint: '选择一个方案，可做常规 AI 分析，或检测功耗稳定性、魔改 CPU / 矿卡等硬件风险',
+        onTap: _openAiChoice,
       );
 
-  /// 可靠性分析模式：列出所有方案，用户点一个进入可靠性分析
-  Widget _reliabilityView(ThemeData theme) => _planPicker(
+  /// 六维雷达图模式：列出所有方案，点一个进入雷达图
+  Widget _radarView(ThemeData theme) => _planPicker(
         theme,
-        mode: 'reliability',
-        icon: Icons.verified_user_outlined,
-        hint: '选择一个方案，AI 会检测功耗稳定性、魔改 CPU / 矿卡等硬件风险',
+        icon: Icons.radar,
+        hint: '选择一个方案，从单核 / 多核 / 显卡 / 功耗 / 性价比 / 兼容性六个维度看它的轮廓',
+        onTap: _openRadar,
       );
 
-  /// 方案选择列表（AI 分析 / 可靠性分析共用）：一行一个方案，点按进入对应分析
+  /// 方案选择列表（AI 分析 / 六维雷达图共用）：一行一个方案，点按进入对应分析
   Widget _planPicker(
     ThemeData theme, {
-    required String mode,
     required IconData icon,
     required String hint,
+    required void Function(BuildPlan) onTap,
   }) {
     if (_plans.isEmpty) return _empty(theme);
     return ListView(
@@ -398,25 +399,85 @@ class _AnalysisPageState extends State<AnalysisPage>
             style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
           ),
         ),
-        for (final plan in _plans) _planCard(theme, plan, mode, icon),
+        for (final plan in _plans) _planCard(theme, plan, icon, onTap),
       ],
     );
   }
 
   /// 方案选择卡片：方案名 + 配件数 + 总价，点按进入分析
-  Widget _planCard(ThemeData theme, BuildPlan plan, String mode, IconData icon) {
+  Widget _planCard(
+    ThemeData theme,
+    BuildPlan plan,
+    IconData icon,
+    void Function(BuildPlan) onTap,
+  ) {
     final name = plan.name.isEmpty ? '未命名方案' : plan.name;
     final count = plan.components.length;
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 10),
-      child: Card(
-        child: ListTile(
-          onTap: () => _openAiAnalysis(plan, mode: mode),
-          leading: Icon(icon, color: theme.colorScheme.primary),
-          title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
-          subtitle: Text('$count 个配件 · 整机 ¥${_fmt(plan.total)}'),
-          trailing: const Icon(Icons.chevron_right),
+    return Card(
+      margin: const EdgeInsets.only(bottom: 8),
+      child: ListTile(
+        onTap: () => onTap(plan),
+        leading: Icon(icon, color: theme.colorScheme.primary),
+        title: Text(name, maxLines: 1, overflow: TextOverflow.ellipsis),
+        subtitle: Text('$count 个配件 · 整机 ¥${_fmt(plan.total)}'),
+        trailing: const Icon(Icons.chevron_right),
+      ),
+    );
+  }
+
+  /// 弹出「AI 分析 / 可靠性分析」二选一，再进入对应分析
+  void _openAiChoice(BuildPlan plan) {
+    final theme = Theme.of(context);
+    showModalBottomSheet<String>(
+      context: context,
+      backgroundColor: Colors.transparent,
+      builder: (ctx) => SafeArea(
+        child: Container(
+          margin: const EdgeInsets.all(12),
+          padding: const EdgeInsets.only(bottom: 8),
+          decoration: BoxDecoration(
+            color: theme.colorScheme.surface,
+            borderRadius: BorderRadius.circular(28),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                margin: const EdgeInsets.symmetric(vertical: 10),
+                decoration: BoxDecoration(
+                  color: theme.colorScheme.onSurfaceVariant.withValues(alpha: 0.4),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              ListTile(
+                leading: Icon(Icons.auto_awesome, color: theme.colorScheme.primary),
+                title: const Text('AI 分析'),
+                subtitle: const Text('亮点、侧重、局限与超频稳定性'),
+                onTap: () => Navigator.pop(ctx, 'general'),
+              ),
+              ListTile(
+                leading: Icon(Icons.verified_user_outlined, color: theme.colorScheme.primary),
+                title: const Text('可靠性分析'),
+                subtitle: const Text('功耗稳定性、魔改 CPU / 矿卡等硬件风险'),
+                onTap: () => Navigator.pop(ctx, 'reliability'),
+              ),
+            ],
+          ),
         ),
+      ),
+    ).then((mode) {
+      if (mode != null && mounted) _openAiAnalysis(plan, mode: mode);
+    });
+  }
+
+  /// 打开六维雷达图（无需登录）
+  void _openRadar(BuildPlan plan) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => RadarChartPage(plan: plan, library: _library),
       ),
     );
   }
@@ -581,7 +642,7 @@ class _AnalysisPageState extends State<AnalysisPage>
           const Icon(Icons.insights, size: 64, color: Colors.grey),
           const SizedBox(height: 12),
           Text(
-            _plans.isEmpty ? '还没有整机方案' : '没有可评分的方案',
+            _plans.isEmpty ? "啊嘞，这里还没有数据，创建第一个数据吧 (●'◡'●)" : '没有可评分的方案',
             style: theme.textTheme.bodyMedium,
           ),
           const SizedBox(height: 4),

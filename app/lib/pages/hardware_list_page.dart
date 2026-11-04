@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../data/hardware_catalog.dart';
 import '../models/build_plan.dart';
 import '../models/hardware_item.dart';
 import '../storage/build_plan_store.dart';
@@ -75,8 +76,15 @@ class _HardwareListPageState extends State<HardwareListPage>
   }
 
   Future<void> _load() async {
-    final items = await _store.loadAll();
+    var items = await _store.loadAll();
     final plans = await BuildPlanStore().loadAll();
+    // 新版「整机方案」分类直接读方案数据；历史版本遗留的整机方案快照条目一律清理，
+    // 避免删除方案后清单里还残留旧版快照
+    final stale = items.where((e) => e.category == '整机方案').toList();
+    if (stale.isNotEmpty) {
+      items = items.where((e) => e.category != '整机方案').toList();
+      await _store.saveAll(items);
+    }
     if (!mounted) return;
     setState(() {
       _items = items;
@@ -96,6 +104,91 @@ class _HardwareListPageState extends State<HardwareListPage>
   Future<void> _openPlanById(String id) async {
     await BuildPlanStore().saveCurrentId(id);
     widget.onOpenPlan?.call();
+  }
+
+  /// 解构整机方案：把方案里的硬件合并成一张大卡片加入清单，重复硬件跳过
+  Future<void> _deconstructPlan(BuildContext context, BuildPlan plan) async {
+    final comps = [...plan.components.values, ...plan.storages];
+    if (comps.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('该方案还没有硬件')),
+      );
+      return;
+    }
+    // 硬件级去重：清单里已有同品类同型号的硬件则跳过（散热归「其他」）
+    String cat(PlanComponent c) => c.category == '散热' ? '其他' : c.category;
+    final fresh = <PlanComponent>[
+      for (final c in comps)
+        if (!_items.any((e) => e.category == cat(c) && e.model == c.model)) c,
+    ];
+    if (fresh.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('该方案的硬件都已存在于清单中，无需添加')),
+      );
+      return;
+    }
+    final skipped = comps.length - fresh.length;
+
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('解构到硬件清单'),
+        content: Text(
+          skipped == 0
+              ? '将把该方案 ${fresh.length} 件硬件合并成一张卡片加入清单，确定吗？'
+              : '将把该方案 ${fresh.length} 件硬件合并加入清单（已跳过 $skipped 件重复），确定吗？',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child: const Text('取消'),
+          ),
+          TextButton(
+            onPressed: () => Navigator.pop(context, true),
+            child: const Text('解构'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+
+    // 该方案已解构过则先删除旧记录，实现「更新」而非重复新增
+    for (final o in _items.where((e) => e.planId == plan.id)) {
+      await _store.delete(o.id);
+    }
+
+    // 生成一条合并记录，spec 存各硬件明细
+    String fmt(double p) =>
+        p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
+    final lines = <String>[];
+    var totalPrice = 0.0;
+    for (final c in fresh) {
+      lines.add('${cat(c)} · ${c.model} · ¥${fmt(c.price)}');
+      totalPrice += c.price;
+    }
+    final item = HardwareItem(
+      id: 'decon_${DateTime.now().microsecondsSinceEpoch}',
+      category: '其他',
+      brand: '',
+      model: plan.name.isEmpty ? '未命名方案' : plan.name,
+      price: totalPrice,
+      platform: '',
+      spec: lines.join('\n'),
+      planId: plan.id,
+      createdAt: DateTime.now(),
+    );
+    await _store.add(item);
+    if (!mounted) return;
+    _load();
+    ScaffoldMessenger.of(this.context).showSnackBar(
+      SnackBar(
+        content: Text(
+          skipped == 0
+              ? '已解构 ${fresh.length} 件硬件'
+              : '已解构 ${fresh.length} 件硬件（跳过 $skipped 件重复）',
+        ),
+      ),
+    );
   }
 
   Future<void> _confirmDelete(HardwareItem item) async {
@@ -199,8 +292,28 @@ class _HardwareListPageState extends State<HardwareListPage>
 
   Widget _categoryTab(String category) {
     if (category == '整机方案') return _planTab();
-    final items = _items.where((e) => e.category == category).toList();
-    if (items.isEmpty) return _emptyCategory(category);
+    final all = _items.where((e) => e.category == category).toList();
+    if (all.isEmpty) return _emptyCategory(category);
+
+    // 解构记录（planId 非空）与普通硬件分开
+    final decon = all.where((e) => e.planId != null).toList();
+    final plain = all.where((e) => e.planId == null).toList();
+
+    // 普通硬件去重：相同型号只保留一条
+    final seen = <String>{};
+    final unique = [
+      for (final e in plain)
+        if (seen.add(e.model)) e,
+    ];
+
+    // 按品牌分组，每组一张大圆角卡片
+    final sections = _brandSections(category, unique);
+    final entries = <Widget>[
+      for (final sec in sections) _brandGroupCard(sec.brand, sec.items),
+      for (final d in decon)
+        _DeconstructedCard(item: d, onDelete: () => _confirmDelete(d)),
+    ];
+
     return ListView.builder(
       // 回弹效果：超出可滚动范围时橡皮筋回弹（AlwaysScrollable 保证短列表也能滚）
       physics: const BouncingScrollPhysics(
@@ -212,29 +325,90 @@ class _HardwareListPageState extends State<HardwareListPage>
         12,
         12 + bottomNavClearance(context),
       ),
-      itemCount: items.length,
-      itemBuilder: (context, index) {
-        final item = items[index];
-        return _HardwareCard(
-          item: item,
-          onDelete: () => _confirmDelete(item),
-          onTap: null,
-        );
-      },
+      itemCount: entries.length,
+      itemBuilder: (context, index) => entries[index],
     );
   }
 
-  /// 整机方案分类：直接读整机方案（BuildPlanStore）自动出现；
-  /// 「保存到清单」产生的快照在方案删除后仍保留，作为孤儿条目列出（可删）
+  /// 按品牌把某品类的硬件分组：主流品牌在前（按 kBrandGroups 顺序），其余归「其它」
+  List<({String brand, List<HardwareItem> items})> _brandSections(
+    String category,
+    List<HardwareItem> items,
+  ) {
+    final mains = kBrandGroups[category] ?? const <String>[];
+    final sections = <({String brand, List<HardwareItem> items})>[];
+    for (final brand in [...mains, '其它']) {
+      final list =
+          items
+              .where((i) => brandGroupOf(category, i.brand) == brand)
+              .toList()
+            ..sort((a, b) => a.model.compareTo(b.model));
+      if (list.isNotEmpty) sections.add((brand: brand, items: list));
+    }
+    return sections;
+  }
+
+  /// 品牌分组大圆角卡片：品牌名 + 该品牌下的硬件行
+  Widget _brandGroupCard(String brand, List<HardwareItem> items) {
+    final theme = Theme.of(context);
+    return Card(
+      margin: const EdgeInsets.only(bottom: 12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 12, 16, 4),
+            child: Text(
+              brand,
+              style: theme.textTheme.titleSmall?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
+            ),
+          ),
+          for (var i = 0; i < items.length; i++) ...[
+            if (i > 0) const Divider(height: 1, indent: 16),
+            _itemTile(theme, items[i]),
+          ],
+          const SizedBox(height: 4),
+        ],
+      ),
+    );
+  }
+
+  /// 分组卡片内的一行硬件：品类徽标 + 型号 + 品牌/平台 + 价格 + 删除
+  Widget _itemTile(ThemeData theme, HardwareItem item) {
+    String fmt(double p) =>
+        p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
+    return ListTile(
+      leading: CategoryBadge(category: item.category),
+      title: Text(item.model),
+      subtitle: Text(
+        item.brand.isEmpty ? item.platform : '${item.brand} · ${item.platform}',
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(
+            '¥${fmt(item.price)}',
+            style: TextStyle(
+              fontWeight: FontWeight.bold,
+              color: theme.colorScheme.primary,
+            ),
+          ),
+          IconButton(
+            onPressed: () => _confirmDelete(item),
+            tooltip: '删除',
+            icon: const Icon(Icons.delete_outline, size: 20),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 整机方案分类：直接读整机方案（BuildPlanStore）自动出现
   Widget _planTab() {
-    final liveIds = _plans.map((p) => p.id).toSet();
-    final orphans = _items
-        .where((e) =>
-            e.category == '整机方案' &&
-            e.planId != null &&
-            !liveIds.contains(e.planId))
-        .toList();
-    if (_plans.isEmpty && orphans.isEmpty) return _emptyCategory('整机方案');
+    if (_plans.isEmpty) return _emptyCategory('整机方案');
 
     final entries = <Widget>[
       // 活方案用「文件夹」风格卡片，与整机方案页的文件夹列表保持一致
@@ -242,12 +416,7 @@ class _HardwareListPageState extends State<HardwareListPage>
         _PlanFolderCard(
           plan: plan,
           onTap: () => _openPlanById(plan.id),
-        ),
-      for (final snap in orphans)
-        _HardwareCard(
-          item: snap,
-          onDelete: () => _confirmDelete(snap),
-          onTap: null,
+          onDeconstruct: () => _deconstructPlan(context, plan),
         ),
     ];
 
@@ -277,7 +446,7 @@ class _HardwareListPageState extends State<HardwareListPage>
           color: categoryColor(category),
         ),
         const SizedBox(height: 8),
-        Text(isPlan ? '还没有整机方案' : '还没有「$category」的记录'),
+        const Text("啊嘞，这里还没有数据，创建第一个数据吧 (●'◡'●)"),
         const SizedBox(height: 4),
         Text(
           isPlan ? '在顶部「整机方案」里创建后会自动出现在这里' : '可去「硬件库」选型号，或点右下角 + 添加',
@@ -293,98 +462,78 @@ class _HardwareListPageState extends State<HardwareListPage>
         ),
         child: SizedBox(
           height: constraints.maxHeight,
-          child: Center(child: content),
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 48),
+              child: content,
+            ),
+          ),
         ),
       ),
     );
   }
 }
 
-class _HardwareCard extends StatelessWidget {
-  const _HardwareCard({required this.item, this.onDelete, this.onTap});
+/// 解构整机方案产生的大圆角矩形卡片：方案名 + 总价 + 各硬件明细
+class _DeconstructedCard extends StatelessWidget {
+  const _DeconstructedCard({required this.item, required this.onDelete});
 
   final HardwareItem item;
-  final VoidCallback? onDelete;
-  final VoidCallback? onTap;
+  final VoidCallback onDelete;
 
-  String _formatPrice(double p) {
-    return p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
-  }
+  String _fmt(double p) =>
+      p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final isPlan = item.planId != null;
-    // 整机方案只展示方案名称，隐藏 CPU/显卡 等配件摘要
-    final subtitle = [
-      if (item.brand.isNotEmpty) item.brand,
-      if (item.platform.isNotEmpty) item.platform,
-      if (item.spec.isNotEmpty && !isPlan) item.spec,
-    ].join(' · ');
-
+    final lines =
+        item.spec.split('\n').where((e) => e.trim().isNotEmpty).toList();
     return Card(
       margin: const EdgeInsets.only(bottom: 10),
-      child: InkWell(
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(kCardRadius),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Row(
-            children: [
-              CategoryBadge(category: item.category),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      item.model,
-                      style: TextStyle(
-                        // 整机方案：方案名加粗加大；普通硬件保持原样
-                        fontWeight: isPlan ? FontWeight.w700 : FontWeight.w600,
-                        fontSize: isPlan ? 19 : 16,
-                      ),
-                    ),
-                    if (subtitle.isNotEmpty) ...[
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: theme.textTheme.bodySmall,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-                    ],
-                    const SizedBox(height: 4),
-                    Text(
-                      item.category,
-                      style: theme.textTheme.labelSmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(
-                    '¥${_formatPrice(item.price)}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                      color: theme.colorScheme.primary,
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Padding(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    item.model,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18,
                     ),
                   ),
-                  if (onDelete != null)
-                    IconButton(
-                      onPressed: onDelete,
-                      tooltip: '删除',
-                      icon: const Icon(Icons.delete_outline, size: 20),
-                    ),
-                ],
+                ),
+                Text(
+                  '¥${_fmt(item.price)}',
+                  style: TextStyle(
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16,
+                    color: theme.colorScheme.primary,
+                  ),
+                ),
+                IconButton(
+                  onPressed: onDelete,
+                  tooltip: '删除',
+                  icon: const Icon(Icons.delete_outline, size: 20),
+                ),
+              ],
+            ),
+            const SizedBox(height: 8),
+            for (final line in lines)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 4),
+                child: Text(line, style: theme.textTheme.bodyMedium),
               ),
-            ],
-          ),
+          ],
         ),
       ),
     );
@@ -394,10 +543,15 @@ class _HardwareCard extends StatelessWidget {
 /// 硬件清单「整机方案」分类里的活方案卡片：圆形文件夹图标 + 方案名 + 件数 + 总价
 /// 风格与整机方案页的文件夹列表保持一致（点击进入该方案）
 class _PlanFolderCard extends StatelessWidget {
-  const _PlanFolderCard({required this.plan, required this.onTap});
+  const _PlanFolderCard({
+    required this.plan,
+    required this.onTap,
+    required this.onDeconstruct,
+  });
 
   final BuildPlan plan;
   final VoidCallback onTap;
+  final VoidCallback onDeconstruct;
 
   String _fmt(double p) =>
       p == p.roundToDouble() ? p.toStringAsFixed(0) : p.toStringAsFixed(2);
@@ -408,61 +562,73 @@ class _PlanFolderCard extends StatelessWidget {
     final name = plan.name.isEmpty ? '未命名方案' : plan.name;
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(kCardRadius),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-          child: Row(
-            children: [
-              Container(
-                width: 44,
-                height: 44,
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  color: theme.colorScheme.primary.withValues(alpha: 0.12),
-                  shape: BoxShape.circle,
-                ),
-                child: Icon(
-                  Icons.folder,
-                  color: theme.colorScheme.primary,
-                  size: 28,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+      // 解构按钮放在 InkWell 外面，避免点击时被 onTap（进方案）抢走手势导致无反应
+      child: Row(
+        children: [
+          Expanded(
+            child: InkWell(
+              borderRadius: BorderRadius.circular(kCardRadius),
+              onTap: onTap,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+                child: Row(
                   children: [
-                    Text(
-                      name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w700,
-                        fontSize: 16,
+                    Container(
+                      width: 44,
+                      height: 44,
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primary.withValues(alpha: 0.12),
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.folder,
+                        color: theme.colorScheme.primary,
+                        size: 28,
                       ),
                     ),
-                    const SizedBox(height: 2),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            name,
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w700,
+                              fontSize: 16,
+                            ),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            '${plan.filledCount} 件',
+                            style: theme.textTheme.bodySmall
+                                ?.copyWith(color: Colors.grey),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 8),
                     Text(
-                      '${plan.filledCount} 件',
-                      style: theme.textTheme.bodySmall
-                          ?.copyWith(color: Colors.grey),
+                      '¥${_fmt(plan.total)}',
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w700,
+                        color: theme.colorScheme.primary,
+                      ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 8),
-              Text(
-                '¥${_fmt(plan.total)}',
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontWeight: FontWeight.w700,
-                  color: theme.colorScheme.primary,
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          IconButton(
+            onPressed: onDeconstruct,
+            tooltip: '解构到清单',
+            icon: const Icon(Icons.call_split, size: 20),
+          ),
+        ],
       ),
     );
   }

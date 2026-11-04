@@ -280,7 +280,7 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
       children: [
         _sectionTitle(theme, '从硬件库选'),
         if (_library.isEmpty)
-          _emptyHint(theme, '硬件库里还没有「${widget.category}」')
+          _emptyHint(theme, "啊嘞，这里还没有「${widget.category}」 (●'◡'●)")
         else ...[
           if (matching.isNotEmpty) ...[
             _sectionTitle(theme, '匹配 CPU（插槽 ${widget.preferredSocket}）'),
@@ -293,7 +293,7 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
         const SizedBox(height: 8),
         _sectionTitle(theme, '从我的清单选'),
         if (_items.isEmpty)
-          _emptyHint(theme, '清单里还没有「${widget.category}」')
+          _emptyHint(theme, "啊嘞，这里还没有「${widget.category}」 (●'◡'●)")
         else
           for (final sec in _itemBrandSections(_items))
             _itemBrandCard(theme, sec.brand, sec.items),

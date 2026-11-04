@@ -19,6 +19,8 @@ class ValueItem {
 /// 可选的分析项目（跑分覆盖 CPU+显卡，另加整机功耗）
 const kValueItems = [
   ValueItem('CPU-Z 单核', 'CPU', 'CPU-Z 单核', weighted: true),
+  ValueItem('Cinebench R23 单核', 'CPU', 'Cinebench R23 单核', weighted: true),
+  ValueItem('Geekbench 6 单核', 'CPU', 'Geekbench 6 单核', weighted: true),
   ValueItem('CPU-Z 多核', 'CPU', 'CPU-Z 多核'),
   ValueItem('Cinebench R23 多核', 'CPU', 'Cinebench R23 多核'),
   ValueItem('3DMark Time Spy', '显卡', '3DMark Time Spy'),

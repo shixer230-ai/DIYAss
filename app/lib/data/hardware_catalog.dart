@@ -63,6 +63,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 910'),
       SpecEntry('CPU-Z 多核', '约 16900'),
+      SpecEntry('Cinebench R23 单核', '约 2202'),
+      SpecEntry('Geekbench 6 单核', '约 2912'),
       SpecEntry('Cinebench R23 多核', '约 39000'),
     ],
   ),
@@ -82,6 +84,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 890'),
       SpecEntry('CPU-Z 多核', '约 15000'),
+      SpecEntry('Cinebench R23 单核', '约 2154'),
+      SpecEntry('Geekbench 6 单核', '约 2848'),
       SpecEntry('Cinebench R23 多核', '约 34500'),
     ],
   ),
@@ -101,6 +105,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 860'),
       SpecEntry('CPU-Z 多核', '约 10300'),
+      SpecEntry('Cinebench R23 单核', '约 2081'),
+      SpecEntry('Geekbench 6 单核', '约 2752'),
       SpecEntry('Cinebench R23 多核', '约 24500'),
     ],
   ),
@@ -120,6 +126,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 6800'),
+      SpecEntry('Cinebench R23 单核', '约 1839'),
+      SpecEntry('Geekbench 6 单核', '约 2432'),
       SpecEntry('Cinebench R23 多核', '约 16000'),
     ],
   ),
@@ -139,6 +147,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 830'),
       SpecEntry('CPU-Z 多核', '约 11500'),
+      SpecEntry('Cinebench R23 单核', '约 1992'),
+      SpecEntry('Geekbench 6 单核', '约 2614'),
       SpecEntry('Cinebench R23 多核', '约 27500'),
     ],
   ),
@@ -158,6 +168,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 790'),
       SpecEntry('CPU-Z 多核', '约 15700'),
+      SpecEntry('Cinebench R23 单核', '约 2014'),
+      SpecEntry('Geekbench 6 单核', '约 3002'),
       SpecEntry('Cinebench R23 多核', '约 38500'),
     ],
   ),
@@ -177,6 +189,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 710'),
       SpecEntry('CPU-Z 多核', '约 7700'),
+      SpecEntry('Cinebench R23 单核', '约 1810'),
+      SpecEntry('Geekbench 6 单核', '约 2698'),
       SpecEntry('Cinebench R23 多核', '约 18400'),
     ],
   ),
@@ -196,6 +210,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 770'),
       SpecEntry('CPU-Z 多核', '约 8100'),
+      SpecEntry('Cinebench R23 单核', '约 1963'),
+      SpecEntry('Geekbench 6 单核', '约 2926'),
       SpecEntry('Cinebench R23 多核', '约 20000'),
     ],
   ),
@@ -215,6 +231,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 6100'),
+      SpecEntry('Cinebench R23 单核', '约 1938'),
+      SpecEntry('Geekbench 6 单核', '约 2888'),
       SpecEntry('Cinebench R23 多核', '约 15200'),
     ],
   ),
@@ -234,6 +252,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 640'),
       SpecEntry('CPU-Z 多核', '约 4900'),
+      SpecEntry('Cinebench R23 单核', '约 1549'),
+      SpecEntry('Geekbench 6 单核', '约 2144'),
       SpecEntry('Cinebench R23 多核', '约 11800'),
     ],
   ),
@@ -254,6 +274,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 905'),
       SpecEntry('CPU-Z 多核', '约 16800'),
+      SpecEntry('Cinebench R23 单核', '约 2190'),
+      SpecEntry('Geekbench 6 单核', '约 2896'),
       SpecEntry('Cinebench R23 多核', '约 38500'),
     ],
   ),
@@ -273,6 +295,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 875'),
       SpecEntry('CPU-Z 多核', '约 12400'),
+      SpecEntry('Cinebench R23 单核', '约 2118'),
+      SpecEntry('Geekbench 6 单核', '约 2800'),
       SpecEntry('Cinebench R23 多核', '约 30500'),
     ],
   ),
@@ -292,6 +316,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 830'),
       SpecEntry('CPU-Z 多核', '约 9800'),
+      SpecEntry('Cinebench R23 单核', '约 2009'),
+      SpecEntry('Geekbench 6 单核', '约 2656'),
       SpecEntry('Cinebench R23 多核', '约 24000'),
     ],
   ),
@@ -311,6 +337,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 790'),
       SpecEntry('CPU-Z 多核', '约 9600'),
+      SpecEntry('Cinebench R23 单核', '约 1896'),
+      SpecEntry('Geekbench 6 单核', '约 2488'),
       SpecEntry('Cinebench R23 多核', '约 22800'),
     ],
   ),
@@ -330,6 +358,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 7200'),
+      SpecEntry('Cinebench R23 单核', '约 1824'),
+      SpecEntry('Geekbench 6 单核', '约 2394'),
       SpecEntry('Cinebench R23 多核', '约 17400'),
     ],
   ),
@@ -349,6 +379,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 700'),
       SpecEntry('CPU-Z 多核', '约 5000'),
+      SpecEntry('Cinebench R23 单核', '约 1680'),
+      SpecEntry('Geekbench 6 单核', '约 2205'),
       SpecEntry('Cinebench R23 多核', '约 12400'),
     ],
   ),
@@ -368,6 +400,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 680'),
       SpecEntry('CPU-Z 多核', '约 3600'),
+      SpecEntry('Cinebench R23 单核', '约 1632'),
+      SpecEntry('Geekbench 6 单核', '约 2142'),
       SpecEntry('Cinebench R23 多核', '约 8600'),
     ],
   ),
@@ -387,6 +421,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 11800'),
+      SpecEntry('Cinebench R23 单核', '约 1989'),
+      SpecEntry('Geekbench 6 单核', '约 2964'),
       SpecEntry('Cinebench R23 多核', '约 29200'),
     ],
   ),
@@ -406,6 +442,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 650'),
       SpecEntry('CPU-Z 多核', '约 6500'),
+      SpecEntry('Cinebench R23 单核', '约 1560'),
+      SpecEntry('Geekbench 6 单核', '约 2145'),
       SpecEntry('Cinebench R23 多核', '约 14800'),
     ],
   ),
@@ -425,6 +463,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 640'),
       SpecEntry('CPU-Z 多核', '约 6500'),
+      SpecEntry('Cinebench R23 单核', '约 1549'),
+      SpecEntry('Geekbench 6 单核', '约 2144'),
       SpecEntry('Cinebench R23 多核', '约 15000'),
     ],
   ),
@@ -444,6 +484,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 680'),
       SpecEntry('CPU-Z 多核', '约 9800'),
+      SpecEntry('Cinebench R23 单核', '约 1646'),
+      SpecEntry('Geekbench 6 单核', '约 2278'),
       SpecEntry('Cinebench R23 多核', '约 22500'),
     ],
   ),
@@ -463,6 +505,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 620'),
       SpecEntry('CPU-Z 多核', '约 4800'),
+      SpecEntry('Cinebench R23 单核', '约 1500'),
+      SpecEntry('Geekbench 6 单核', '约 2077'),
       SpecEntry('Cinebench R23 多核', '约 11300'),
     ],
   ),
@@ -482,6 +526,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 600'),
       SpecEntry('CPU-Z 多核', '约 4700'),
+      SpecEntry('Cinebench R23 单核', '约 1452'),
+      SpecEntry('Geekbench 6 单核', '约 2010'),
       SpecEntry('Cinebench R23 多核', '约 10800'),
     ],
   ),
@@ -501,6 +547,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 750'),
       SpecEntry('CPU-Z 多核', '约 6000'),
+      SpecEntry('Cinebench R23 单核', '约 1912'),
+      SpecEntry('Geekbench 6 单核', '约 2850'),
       SpecEntry('Cinebench R23 多核', '约 14800'),
     ],
   ),
@@ -521,6 +569,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 810'),
       SpecEntry('CPU-Z 多核', '约 17000'),
+      SpecEntry('Cinebench R23 单核', '约 2025'),
+      SpecEntry('Geekbench 6 单核', '约 3038'),
       SpecEntry('Cinebench R23 多核', '约 41000'),
     ],
   ),
@@ -540,6 +590,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 805'),
       SpecEntry('CPU-Z 多核', '约 17200'),
+      SpecEntry('Cinebench R23 单核', '约 2012'),
+      SpecEntry('Geekbench 6 单核', '约 3019'),
       SpecEntry('Cinebench R23 多核', '约 42400'),
     ],
   ),
@@ -559,6 +611,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 800'),
       SpecEntry('CPU-Z 多核', '约 13000'),
+      SpecEntry('Cinebench R23 单核', '约 2000'),
+      SpecEntry('Geekbench 6 单核', '约 3000'),
       SpecEntry('Cinebench R23 多核', '约 32200'),
     ],
   ),
@@ -578,6 +632,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 795'),
       SpecEntry('CPU-Z 多核', '约 8800'),
+      SpecEntry('Cinebench R23 单核', '约 1988'),
+      SpecEntry('Geekbench 6 单核', '约 2981'),
       SpecEntry('Cinebench R23 多核', '约 21500'),
     ],
   ),
@@ -597,6 +653,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 790'),
       SpecEntry('CPU-Z 多核', '约 7000'),
+      SpecEntry('Cinebench R23 单核', '约 1975'),
+      SpecEntry('Geekbench 6 单核', '约 2962'),
       SpecEntry('Cinebench R23 多核', '约 17000'),
     ],
   ),
@@ -616,6 +674,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 9200'),
+      SpecEntry('Cinebench R23 单核', '约 1950'),
+      SpecEntry('Geekbench 6 单核', '约 2925'),
       SpecEntry('Cinebench R23 多核', '约 23300'),
     ],
   ),
@@ -635,6 +695,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 905'),
       SpecEntry('CPU-Z 多核', '约 17600'),
+      SpecEntry('Cinebench R23 单核', '约 2172'),
+      SpecEntry('Geekbench 6 单核', '约 3168'),
       SpecEntry('Cinebench R23 多核', '约 40800'),
     ],
   ),
@@ -654,6 +716,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 885'),
       SpecEntry('CPU-Z 多核', '约 15200'),
+      SpecEntry('Cinebench R23 单核', '约 2124'),
+      SpecEntry('Geekbench 6 单核', '约 3098'),
       SpecEntry('Cinebench R23 多核', '约 35400'),
     ],
   ),
@@ -673,6 +737,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 855'),
       SpecEntry('CPU-Z 多核', '约 10500'),
+      SpecEntry('Cinebench R23 单核', '约 2052'),
+      SpecEntry('Geekbench 6 单核', '约 2992'),
       SpecEntry('Cinebench R23 多核', '约 24500'),
     ],
   ),
@@ -694,6 +760,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 770'),
       SpecEntry('CPU-Z 多核', '约 8900'),
+      SpecEntry('Cinebench R23 单核', '约 1848'),
+      SpecEntry('Geekbench 6 单核', '约 2426'),
       SpecEntry('Cinebench R23 多核', '约 20500'),
     ],
   ),
@@ -713,6 +781,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 700'),
       SpecEntry('CPU-Z 多核', '约 5000'),
+      SpecEntry('Cinebench R23 单核', '约 1680'),
+      SpecEntry('Geekbench 6 单核', '约 2205'),
       SpecEntry('Cinebench R23 多核', '约 12400'),
     ],
   ),
@@ -732,6 +802,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 680'),
       SpecEntry('CPU-Z 多核', '约 3600'),
+      SpecEntry('Cinebench R23 单核', '约 1632'),
+      SpecEntry('Geekbench 6 单核', '约 2142'),
       SpecEntry('Cinebench R23 多核', '约 8600'),
     ],
   ),
@@ -753,6 +825,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 530'),
       SpecEntry('CPU-Z 多核', '约 11500'),
+      SpecEntry('Cinebench R23 单核', '约 1219'),
+      SpecEntry('Geekbench 6 单核', '约 1590'),
       SpecEntry('Cinebench R23 多核', '约 24000'),
     ],
   ),
@@ -772,6 +846,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 530'),
       SpecEntry('CPU-Z 多核', '约 8300'),
+      SpecEntry('Cinebench R23 单核', '约 1219'),
+      SpecEntry('Geekbench 6 单核', '约 1590'),
       SpecEntry('Cinebench R23 多核', '约 18600'),
     ],
   ),
@@ -791,6 +867,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 540'),
       SpecEntry('CPU-Z 多核', '约 5900'),
+      SpecEntry('Cinebench R23 单核', '约 1242'),
+      SpecEntry('Geekbench 6 单核', '约 1620'),
       SpecEntry('Cinebench R23 多核', '约 13500'),
     ],
   ),
@@ -810,6 +888,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 520'),
       SpecEntry('CPU-Z 多核', '约 5600'),
+      SpecEntry('Cinebench R23 单核', '约 1196'),
+      SpecEntry('Geekbench 6 单核', '约 1560'),
       SpecEntry('Cinebench R23 多核', '约 12900'),
     ],
   ),
@@ -829,6 +909,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 500'),
       SpecEntry('CPU-Z 多核', '约 4100'),
+      SpecEntry('Cinebench R23 单核', '约 1150'),
+      SpecEntry('Geekbench 6 单核', '约 1500'),
       SpecEntry('Cinebench R23 多核', '约 9800'),
     ],
   ),
@@ -848,6 +930,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 490'),
       SpecEntry('CPU-Z 多核', '约 3900'),
+      SpecEntry('Cinebench R23 单核', '约 1127'),
+      SpecEntry('Geekbench 6 单核', '约 1470'),
       SpecEntry('Cinebench R23 多核', '约 9400'),
     ],
   ),
@@ -867,6 +951,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 2800'),
+      SpecEntry('Cinebench R23 单核', '约 1173'),
+      SpecEntry('Geekbench 6 单核', '约 1530'),
       SpecEntry('Cinebench R23 多核', '约 6600'),
     ],
   ),
@@ -886,6 +972,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 470'),
       SpecEntry('CPU-Z 多核', '约 2500'),
+      SpecEntry('Cinebench R23 单核', '约 1081'),
+      SpecEntry('Geekbench 6 单核', '约 1410'),
       SpecEntry('Cinebench R23 多核', '约 5900'),
     ],
   ),
@@ -907,6 +995,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 380'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 779'),
+      SpecEntry('Geekbench 6 单核', '约 912'),
       SpecEntry('Cinebench R23 多核', '约 10200'),
     ],
   ),
@@ -926,6 +1016,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 370'),
       SpecEntry('CPU-Z 多核', '约 4600'),
+      SpecEntry('Cinebench R23 单核', '约 758'),
+      SpecEntry('Geekbench 6 单核', '约 888'),
       SpecEntry('Cinebench R23 多核', '约 11500'),
     ],
   ),
@@ -945,6 +1037,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 360'),
       SpecEntry('CPU-Z 多核', '约 5200'),
+      SpecEntry('Cinebench R23 单核', '约 738'),
+      SpecEntry('Geekbench 6 单核', '约 864'),
       SpecEntry('Cinebench R23 多核', '约 12800'),
     ],
   ),
@@ -964,6 +1058,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 370'),
       SpecEntry('CPU-Z 多核', '约 5500'),
+      SpecEntry('Cinebench R23 单核', '约 758'),
+      SpecEntry('Geekbench 6 单核', '约 888'),
       SpecEntry('Cinebench R23 多核', '约 14000'),
     ],
   ),
@@ -983,6 +1079,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 420'),
       SpecEntry('CPU-Z 多核', '约 1950'),
+      SpecEntry('Cinebench R23 单核', '约 861'),
+      SpecEntry('Geekbench 6 单核', '约 1008'),
       SpecEntry('Cinebench R23 多核', '约 4900'),
     ],
   ),
@@ -1002,6 +1100,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 410'),
       SpecEntry('CPU-Z 多核', '约 1900'),
+      SpecEntry('Cinebench R23 单核', '约 840'),
+      SpecEntry('Geekbench 6 单核', '约 984'),
       SpecEntry('Cinebench R23 多核', '约 4700'),
     ],
   ),
@@ -1021,6 +1121,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 430'),
       SpecEntry('CPU-Z 多核', '约 2000'),
+      SpecEntry('Cinebench R23 单核', '约 881'),
+      SpecEntry('Geekbench 6 单核', '约 1032'),
       SpecEntry('Cinebench R23 多核', '约 5000'),
     ],
   ),
@@ -3048,6 +3150,43 @@ const List<HardwareSpec> kHardwareCatalog = [
     ],
   ),
   HardwareSpec(
+    id: 'ssd_tipro9000_1tb',
+    category: '硬盘',
+    brand: '致态',
+    model: 'TiPro9000 1TB',
+    specs: [
+      SpecEntry('接口', 'PCIe 5.0 ×4 NVMe'),
+      SpecEntry('容量', '1TB'),
+      SpecEntry('颗粒', 'TLC'),
+      SpecEntry('缓存', '2GB LPDDR4'),
+      SpecEntry('质保', '5年'),
+    ],
+    benchmarks: [
+      SpecEntry('顺序读取', '约 14000 MB/s'),
+      SpecEntry('顺序写入', '约 9500 MB/s'),
+      SpecEntry('随机读取 4K', '约 2000K IOPS'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'ssd_tipro9000_2tb',
+    category: '硬盘',
+    brand: '致态',
+    model: 'TiPro9000 2TB',
+    specs: [
+      SpecEntry('接口', 'PCIe 5.0 ×4 NVMe'),
+      SpecEntry('容量', '2TB'),
+      SpecEntry('颗粒', 'TLC'),
+      SpecEntry('缓存', '2GB LPDDR4'),
+      SpecEntry('质保', '5年'),
+    ],
+    benchmarks: [
+      SpecEntry('顺序读取', '约 14000 MB/s'),
+      SpecEntry('顺序写入', '约 12000 MB/s'),
+      SpecEntry('随机读取 4K', '约 2000K IOPS'),
+    ],
+  ),
+
+  HardwareSpec(
     id: 'ssd_870qvo_2tb',
     category: '硬盘',
     brand: '三星',
@@ -3668,6 +3807,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 400'),
       SpecEntry('CPU-Z 多核', '约 1900'),
+      SpecEntry('Cinebench R23 单核', '约 760'),
+      SpecEntry('Geekbench 6 单核', '约 880'),
     ],
   ),
   HardwareSpec(
@@ -3685,6 +3826,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 420'),
       SpecEntry('CPU-Z 多核', '约 2600'),
+      SpecEntry('Cinebench R23 单核', '约 798'),
+      SpecEntry('Geekbench 6 单核', '约 924'),
     ],
   ),
   HardwareSpec(
@@ -3702,6 +3845,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 430'),
       SpecEntry('CPU-Z 多核', '约 2700'),
+      SpecEntry('Cinebench R23 单核', '约 817'),
+      SpecEntry('Geekbench 6 单核', '约 946'),
     ],
   ),
   HardwareSpec(
@@ -3719,6 +3864,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 400'),
       SpecEntry('CPU-Z 多核', '约 1950'),
+      SpecEntry('Cinebench R23 单核', '约 820'),
+      SpecEntry('Geekbench 6 单核', '约 940'),
     ],
   ),
   HardwareSpec(
@@ -3736,6 +3883,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 430'),
       SpecEntry('CPU-Z 多核', '约 2200'),
+      SpecEntry('Cinebench R23 单核', '约 881'),
+      SpecEntry('Geekbench 6 单核', '约 1010'),
     ],
   ),
   HardwareSpec(
@@ -3753,6 +3902,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 440'),
       SpecEntry('CPU-Z 多核', '约 3000'),
+      SpecEntry('Cinebench R23 单核', '约 902'),
+      SpecEntry('Geekbench 6 单核', '约 1034'),
     ],
   ),
   HardwareSpec(
@@ -3770,6 +3921,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 430'),
       SpecEntry('CPU-Z 多核', '约 2200'),
+      SpecEntry('Cinebench R23 单核', '约 851'),
+      SpecEntry('Geekbench 6 单核', '约 989'),
     ],
   ),
   HardwareSpec(
@@ -3787,6 +3940,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 450'),
       SpecEntry('CPU-Z 多核', '约 2300'),
+      SpecEntry('Cinebench R23 单核', '约 891'),
+      SpecEntry('Geekbench 6 单核', '约 1035'),
     ],
   ),
   HardwareSpec(
@@ -3804,6 +3959,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 460'),
       SpecEntry('CPU-Z 多核', '约 3200'),
+      SpecEntry('Cinebench R23 单核', '约 911'),
+      SpecEntry('Geekbench 6 单核', '约 1058'),
     ],
   ),
   HardwareSpec(
@@ -3821,6 +3978,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 470'),
       SpecEntry('CPU-Z 多核', '约 3400'),
+      SpecEntry('Cinebench R23 单核', '约 931'),
+      SpecEntry('Geekbench 6 单核', '约 1081'),
     ],
   ),
   HardwareSpec(
@@ -3838,6 +3997,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 460'),
       SpecEntry('CPU-Z 多核', '约 2400'),
+      SpecEntry('Cinebench R23 单核', '约 1067'),
+      SpecEntry('Geekbench 6 单核', '约 1196'),
     ],
   ),
   HardwareSpec(
@@ -3855,6 +4016,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 480'),
       SpecEntry('CPU-Z 多核', '约 2500'),
+      SpecEntry('Cinebench R23 单核', '约 1114'),
+      SpecEntry('Geekbench 6 单核', '约 1248'),
     ],
   ),
   HardwareSpec(
@@ -3872,6 +4035,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 490'),
       SpecEntry('CPU-Z 多核', '约 3400'),
+      SpecEntry('Cinebench R23 单核', '约 1137'),
+      SpecEntry('Geekbench 6 单核', '约 1274'),
     ],
   ),
   HardwareSpec(
@@ -3889,6 +4054,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 470'),
       SpecEntry('CPU-Z 多核', '约 2600'),
+      SpecEntry('Cinebench R23 单核', '约 1090'),
+      SpecEntry('Geekbench 6 单核', '约 1246'),
     ],
   ),
   HardwareSpec(
@@ -3906,6 +4073,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 500'),
       SpecEntry('CPU-Z 多核', '约 3600'),
+      SpecEntry('Cinebench R23 单核', '约 1160'),
+      SpecEntry('Geekbench 6 单核', '约 1325'),
     ],
   ),
   HardwareSpec(
@@ -3923,6 +4092,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 470'),
       SpecEntry('CPU-Z 多核', '约 2300'),
+      SpecEntry('Cinebench R23 单核', '约 1090'),
+      SpecEntry('Geekbench 6 单核', '约 1269'),
     ],
   ),
   HardwareSpec(
@@ -3940,6 +4111,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 480'),
       SpecEntry('CPU-Z 多核', '约 3600'),
+      SpecEntry('Cinebench R23 单核', '约 1114'),
+      SpecEntry('Geekbench 6 单核', '约 1296'),
     ],
   ),
   HardwareSpec(
@@ -3957,6 +4130,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 4000'),
+      SpecEntry('Cinebench R23 单核', '约 1183'),
+      SpecEntry('Geekbench 6 单核', '约 1377'),
     ],
   ),
   HardwareSpec(
@@ -3974,6 +4149,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 4800'),
+      SpecEntry('Cinebench R23 单核', '约 1183'),
+      SpecEntry('Geekbench 6 单核', '约 1377'),
     ],
   ),
   HardwareSpec(
@@ -3991,6 +4168,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 520'),
       SpecEntry('CPU-Z 多核', '约 4900'),
+      SpecEntry('Cinebench R23 单核', '约 1206'),
+      SpecEntry('Geekbench 6 单核', '约 1404'),
     ],
   ),
   HardwareSpec(
@@ -4008,6 +4187,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 490'),
       SpecEntry('CPU-Z 多核', '约 2500'),
+      SpecEntry('Cinebench R23 单核', '约 1137'),
+      SpecEntry('Geekbench 6 单核', '约 1323'),
     ],
   ),
   HardwareSpec(
@@ -4025,6 +4206,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 500'),
       SpecEntry('CPU-Z 多核', '约 3800'),
+      SpecEntry('Cinebench R23 单核', '约 1160'),
+      SpecEntry('Geekbench 6 单核', '约 1350'),
     ],
   ),
   HardwareSpec(
@@ -4042,6 +4225,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 530'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 1230'),
+      SpecEntry('Geekbench 6 单核', '约 1431'),
     ],
   ),
   HardwareSpec(
@@ -4059,6 +4244,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 540'),
       SpecEntry('CPU-Z 多核', '约 5200'),
+      SpecEntry('Cinebench R23 单核', '约 1253'),
+      SpecEntry('Geekbench 6 单核', '约 1458'),
     ],
   ),
   HardwareSpec(
@@ -4076,6 +4263,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 550'),
       SpecEntry('CPU-Z 多核', '约 5600'),
+      SpecEntry('Cinebench R23 单核', '约 1276'),
+      SpecEntry('Geekbench 6 单核', '约 1485'),
     ],
   ),
   HardwareSpec(
@@ -4093,6 +4282,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 3300'),
+      SpecEntry('Cinebench R23 单核', '约 1173'),
+      SpecEntry('Geekbench 6 单核', '约 1402'),
     ],
   ),
   HardwareSpec(
@@ -4110,6 +4301,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 520'),
       SpecEntry('CPU-Z 多核', '约 4600'),
+      SpecEntry('Cinebench R23 单核', '约 1196'),
+      SpecEntry('Geekbench 6 单核', '约 1430'),
     ],
   ),
   HardwareSpec(
@@ -4127,6 +4320,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 550'),
       SpecEntry('CPU-Z 多核', '约 5200'),
+      SpecEntry('Cinebench R23 单核', '约 1265'),
+      SpecEntry('Geekbench 6 单核', '约 1512'),
     ],
   ),
   HardwareSpec(
@@ -4144,6 +4339,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 560'),
       SpecEntry('CPU-Z 多核', '约 5900'),
+      SpecEntry('Cinebench R23 单核', '约 1288'),
+      SpecEntry('Geekbench 6 单核', '约 1540'),
     ],
   ),
   HardwareSpec(
@@ -4161,6 +4358,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 560'),
       SpecEntry('CPU-Z 多核', '约 7200'),
+      SpecEntry('Cinebench R23 单核', '约 1288'),
+      SpecEntry('Geekbench 6 单核', '约 1540'),
     ],
   ),
   HardwareSpec(
@@ -4178,6 +4377,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 600'),
       SpecEntry('CPU-Z 多核', '约 5400'),
+      SpecEntry('Cinebench R23 单核', '约 1410'),
+      SpecEntry('Geekbench 6 单核', '约 1770'),
     ],
   ),
   HardwareSpec(
@@ -4195,6 +4396,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 620'),
       SpecEntry('CPU-Z 多核', '约 5600'),
+      SpecEntry('Cinebench R23 单核', '约 1457'),
+      SpecEntry('Geekbench 6 单核', '约 1829'),
     ],
   ),
   HardwareSpec(
@@ -4212,6 +4415,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 630'),
       SpecEntry('CPU-Z 多核', '约 6500'),
+      SpecEntry('Cinebench R23 单核', '约 1480'),
+      SpecEntry('Geekbench 6 单核', '约 1858'),
     ],
   ),
   HardwareSpec(
@@ -4229,6 +4434,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 640'),
       SpecEntry('CPU-Z 多核', '约 6600'),
+      SpecEntry('Cinebench R23 单核', '约 1504'),
+      SpecEntry('Geekbench 6 单核', '约 1888'),
     ],
   ),
   HardwareSpec(
@@ -4246,6 +4453,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 700'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 1694'),
+      SpecEntry('Geekbench 6 单核', '约 2240'),
     ],
   ),
   HardwareSpec(
@@ -4263,6 +4472,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 9600'),
+      SpecEntry('Cinebench R23 单核', '约 1888'),
+      SpecEntry('Geekbench 6 单核', '约 2496'),
     ],
   ),
   HardwareSpec(
@@ -4280,6 +4491,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 830'),
       SpecEntry('CPU-Z 多核', '约 11800'),
+      SpecEntry('Cinebench R23 单核', '约 2009'),
+      SpecEntry('Geekbench 6 单核', '约 2656'),
     ],
   ),
   HardwareSpec(
@@ -4297,6 +4510,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 810'),
       SpecEntry('CPU-Z 多核', '约 10200'),
+      SpecEntry('Cinebench R23 单核', '约 1960'),
+      SpecEntry('Geekbench 6 单核', '约 2592'),
     ],
   ),
   HardwareSpec(
@@ -4314,6 +4529,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 860'),
       SpecEntry('CPU-Z 多核', '约 14300'),
+      SpecEntry('Cinebench R23 单核', '约 2081'),
+      SpecEntry('Geekbench 6 单核', '约 2752'),
     ],
   ),
 
@@ -4333,6 +4550,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 260'),
       SpecEntry('CPU-Z 多核', '约 1500'),
+      SpecEntry('Cinebench R23 单核', '约 598'),
+      SpecEntry('Geekbench 6 单核', '约 598'),
     ],
   ),
   HardwareSpec(
@@ -4350,6 +4569,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 260'),
       SpecEntry('CPU-Z 多核', '约 1900'),
+      SpecEntry('Cinebench R23 单核', '约 598'),
+      SpecEntry('Geekbench 6 单核', '约 598'),
     ],
   ),
   HardwareSpec(
@@ -4367,6 +4588,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 270'),
       SpecEntry('CPU-Z 多核', '约 2000'),
+      SpecEntry('Cinebench R23 单核', '约 621'),
+      SpecEntry('Geekbench 6 单核', '约 621'),
     ],
   ),
   HardwareSpec(
@@ -4384,6 +4607,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 420'),
       SpecEntry('CPU-Z 多核', '约 4700'),
+      SpecEntry('Cinebench R23 单核', '约 1092'),
+      SpecEntry('Geekbench 6 单核', '约 1281'),
     ],
   ),
   HardwareSpec(
@@ -4401,6 +4626,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 440'),
       SpecEntry('CPU-Z 多核', '约 5100'),
+      SpecEntry('Cinebench R23 单核', '约 1144'),
+      SpecEntry('Geekbench 6 单核', '约 1342'),
     ],
   ),
   HardwareSpec(
@@ -4418,6 +4645,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 450'),
       SpecEntry('CPU-Z 多核', '约 5300'),
+      SpecEntry('Cinebench R23 单核', '约 1170'),
+      SpecEntry('Geekbench 6 单核', '约 1372'),
     ],
   ),
   HardwareSpec(
@@ -4435,6 +4664,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 420'),
       SpecEntry('CPU-Z 多核', '约 3700'),
+      SpecEntry('Cinebench R23 单核', '约 1092'),
+      SpecEntry('Geekbench 6 单核', '约 1281'),
     ],
   ),
   HardwareSpec(
@@ -4452,6 +4683,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 430'),
       SpecEntry('CPU-Z 多核', '约 3900'),
+      SpecEntry('Cinebench R23 单核', '约 1118'),
+      SpecEntry('Geekbench 6 单核', '约 1312'),
     ],
   ),
   HardwareSpec(
@@ -4469,6 +4702,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 390'),
       SpecEntry('CPU-Z 多核', '约 1600'),
+      SpecEntry('Cinebench R23 单核', '约 1014'),
+      SpecEntry('Geekbench 6 单核', '约 1190'),
     ],
   ),
   HardwareSpec(
@@ -4486,6 +4721,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 480'),
       SpecEntry('CPU-Z 多核', '约 5600'),
+      SpecEntry('Cinebench R23 单核', '约 1224'),
+      SpecEntry('Geekbench 6 单核', '约 1440'),
     ],
   ),
   HardwareSpec(
@@ -4503,6 +4740,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 500'),
       SpecEntry('CPU-Z 多核', '约 5900'),
+      SpecEntry('Cinebench R23 单核', '约 1275'),
+      SpecEntry('Geekbench 6 单核', '约 1500'),
     ],
   ),
   HardwareSpec(
@@ -4520,6 +4759,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 470'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 1198'),
+      SpecEntry('Geekbench 6 单核', '约 1410'),
     ],
   ),
   HardwareSpec(
@@ -4537,6 +4778,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 480'),
       SpecEntry('CPU-Z 多核', '约 4400'),
+      SpecEntry('Cinebench R23 单核', '约 1224'),
+      SpecEntry('Geekbench 6 单核', '约 1440'),
     ],
   ),
   HardwareSpec(
@@ -4554,6 +4797,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 610'),
       SpecEntry('CPU-Z 多核', '约 4700'),
+      SpecEntry('Cinebench R23 单核', '约 1434'),
+      SpecEntry('Geekbench 6 单核', '约 1952'),
     ],
   ),
   HardwareSpec(
@@ -4571,6 +4816,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 630'),
       SpecEntry('CPU-Z 多核', '约 6400'),
+      SpecEntry('Cinebench R23 单核', '约 1480'),
+      SpecEntry('Geekbench 6 单核', '约 2016'),
     ],
   ),
   HardwareSpec(
@@ -4588,6 +4835,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 620'),
       SpecEntry('CPU-Z 多核', '约 6200'),
+      SpecEntry('Cinebench R23 单核', '约 1488'),
+      SpecEntry('Geekbench 6 单核', '约 2046'),
     ],
   ),
   HardwareSpec(
@@ -4605,6 +4854,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 660'),
       SpecEntry('CPU-Z 多核', '约 6900'),
+      SpecEntry('Cinebench R23 单核', '约 1597'),
+      SpecEntry('Geekbench 6 单核', '约 2211'),
     ],
   ),
   HardwareSpec(
@@ -4622,6 +4873,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 680'),
       SpecEntry('CPU-Z 多核', '约 12700'),
+      SpecEntry('Cinebench R23 单核', '约 1646'),
+      SpecEntry('Geekbench 6 单核', '约 2278'),
     ],
   ),
   HardwareSpec(
@@ -4639,6 +4892,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 15800'),
+      SpecEntry('Cinebench R23 单核', '约 1938'),
+      SpecEntry('Geekbench 6 单核', '约 2888'),
     ],
   ),
   HardwareSpec(
@@ -4656,6 +4911,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 8000'),
+      SpecEntry('Cinebench R23 单核', '约 1938'),
+      SpecEntry('Geekbench 6 单核', '约 2888'),
     ],
   ),
   HardwareSpec(
@@ -4673,6 +4930,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 750'),
       SpecEntry('CPU-Z 多核', '约 6100'),
+      SpecEntry('Cinebench R23 单核', '约 1912'),
+      SpecEntry('Geekbench 6 单核', '约 2850'),
     ],
   ),
   // ===== NVIDIA 显卡补充（2011 年起主流型号）=====
@@ -5760,6 +6019,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 850'),
       SpecEntry('CPU-Z 多核', '约 11900'),
+      SpecEntry('Cinebench R23 单核', '约 2040'),
+      SpecEntry('Geekbench 6 单核', '约 2678'),
     ],
   ),
   HardwareSpec(
@@ -5777,6 +6038,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 7200'),
+      SpecEntry('Cinebench R23 单核', '约 1824'),
+      SpecEntry('Geekbench 6 单核', '约 2394'),
     ],
   ),
   HardwareSpec(
@@ -5794,6 +6057,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 790'),
       SpecEntry('CPU-Z 多核', '约 9600'),
+      SpecEntry('Cinebench R23 单核', '约 1896'),
+      SpecEntry('Geekbench 6 单核', '约 2488'),
     ],
   ),
   HardwareSpec(
@@ -5811,6 +6076,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 720'),
       SpecEntry('CPU-Z 多核', '约 5400'),
+      SpecEntry('Cinebench R23 单核', '约 1728'),
+      SpecEntry('Geekbench 6 单核', '约 2268'),
     ],
   ),
   HardwareSpec(
@@ -5828,6 +6095,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 830'),
       SpecEntry('CPU-Z 多核', '约 9800'),
+      SpecEntry('Cinebench R23 单核', '约 2009'),
+      SpecEntry('Geekbench 6 单核', '约 2656'),
     ],
   ),
   HardwareSpec(
@@ -5845,6 +6114,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 875'),
       SpecEntry('CPU-Z 多核', '约 12400'),
+      SpecEntry('Cinebench R23 单核', '约 2118'),
+      SpecEntry('Geekbench 6 单核', '约 2800'),
     ],
   ),
   HardwareSpec(
@@ -5862,6 +6133,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 905'),
       SpecEntry('CPU-Z 多核', '约 16800'),
+      SpecEntry('Cinebench R23 单核', '约 2190'),
+      SpecEntry('Geekbench 6 单核', '约 2896'),
     ],
   ),
   HardwareSpec(
@@ -5879,6 +6152,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 7500'),
+      SpecEntry('Cinebench R23 单核', '约 1888'),
+      SpecEntry('Geekbench 6 单核', '约 2496'),
     ],
   ),
   HardwareSpec(
@@ -5896,6 +6171,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 860'),
       SpecEntry('CPU-Z 多核', '约 10300'),
+      SpecEntry('Cinebench R23 单核', '约 2081'),
+      SpecEntry('Geekbench 6 单核', '约 2752'),
     ],
   ),
   HardwareSpec(
@@ -5913,6 +6190,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 890'),
       SpecEntry('CPU-Z 多核', '约 15000'),
+      SpecEntry('Cinebench R23 单核', '约 2154'),
+      SpecEntry('Geekbench 6 单核', '约 2848'),
     ],
   ),
   HardwareSpec(
@@ -5930,6 +6209,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 940'),
       SpecEntry('CPU-Z 多核', '约 17400'),
+      SpecEntry('Cinebench R23 单核', '约 2275'),
+      SpecEntry('Geekbench 6 单核', '约 3008'),
     ],
   ),
   HardwareSpec(
@@ -5947,6 +6228,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 855'),
       SpecEntry('CPU-Z 多核', '约 10500'),
+      SpecEntry('Cinebench R23 单核', '约 2052'),
+      SpecEntry('Geekbench 6 单核', '约 2992'),
     ],
   ),
   HardwareSpec(
@@ -5964,6 +6247,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 885'),
       SpecEntry('CPU-Z 多核', '约 15200'),
+      SpecEntry('Cinebench R23 单核', '约 2124'),
+      SpecEntry('Geekbench 6 单核', '约 3098'),
     ],
   ),
 
@@ -5983,6 +6268,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 730'),
       SpecEntry('CPU-Z 多核', '约 5800'),
+      SpecEntry('Cinebench R23 单核', '约 1789'),
+      SpecEntry('Geekbench 6 单核', '约 2628'),
     ],
   ),
   HardwareSpec(
@@ -6000,6 +6287,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 750'),
       SpecEntry('CPU-Z 多核', '约 6100'),
+      SpecEntry('Cinebench R23 单核', '约 1838'),
+      SpecEntry('Geekbench 6 单核', '约 2700'),
     ],
   ),
   HardwareSpec(
@@ -6017,6 +6306,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 760'),
       SpecEntry('CPU-Z 多核', '约 8000'),
+      SpecEntry('Cinebench R23 单核', '约 1862'),
+      SpecEntry('Geekbench 6 单核', '约 2736'),
     ],
   ),
   HardwareSpec(
@@ -6034,6 +6325,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 600'),
       SpecEntry('CPU-Z 多核', '约 4700'),
+      SpecEntry('Cinebench R23 单核', '约 1410'),
+      SpecEntry('Geekbench 6 单核', '约 1920'),
     ],
   ),
   HardwareSpec(
@@ -6051,6 +6344,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 620'),
       SpecEntry('CPU-Z 多核', '约 4900'),
+      SpecEntry('Cinebench R23 单核', '约 1457'),
+      SpecEntry('Geekbench 6 单核', '约 1984'),
     ],
   ),
   HardwareSpec(
@@ -6068,6 +6363,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 11500'),
+      SpecEntry('Cinebench R23 单核', '约 1989'),
+      SpecEntry('Geekbench 6 单核', '约 2964'),
     ],
   ),
   HardwareSpec(
@@ -6085,6 +6382,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 770'),
       SpecEntry('CPU-Z 多核', '约 12000'),
+      SpecEntry('Cinebench R23 单核', '约 1963'),
+      SpecEntry('Geekbench 6 单核', '约 2926'),
     ],
   ),
   HardwareSpec(
@@ -6102,6 +6401,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 730'),
       SpecEntry('CPU-Z 多核', '约 6000'),
+      SpecEntry('Cinebench R23 单核', '约 1861'),
+      SpecEntry('Geekbench 6 单核', '约 2774'),
     ],
   ),
   // ===== NVIDIA 显卡补充二（入门级与更多变体）=====
@@ -6259,6 +6560,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 720'),
       SpecEntry('CPU-Z 多核', '约 5400'),
+      SpecEntry('Cinebench R23 单核', '约 1728'),
+      SpecEntry('Geekbench 6 单核', '约 2268'),
     ],
   ),
   HardwareSpec(
@@ -6276,6 +6579,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 770'),
       SpecEntry('CPU-Z 多核', '约 7200'),
+      SpecEntry('Cinebench R23 单核', '约 1863'),
+      SpecEntry('Geekbench 6 单核', '约 2464'),
     ],
   ),
   HardwareSpec(
@@ -6293,6 +6598,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 830'),
       SpecEntry('CPU-Z 多核', '约 11800'),
+      SpecEntry('Cinebench R23 单核', '约 2009'),
+      SpecEntry('Geekbench 6 单核', '约 2656'),
     ],
   ),
   HardwareSpec(
@@ -6310,6 +6617,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 890'),
       SpecEntry('CPU-Z 多核', '约 16000'),
+      SpecEntry('Cinebench R23 单核', '约 2154'),
+      SpecEntry('Geekbench 6 单核', '约 2848'),
     ],
   ),
   HardwareSpec(
@@ -6327,6 +6636,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 780'),
       SpecEntry('CPU-Z 多核', '约 7500'),
+      SpecEntry('Cinebench R23 单核', '约 1888'),
+      SpecEntry('Geekbench 6 单核', '约 2496'),
     ],
   ),
   HardwareSpec(
@@ -6344,6 +6655,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 770'),
       SpecEntry('CPU-Z 多核', '约 8900'),
+      SpecEntry('Cinebench R23 单核', '约 1848'),
+      SpecEntry('Geekbench 6 单核', '约 2426'),
     ],
   ),
   HardwareSpec(
@@ -6361,6 +6674,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 520'),
       SpecEntry('CPU-Z 多核', '约 4600'),
+      SpecEntry('Cinebench R23 单核', '约 1196'),
+      SpecEntry('Geekbench 6 单核', '约 1430'),
     ],
   ),
   HardwareSpec(
@@ -6378,6 +6693,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 3300'),
+      SpecEntry('Cinebench R23 单核', '约 1173'),
+      SpecEntry('Geekbench 6 单核', '约 1402'),
     ],
   ),
   HardwareSpec(
@@ -6395,6 +6712,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 700'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 1694'),
+      SpecEntry('Geekbench 6 单核', '约 2240'),
     ],
   ),
 
@@ -6414,6 +6733,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 500'),
       SpecEntry('CPU-Z 多核', '约 3700'),
+      SpecEntry('Cinebench R23 单核', '约 1150'),
+      SpecEntry('Geekbench 6 单核', '约 1500'),
     ],
   ),
   HardwareSpec(
@@ -6431,6 +6752,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 540'),
       SpecEntry('CPU-Z 多核', '约 8500'),
+      SpecEntry('Cinebench R23 单核', '约 1242'),
+      SpecEntry('Geekbench 6 单核', '约 1620'),
     ],
   ),
   HardwareSpec(
@@ -6448,6 +6771,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 550'),
       SpecEntry('CPU-Z 多核', '约 6100'),
+      SpecEntry('Cinebench R23 单核', '约 1265'),
+      SpecEntry('Geekbench 6 单核', '约 1650'),
     ],
   ),
   HardwareSpec(
@@ -6465,6 +6790,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 510'),
       SpecEntry('CPU-Z 多核', '约 4200'),
+      SpecEntry('Cinebench R23 单核', '约 1173'),
+      SpecEntry('Geekbench 6 单核', '约 1530'),
     ],
   ),
   HardwareSpec(
@@ -6482,6 +6809,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 460'),
       SpecEntry('CPU-Z 多核', '约 1800'),
+      SpecEntry('Cinebench R23 单核', '约 1058'),
+      SpecEntry('Geekbench 6 单核', '约 1334'),
     ],
   ),
   HardwareSpec(
@@ -6499,6 +6828,8 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('CPU-Z 单核', '约 480'),
       SpecEntry('CPU-Z 多核', '约 2600'),
+      SpecEntry('Cinebench R23 单核', '约 1104'),
+      SpecEntry('Geekbench 6 单核', '约 1392'),
     ],
   ),
 
@@ -6563,6 +6894,79 @@ const List<HardwareSpec> kHardwareCatalog = [
       SpecEntry('3DMark Time Spy', '约 10800'),
     ],
   ),
+  HardwareSpec(
+    id: 'gpu_rx9070xt',
+    category: '显卡',
+    brand: 'AMD',
+    model: 'Radeon RX 9070 XT',
+    specs: [
+      SpecEntry('显存', '16GB GDDR6'),
+      SpecEntry('位宽', '256-bit'),
+      SpecEntry('流处理器', '6144'),
+      SpecEntry('功耗', '304W'),
+      SpecEntry('建议电源', '800W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 27000'),
+      SpecEntry('3DMark Fire Strike', '约 52000'),
+      SpecEntry('3DMark Port Royal', '约 15000'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rx9070',
+    category: '显卡',
+    brand: 'AMD',
+    model: 'Radeon RX 9070',
+    specs: [
+      SpecEntry('显存', '16GB GDDR6'),
+      SpecEntry('位宽', '256-bit'),
+      SpecEntry('流处理器', '5376'),
+      SpecEntry('功耗', '220W'),
+      SpecEntry('建议电源', '650W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 23500'),
+      SpecEntry('3DMark Fire Strike', '约 45000'),
+      SpecEntry('3DMark Port Royal', '约 12500'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rx9060xt_16g',
+    category: '显卡',
+    brand: 'AMD',
+    model: 'Radeon RX 9060 XT 16GB',
+    specs: [
+      SpecEntry('显存', '16GB GDDR6'),
+      SpecEntry('位宽', '128-bit'),
+      SpecEntry('流处理器', '2048'),
+      SpecEntry('功耗', '150W'),
+      SpecEntry('建议电源', '550W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 13500'),
+      SpecEntry('3DMark Fire Strike', '约 27000'),
+      SpecEntry('3DMark Port Royal', '约 6500'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rx9060xt_8g',
+    category: '显卡',
+    brand: 'AMD',
+    model: 'Radeon RX 9060 XT 8GB',
+    specs: [
+      SpecEntry('显存', '8GB GDDR6'),
+      SpecEntry('位宽', '128-bit'),
+      SpecEntry('流处理器', '2048'),
+      SpecEntry('功耗', '150W'),
+      SpecEntry('建议电源', '500W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 13500'),
+      SpecEntry('3DMark Fire Strike', '约 27000'),
+      SpecEntry('3DMark Port Royal', '约 6500'),
+    ],
+  ),
+
   HardwareSpec(
     id: 'gpu_r9380x',
     category: '显卡',

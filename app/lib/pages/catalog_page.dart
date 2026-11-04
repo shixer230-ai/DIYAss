@@ -405,21 +405,25 @@ class _CatalogPageState extends State<CatalogPage>
         physics: const AlwaysScrollableScrollPhysics(),
         child: SizedBox(
           height: constraints.maxHeight,
-          child: Center(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                const Icon(Icons.cloud_outlined, size: 48, color: Colors.grey),
-                const SizedBox(height: 8),
-                const Text('还没有公开的云方案'),
-                const SizedBox(height: 4),
-                Text(
-                  '在「整机方案」里点「上传到云方案」，就能把方案分享到这里',
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodySmall
-                      ?.copyWith(color: Colors.grey),
-                ),
-              ],
+          child: Align(
+            alignment: Alignment.topCenter,
+            child: Padding(
+              padding: const EdgeInsets.only(top: 48),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  const Icon(Icons.cloud_outlined, size: 48, color: Colors.grey),
+                  const SizedBox(height: 8),
+                  const Text("啊嘞，这里还没有数据，创建第一个数据吧 (●'◡'●)"),
+                  const SizedBox(height: 4),
+                  Text(
+                    '在「整机方案」里点「上传到云方案」，就能把方案分享到这里',
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodySmall
+                        ?.copyWith(color: Colors.grey),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -813,7 +817,7 @@ class _CatalogPageState extends State<CatalogPage>
               color: Colors.grey,
             ),
             const SizedBox(height: 8),
-            const Text('还没有自定义添加的型号'),
+            const Text("啊嘞，这里还没有数据，创建第一个数据吧 (●'◡'●)"),
             const SizedBox(height: 4),
             Text(
               '点「自定义添加」录入新硬件，或在预置型号详情里点「加入我的添加」收藏',

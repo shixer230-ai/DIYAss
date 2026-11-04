@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '3.3.0';
+const String kAppVersion = '3.4.0';
 
 /// 捐赠/增加云服务额度的赞助链接（爱发电等网页）；留空时「增加云服务额度」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,14 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('3.4.0', [
+    '分析页新增「六维雷达图」与「场景六维雷达图」两块，可切换查看',
+    '场景雷达图按 3A / 网游 / 视频创作 / 综合 / AI 创作 / 稳定性评分，含短板木桶算法',
+    '硬件库新增 RX 9000 系列显卡、致态 TiPro9000 硬盘，补充 Cinebench / Geekbench 跑分',
+    '整机方案支持「解构」到硬件清单：合并成大卡片、自动去重',
+    '硬件清单按品牌合并展示，相同型号自动去重',
+    '空状态提示趣味化',
+  ]),
   VersionLogEntry('3.3.0', [
     '新增图片导入：从电商截图识别硬件，一键生成整机方案',
     '硬件库「我的添加」支持编辑已有型号',
