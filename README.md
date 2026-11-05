@@ -58,8 +58,10 @@ flutter build apk --release
 
 产物：`app/build/app/outputs/flutter-apk/app-release.apk`
 
-## 版权
+## 版权与许可
 
-CreativeDesign ZkeRurQwQ · 蓝色大肥鱼Accomplish
+本项目代码采用 [Apache License 2.0](LICENSE) 开源许可：允许商用、修改与再分发，但需保留本版权声明。
 
-> 版权署名，请勿盗用
+**注意**：DIYAss 的名称、Logo、应用图标及其他视觉设计是品牌标识（商标），不在本代码许可的授权范围内，未经授权请勿使用或冒用。
+
+Copyright 2026 CreativeDesign ZkeRurQwQ · 蓝色大肥鱼Accomplish
