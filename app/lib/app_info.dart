@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '3.4.0';
+const String kAppVersion = '4.0.0';
 
 /// 捐赠/增加云服务额度的赞助链接（爱发电等网页）；留空时「增加云服务额度」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,10 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('4.0.0', [
+    '更换全新应用图标',
+    '免责声明新增「隐私与数据」说明',
+  ]),
   VersionLogEntry('3.4.0', [
     '分析页新增「六维雷达图」与「场景六维雷达图」两块，可切换查看',
     '场景雷达图按 3A / 网游 / 视频创作 / 综合 / AI 创作 / 稳定性评分，含短板木桶算法',

@@ -1,459 +1,1037 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>DIYAss · 装机方案，一键搞定</title>
-<meta name="description" content="DIYAss 是一款免费开源的装机方案生成与分析工具：自动生成整机方案、兼容性检查、六维雷达图、性价比排行、AI 分析">
-<style>
-  :root {
-    --pink: #EC4899;
-    --pink-deep: #DB2777;
-    --violet: #8B5CF6;
-    --ink: #1f1a24;
-    --grey: #6b6274;
-    --grey-dark: #5a5363;
-  }
-  * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Segoe UI", "Microsoft YaHei", sans-serif;
-    background: linear-gradient(180deg, #fdf5f8 0%, #faf6ff 100%);
-    color: var(--ink);
-    line-height: 1.55;
-    -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DIYAss · 丝滑装机，一键搞定</title>
+  <meta name="description" content="DIYAss 是一款免费开源的 Android 装机方案生成与分析工具：自动生成整机方案、兼容性检查、六维雷达图、性价比排行与 AI 分析">
+  <meta name="theme-color" content="#f8fafc">
+  <link rel="icon" type="image/png" href="/diyass-icon.png">
+  <script>document.documentElement.classList.add('js');</script>
+  <style>
+    :root {
+      /* Primitive palette */
+      --blue-700: oklch(0.48 0.15 245);
+      --blue-600: oklch(0.58 0.16 235);
+      --blue-500: oklch(0.68 0.15 220);
+      --blue-100: oklch(0.94 0.035 225);
+      --blue-50: oklch(0.975 0.015 225);
+      --navy-900: oklch(0.25 0.055 255);
+      --navy-800: oklch(0.32 0.06 255);
+      --slate-700: oklch(0.43 0.035 255);
+      --slate-600: oklch(0.50 0.03 255);
+      --slate-500: oklch(0.57 0.025 255);
+      --slate-300: oklch(0.85 0.015 255);
+      --slate-200: oklch(0.91 0.012 255);
+      --slate-100: oklch(0.95 0.01 255);
+      --slate-50: oklch(0.985 0.005 255);
+      --white: oklch(1 0 0);
+      --green-600: oklch(0.58 0.14 155);
+      --amber-600: oklch(0.63 0.14 75);
 
-  /* 动态背景光晕 */
-  .bg {
-    position: fixed; inset: 0; z-index: -1; overflow: hidden;
-    background: linear-gradient(165deg, #fdf5f8 0%, #faf6ff 55%, #f6f8ff 100%);
-  }
-  .bg .orb { position: absolute; filter: blur(80px); }
-  .bg .orb1 { width: 560px; height: 420px; background: radial-gradient(ellipse at 40% 40%, rgba(255,107,154,0.35), transparent 72%); border-radius: 58% 42% 55% 45% / 48% 58% 42% 52%; top: -120px; left: -70px; animation: drift1 18s ease-in-out infinite; }
-  .bg .orb2 { width: 460px; height: 500px; background: radial-gradient(ellipse at 60% 40%, rgba(168,85,247,0.3), transparent 72%); border-radius: 45% 55% 48% 52% / 55% 45% 58% 42%; top: 8%; right: -110px; animation: drift2 22s ease-in-out infinite; }
-  .bg .orb3 { width: 480px; height: 380px; background: radial-gradient(ellipse at 50% 50%, rgba(96,165,250,0.28), transparent 72%); border-radius: 52% 48% 60% 40% / 42% 55% 45% 58%; top: 30%; left: 14%; animation: drift3 20s ease-in-out infinite; }
-  .bg .orb4 { width: 420px; height: 460px; background: radial-gradient(ellipse at 50% 45%, rgba(34,211,238,0.26), transparent 72%); border-radius: 40% 60% 52% 48% / 58% 42% 55% 45%; bottom: 5%; right: 4%; animation: drift1 24s ease-in-out infinite; }
-  .bg .orb5 { width: 360px; height: 320px; background: radial-gradient(ellipse at 50% 50%, rgba(251,146,60,0.24), transparent 72%); border-radius: 60% 40% 45% 55% / 50% 60% 40% 50%; top: 46%; left: 40%; animation: drift2 19s ease-in-out infinite; }
-  .bg .orb6 { width: 380px; height: 360px; background: radial-gradient(ellipse at 50% 50%, rgba(52,211,153,0.22), transparent 72%); border-radius: 50% 50% 55% 45% / 45% 55% 50% 50%; bottom: -80px; left: 12%; animation: drift3 21s ease-in-out infinite; }
-  .bg .orb7 { width: 340px; height: 300px; background: radial-gradient(ellipse at 50% 50%, rgba(251,191,36,0.2), transparent 72%); border-radius: 55% 45% 50% 50% / 50% 50% 45% 55%; top: -30px; left: 32%; animation: drift1 23s ease-in-out infinite; }
-  .bg::after {
-    content: '';
-    position: absolute; inset: 0;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-    opacity: 0.03;
-    mix-blend-mode: multiply;
-    pointer-events: none;
-  }
-  @keyframes drift1 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(280px, 200px) scale(1.35); }
-  }
-  @keyframes drift2 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(-260px, 240px) scale(0.8); }
-  }
-  @keyframes drift3 {
-    0%, 100% { transform: translate(0, 0) scale(1); }
-    50% { transform: translate(240px, -220px) scale(1.3); }
-  }
+      /* Semantic palette */
+      --color-brand: var(--blue-600);
+      --color-brand-strong: var(--blue-700);
+      --color-brand-soft: var(--blue-50);
+      --color-heading: var(--navy-900);
+      --color-body: var(--slate-700);
+      --color-muted: var(--slate-600);
+      --color-surface: var(--white);
+      --color-surface-alt: var(--slate-50);
+      --color-border: var(--slate-200);
 
-  .wrap { max-width: 1024px; margin: 0 auto; padding: 0 24px; }
+      /* Component tokens */
+      --header-bg: oklch(1 0 0 / 82%);
+      --card-bg: var(--white);
+      --card-border: var(--slate-200);
+      --button-primary-bg: var(--blue-600);
+      --button-primary-text: var(--white);
+      --shadow-sm: 0 2px 10px oklch(0.25 0.055 255 / 5%);
+      --shadow-md: 0 18px 50px oklch(0.25 0.055 255 / 10%);
+      --shadow-lg: 0 32px 90px oklch(0.25 0.055 255 / 15%);
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 30px;
+      --container: 1180px;
+    }
 
-  /* 顶部导航：极简、半透明 */
-  header {
-    position: sticky; top: 0; z-index: 20;
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    background: rgba(255, 255, 255, 0.6);
-    border-bottom: 1px solid rgba(0,0,0,0.07);
-  }
-  .nav { display: flex; align-items: center; justify-content: space-between; height: 52px; }
-  .logo { display: flex; align-items: center; gap: 9px; font-weight: 600; font-size: 17px; color: var(--ink); }
-  .logo .dot {
-    width: 26px; height: 26px; border-radius: 8px; flex: 0 0 auto;
-    background: linear-gradient(135deg, var(--pink), var(--violet));
-    display: grid; place-items: center; color: #fff; font-size: 13px; font-weight: 700;
-  }
-  .nav a.gh { font-size: 14px; color: var(--grey); text-decoration: none; transition: color .2s; }
-  .nav a.gh:hover { color: var(--ink); }
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+    html { scroll-behavior: smooth; scroll-padding-top: 88px; }
+    body {
+      min-width: 320px;
+      min-height: 100dvh;
+      overflow-x: hidden;
+      font-family: Inter, "Noto Sans SC", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: var(--color-body);
+      background: var(--color-surface);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    img, svg { display: block; max-width: 100%; }
+    img { height: auto; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    :focus-visible {
+      outline: 3px solid var(--blue-500);
+      outline-offset: 4px;
+    }
+    ::selection { color: var(--navy-900); background: var(--blue-100); }
 
-  /* Hero：超大标题 + 光晕背景 */
-  .hero {
-    position: relative;
-    text-align: center;
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 80px 24px;
-  }
-  .hero .kicker { font-size: 15px; font-weight: 600; color: var(--pink); letter-spacing: .02em; }
-  .hero h1 {
-    margin-top: 16px;
-    font-size: clamp(64px, 14vw, 140px);
-    font-weight: 800; letter-spacing: -0.03em; line-height: 1;
-    background: linear-gradient(120deg, var(--pink-deep) 0%, var(--violet) 100%);
-    -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .hero .tagline {
-    margin-top: 22px; font-size: clamp(20px, 4vw, 30px); font-weight: 600; color: var(--ink);
-  }
-  .hero .sub { margin-top: 12px; font-size: 17px; color: var(--grey); max-width: 620px; }
-  .cta { margin-top: 36px; display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
-  .btn {
-    display: inline-flex; align-items: center; gap: 8px;
-    padding: 13px 26px; border-radius: 999px; font-size: 16px; font-weight: 500;
-    text-decoration: none; transition: transform .15s ease, opacity .2s;
-  }
-  .btn:hover { transform: translateY(-2px); opacity: .92; }
-  .btn-primary {
-    background: var(--pink); color: #fff;
-    box-shadow: 0 10px 30px rgba(236,72,153,0.4);
-  }
-  .btn-ghost {
-    background: transparent; color: var(--ink);
-    border: 1px solid rgba(0,0,0,0.25);
-  }
-  .btn-ghost:hover { background: rgba(0,0,0,0.07); }
+    .container { width: min(var(--container), calc(100% - 48px)); margin-inline: auto; }
+    .section { position: relative; padding-block: 112px; }
+    .section-alt { background: var(--color-surface-alt); }
+    .skip-link {
+      position: fixed; top: 12px; left: 12px; z-index: 100;
+      padding: 10px 16px; border-radius: 10px;
+      color: var(--white); background: var(--navy-900);
+      transform: translateY(-160%); transition: transform 180ms ease-out;
+    }
+    .skip-link:focus { transform: translateY(0); }
 
-  /* 区块通用 */
-  section { padding: 80px 0; }
-  .sec-head { text-align: left; width: 100vw; margin-left: calc(50% - 50vw); padding: 0 24px; }
-  .sec-title { font-size: clamp(30px, 5vw, 44px); font-weight: 700; letter-spacing: -.01em; margin-left: 20vw; }
-  .sec-title .accent { color: var(--pink); }
-  .sec-desc { margin-top: 12px; font-size: 17px; color: var(--grey); margin-left: 20vw; }
+    /* Navigation */
+    .site-header {
+      position: sticky; top: 0; z-index: 50;
+      border-bottom: 1px solid oklch(0.91 0.012 255 / 75%);
+      background: var(--header-bg);
+      backdrop-filter: blur(18px) saturate(160%);
+      -webkit-backdrop-filter: blur(18px) saturate(160%);
+    }
+    .nav { position: relative; display: flex; align-items: center; min-height: 72px; gap: 28px; }
+    .brand { display: inline-flex; align-items: center; gap: 10px; flex-shrink: 0; min-height: 44px; }
+    .brand-mark {
+      display: block; width: 36px; height: 36px; overflow: hidden;
+      border-radius: 11px; background: var(--white);
+      box-shadow: 0 7px 18px oklch(0.58 0.16 235 / 18%);
+    }
+    .brand-mark img { display: block; width: 100%; height: 100%; object-fit: cover; }
+    .brand-name { color: var(--color-heading); font-size: 19px; font-weight: 750; letter-spacing: -0.035em; }
+    .nav-links { display: flex; align-items: center; gap: 28px; margin-inline: auto; }
+    .nav-links a {
+      position: relative; display: inline-flex; align-items: center; min-height: 44px;
+      color: var(--color-muted); font-size: 14px; font-weight: 500;
+      transition: color 180ms ease-out;
+    }
+    .nav-links a::after {
+      content: ""; position: absolute; right: 0; bottom: 5px; left: 0; height: 2px;
+      border-radius: 2px; background: var(--color-brand);
+      transform: scaleX(0); transition: transform 180ms ease-out;
+    }
+    .nav-links a:hover { color: var(--color-heading); }
+    .nav-links a:hover::after { transform: scaleX(1); }
+    .nav-actions { display: flex; align-items: center; gap: 10px; }
+    .nav-github {
+      display: inline-flex; align-items: center; gap: 8px; min-height: 42px;
+      padding-inline: 15px; border: 1px solid var(--color-border); border-radius: 999px;
+      color: var(--color-heading); background: var(--white); font-size: 14px; font-weight: 600;
+      transition: border-color 180ms ease-out, transform 180ms ease-out, box-shadow 180ms ease-out;
+    }
+    .nav-github:hover { border-color: var(--slate-300); box-shadow: var(--shadow-sm); transform: translateY(-1px); }
+    .nav-github svg { width: 17px; height: 17px; }
+    .menu-toggle {
+      display: none; place-items: center; width: 44px; height: 44px;
+      border: 1px solid var(--color-border); border-radius: 12px;
+      color: var(--color-heading); background: var(--white); cursor: pointer;
+    }
+    .menu-toggle svg { width: 22px; height: 22px; }
+    .menu-toggle .close-icon { display: none; }
+    .menu-toggle[aria-expanded="true"] .menu-icon { display: none; }
+    .menu-toggle[aria-expanded="true"] .close-icon { display: block; }
 
-  /* 功能介绍：单独成段，不框住 */
-  .features { width: 100vw; margin-left: calc(50% - 50vw); padding: 0 24px; }
-  .feature {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    text-align: left;
-    padding: 80px 0;
-  }
-  .feature .ico { font-size: 64px; line-height: 1; margin-bottom: 24px; margin-left: 20vw; }
-  .feature h3 { font-size: clamp(40px, 7vw, 64px); font-weight: 700; letter-spacing: -.02em; margin-left: 20vw; }
-  .feature p { margin-top: 16px; font-size: 20px; color: var(--grey); line-height: 1.75; max-width: 640px; align-self: center; text-align: center; }
+    /* Shared typography and buttons */
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      color: var(--color-brand-strong); font-size: 13px; font-weight: 700;
+      letter-spacing: 0.09em; text-transform: uppercase;
+    }
+    .eyebrow-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green-600); box-shadow: 0 0 0 5px oklch(0.58 0.14 155 / 10%); }
+    .section-heading { max-width: 690px; }
+    .section-heading.center { margin-inline: auto; text-align: center; }
+    .section-heading h2 {
+      margin-top: 14px; color: var(--color-heading); font-size: clamp(34px, 4vw, 52px);
+      font-weight: 750; line-height: 1.17; letter-spacing: -0.045em;
+    }
+    .section-heading p { margin-top: 20px; max-width: 650px; color: var(--color-muted); font-size: 17px; line-height: 1.8; }
+    .section-heading.center p { margin-inline: auto; }
+    .button-row { display: flex; flex-wrap: wrap; gap: 12px; }
+    .button {
+      display: inline-flex; align-items: center; justify-content: center; gap: 9px;
+      min-height: 50px; padding: 12px 22px; border: 1px solid transparent; border-radius: 999px;
+      font-size: 15px; font-weight: 650; cursor: pointer;
+      transition: transform 180ms ease-out, box-shadow 180ms ease-out, background-color 180ms ease-out, border-color 180ms ease-out;
+    }
+    .button svg { width: 18px; height: 18px; transition: transform 180ms ease-out; }
+    .button:hover { transform: translateY(-2px); }
+    .button:hover svg.arrow { transform: translateX(3px); }
+    .button:active { transform: translateY(0); }
+    .button-primary { color: var(--button-primary-text); background: var(--button-primary-bg); box-shadow: 0 10px 26px oklch(0.58 0.16 235 / 22%); }
+    .button-primary:hover { background: var(--blue-700); box-shadow: 0 14px 32px oklch(0.58 0.16 235 / 28%); }
+    .button-secondary { color: var(--color-heading); border-color: var(--color-border); background: var(--white); }
+    .button-secondary:hover { border-color: var(--slate-300); box-shadow: var(--shadow-sm); }
 
-  /* 性价比排行演示（横向条形图） */
-  .rank-demo {
-    display: flex;
-    flex-direction: column;
-    gap: 22px;
-    align-self: center;
-    margin-top: 48px;
-    width: 100%;
-    max-width: 1000px;
-  }
-  .rank-row {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .rank-name {
-    width: 180px;
-    text-align: right;
-    font-size: 18px;
-    color: var(--ink);
-    flex-shrink: 0;
-  }
-  .rank-track {
-    flex: 1;
-    height: 72px;
-    background: rgba(0,0,0,0.05);
-    border-radius: 32px;
-    overflow: hidden;
-  }
-  .rank-bar {
-    height: 100%;
-    width: var(--w);
-    background: linear-gradient(90deg, var(--pink) 0%, var(--violet) 100%);
-    border-radius: 32px;
-    transform-origin: left;
-    opacity: 0;
-    animation: barGrow 1.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    animation-delay: var(--d, 0s);
-  }
-  .rank-row b {
-    width: 50px;
-    text-align: left;
-    font-size: 24px;
-    font-weight: 700;
-    color: var(--ink);
-    flex-shrink: 0;
-  }
-  @keyframes barGrow {
-    from { transform: scaleX(0); opacity: 0; }
-    to { transform: scaleX(1); opacity: 1; }
-  }
+    /* Hero */
+    .hero { position: relative; overflow: hidden; padding-block: 88px 100px; background: var(--white); }
+    .hero::before {
+      content: ""; position: absolute; inset: 0; pointer-events: none;
+      background-image: linear-gradient(oklch(0.58 0.16 235 / 5%) 1px, transparent 1px), linear-gradient(90deg, oklch(0.58 0.16 235 / 5%) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(to bottom, black, transparent 85%);
+    }
+    .hero-aurora {
+      position: absolute; inset: -18% -12%; overflow: hidden; pointer-events: none;
+      mask-image: linear-gradient(to bottom, black 0%, black 72%, transparent 100%);
+    }
+    .aurora-orb {
+      position: absolute; width: clamp(420px, 58vw, 920px); aspect-ratio: 1;
+      border-radius: 50%; filter: blur(32px); will-change: transform, opacity;
+    }
+    .aurora-orb-one {
+      top: -8%; right: -2%;
+      background: radial-gradient(circle at 45% 45%, oklch(0.8 0.11 215 / 32%) 0%, oklch(0.7 0.17 240 / 20%) 34%, oklch(0.7 0.17 240 / 0%) 70%);
+      animation: aurora-one 14s ease-in-out -4s infinite;
+    }
+    .aurora-orb-two {
+      top: 24%; left: 20%; width: clamp(360px, 45vw, 720px);
+      background: radial-gradient(circle, oklch(0.84 0.09 205 / 25%) 0%, oklch(0.72 0.15 245 / 13%) 42%, oklch(0.72 0.15 245 / 0%) 70%);
+      animation: aurora-two 16s ease-in-out -10s infinite;
+    }
+    .aurora-orb-three {
+      bottom: -16%; left: -6%; width: clamp(340px, 40vw, 640px);
+      background: radial-gradient(circle, oklch(0.82 0.1 220 / 24%) 0%, oklch(0.67 0.17 255 / 12%) 40%, oklch(0.67 0.17 255 / 0%) 70%);
+      animation: aurora-three 12s ease-in-out -7s infinite;
+    }
+    @keyframes aurora-one {
+      0%, 100% { opacity: .72; transform: translate3d(0, 0, 0) scale(1); }
+      50% { opacity: .96; transform: translate3d(-6%, 7%, 0) scale(1.1); }
+    }
+    @keyframes aurora-two {
+      0%, 100% { opacity: .62; transform: translate3d(0, 0, 0) scale(1.04); }
+      50% { opacity: .86; transform: translate3d(9%, -8%, 0) scale(.94); }
+    }
+    @keyframes aurora-three {
+      0%, 100% { opacity: .58; transform: translate3d(0, 0, 0) scale(.96); }
+      50% { opacity: .82; transform: translate3d(10%, -9%, 0) scale(1.12); }
+    }
+    .hero-grid { position: relative; display: grid; grid-template-columns: minmax(0, 0.88fr) minmax(0, 1.12fr); align-items: center; gap: 72px; }
+    .hero-copy { position: relative; z-index: 2; }
+    .hero h1 {
+      margin-top: 18px; color: var(--color-heading); font-size: clamp(68px, 7.6vw, 108px);
+      font-weight: 800; line-height: 1; letter-spacing: -0.07em;
+    }
+    .hero h1 span { color: var(--color-brand); }
+    .hero-tagline { margin-top: 18px; color: var(--color-brand); font-size: clamp(25px, 2.6vw, 36px); font-weight: 720; line-height: 1.3; letter-spacing: -0.035em; }
+    .hero-description { margin-top: 20px; max-width: 540px; color: var(--color-muted); font-size: 17px; line-height: 1.85; }
+    .hero .button-row { margin-top: 30px; }
+    .hero-notes { display: flex; flex-wrap: wrap; gap: 18px; margin-top: 26px; color: var(--color-muted); font-size: 13px; }
+    .hero-notes span { display: inline-flex; align-items: center; gap: 6px; }
+    .hero-notes svg { width: 15px; height: 15px; color: var(--color-brand); }
 
-  /* 数据亮点 */
-  .stats { margin-top: 72px; display: flex; gap: 72px; justify-content: center; flex-wrap: wrap; }
-  .stat { text-align: center; }
-  .stat b {
-    display: block; font-size: clamp(56px, 8vw, 92px); font-weight: 800; letter-spacing: -.03em; line-height: 1;
-    background: linear-gradient(120deg, var(--pink-deep), var(--violet)); -webkit-background-clip: text; background-clip: text; color: transparent;
-  }
-  .stat span { display: block; margin-top: 12px; font-size: 16px; color: var(--grey); letter-spacing: .06em; }
+    .hero-visual { position: relative; z-index: 1; padding: 34px 42px; }
+    .hero-visual::before {
+      content: ""; position: absolute; inset: -30px -50px -30px 0; z-index: -1;
+      border-radius: 50%; background: radial-gradient(circle, var(--blue-100), oklch(0.94 0.035 225 / 0%) 68%);
+    }
+    .product-window {
+      position: relative; width: min(100%, 360px); margin-inline: auto; overflow: hidden;
+      border: 7px solid var(--navy-800); border-radius: 40px;
+      background: var(--white); box-shadow: var(--shadow-lg); transform: rotate(1.5deg);
+    }
+    .product-window::before {
+      content: ""; position: absolute; top: 10px; left: 50%; z-index: 3; width: 68px; height: 6px;
+      border-radius: 999px; background: var(--navy-800); transform: translateX(-50%);
+    }
+    .window-bar { display: flex; align-items: center; justify-content: center; gap: 7px; height: 54px; padding: 10px 18px 0; border-bottom: 1px solid var(--slate-100); background: var(--slate-50); }
+    .window-dot, .product-sidebar { display: none; }
+    .window-title { color: var(--color-muted); font-size: 11px; font-weight: 600; }
+    .window-status { position: absolute; top: 31px; right: 19px; display: inline-flex; align-items: center; gap: 5px; color: var(--green-600); font-size: 9px; }
+    .window-status::before { content: ""; width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .product-body { display: grid; grid-template-columns: minmax(0, 1fr); min-height: 440px; }
+    .side-symbol { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 9px; color: var(--slate-500); }
+    .side-symbol.active { color: var(--color-brand); background: var(--blue-100); }
+    .side-symbol svg { width: 16px; height: 16px; }
+    .product-main { padding: 22px 18px 26px; }
+    .product-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .product-heading small { display: block; color: var(--color-muted); font-size: 10px; }
+    .product-heading strong { display: block; margin-top: 3px; color: var(--color-heading); font-size: 18px; }
+    .product-total { padding: 5px 12px; border-radius: 999px; color: var(--color-brand-strong); background: var(--blue-50); font-size: 18px; font-weight: 750; letter-spacing: -0.04em; }
+    .compat-banner { display: flex; align-items: center; gap: 9px; margin-top: 18px; padding: 10px 14px; border: 1px solid oklch(0.63 0.14 75 / 20%); border-radius: 999px; color: var(--amber-600); background: oklch(0.97 0.03 90); font-size: 10px; }
+    .compat-banner svg { width: 15px; height: 15px; flex-shrink: 0; }
+    .parts-list { display: grid; gap: 11px; margin-top: 16px; }
+    .part-row { display: grid; grid-template-columns: 34px minmax(0, 1fr) auto; align-items: center; gap: 9px; padding: 8px 9px; border: 1px solid var(--slate-200); border-radius: 999px; background: var(--white); }
+    .part-icon { display: grid; place-items: center; width: 32px; height: 32px; border-radius: 50%; color: var(--color-brand); background: var(--blue-50); }
+    .part-icon svg { width: 15px; height: 15px; }
+    .part-name { min-width: 0; }
+    .part-name small { display: block; color: var(--color-muted); font-size: 9px; line-height: 1.3; }
+    .part-name span { display: block; overflow: hidden; color: var(--color-heading); font-size: 11px; font-weight: 600; line-height: 1.4; text-overflow: ellipsis; white-space: nowrap; }
+    .part-price { padding: 5px 10px; border: 1px solid var(--color-border); border-radius: 999px; color: var(--color-heading); font-size: 11px; font-weight: 650; white-space: nowrap; }
+    .float-card {
+      position: absolute; display: flex; align-items: center; gap: 10px;
+      padding: 12px 15px; border: 1px solid oklch(1 0 0 / 80%); border-radius: 14px;
+      background: oklch(1 0 0 / 92%); box-shadow: var(--shadow-md); backdrop-filter: blur(12px);
+    }
+    .float-card svg { width: 20px; height: 20px; color: var(--color-brand); }
+    .float-card small { display: block; color: var(--color-muted); font-size: 10px; }
+    .float-card strong { display: block; color: var(--color-heading); font-size: 13px; }
+    .float-check { right: 0; bottom: 8px; }
+    .float-speed { top: 12px; left: 0; }
 
-  /* 截图展示 */
-  .shots { margin-top: 56px; display: flex; gap: 40px; justify-content: center; align-items: flex-start; align-self: center; flex-wrap: wrap; width: 100%; }
-  .phone {
-    flex: 1 1 300px;
-    max-width: 720px;
-    border-radius: 18px; overflow: hidden;
-    position: relative;
-    box-shadow: 0 24px 60px rgba(0,0,0,0.16);
-  }
-  .phone::after {
-    content: '';
-    position: absolute; inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0) 55%, rgba(250,246,255,0.85) 100%);
-    pointer-events: none;
-  }
-  .phone img { width: 100%; display: block; opacity: 0.9; }
+    /* Workflow strip */
+    .workflow { border-block: 1px solid var(--color-border); background: var(--slate-50); }
+    .workflow-inner { display: grid; grid-template-columns: 1.25fr repeat(4, 1fr); align-items: center; min-height: 108px; }
+    .workflow-title { color: var(--color-heading); font-size: 14px; font-weight: 650; }
+    .workflow-step { display: flex; align-items: center; justify-content: center; gap: 9px; min-height: 44px; color: var(--color-muted); font-size: 13px; }
+    .workflow-step span { display: grid; place-items: center; width: 25px; height: 25px; border: 1px solid var(--color-border); border-radius: 50%; color: var(--color-brand-strong); background: var(--white); font-size: 11px; font-weight: 700; }
 
-  .radar-show { position: relative; display: flex; align-items: center; align-self: center; gap: 48px; margin-top: 44px; width: 100%; overflow: hidden; }
-  .radar-show .shots { margin-top: 0; z-index: 1; }
-  .radar-deco {
-    position: absolute;
-    top: 50%;
-    margin-top: -700px;
-    right: -260px;
-    width: 1400px;
-    height: 1400px;
-    color: var(--violet);
-    -webkit-mask-image: radial-gradient(circle at 0% 50%, #000 28%, transparent 68%);
-    mask-image: radial-gradient(circle at 0% 50%, #000 28%, transparent 68%);
-    animation: radarSpin 45s linear infinite;
-  }
-  @keyframes radarSpin {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-  }
+    /* Feature cards */
+    .features-head { display: flex; align-items: end; justify-content: space-between; gap: 40px; }
+    .features-head > p { max-width: 330px; padding-bottom: 8px; color: var(--color-muted); font-size: 15px; }
+    .feature-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 54px; }
+    .feature-card {
+      position: relative; min-height: 252px; padding: 28px; overflow: hidden;
+      border: 1px solid var(--card-border); border-radius: var(--radius-md); background: var(--card-bg);
+      transition: transform 220ms ease-out, border-color 220ms ease-out, box-shadow 220ms ease-out;
+    }
+    .feature-card::after {
+      content: ""; position: absolute; right: -60px; bottom: -80px; width: 160px; height: 160px;
+      border-radius: 50%; background: var(--blue-50); opacity: 0;
+      transition: opacity 220ms ease-out, transform 220ms ease-out;
+    }
+    .feature-card:hover { border-color: var(--blue-100); box-shadow: var(--shadow-md); transform: translateY(-5px); }
+    .feature-card:hover::after { opacity: 1; transform: scale(1.2); }
+    .feature-icon { display: grid; place-items: center; width: 44px; height: 44px; border-radius: 13px; color: var(--color-brand); background: var(--blue-50); }
+    .feature-icon svg { width: 22px; height: 22px; }
+    .feature-card h3 { margin-top: 24px; color: var(--color-heading); font-size: 19px; font-weight: 700; letter-spacing: -0.02em; }
+    .feature-card p { margin-top: 10px; color: var(--color-muted); font-size: 14px; line-height: 1.8; }
+    .feature-tag { position: absolute; top: 28px; right: 28px; color: var(--slate-500); font-size: 10px; font-weight: 650; letter-spacing: 0.06em; }
 
-  @keyframes shotFade1 {
-    from { opacity: 0; transform: translateY(40px); }
-    to { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes shotFade2 {
-    from { opacity: 0; transform: translateY(70px); }
-    to { opacity: 1; transform: translateY(30px); }
-  }
+    /* Split showcases */
+    .showcase-grid { display: grid; grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr); align-items: center; gap: 80px; }
+    .showcase-copy h2 { margin-top: 14px; color: var(--color-heading); font-size: clamp(34px, 4vw, 50px); font-weight: 750; line-height: 1.2; letter-spacing: -0.045em; }
+    .showcase-copy > p { margin-top: 20px; max-width: 520px; color: var(--color-muted); font-size: 16px; line-height: 1.85; }
+    .check-list { display: grid; gap: 14px; margin-top: 28px; padding: 0; list-style: none; }
+    .check-list li { display: flex; align-items: flex-start; gap: 11px; color: var(--color-body); font-size: 14px; }
+    .check-list svg { width: 19px; height: 19px; margin-top: 3px; flex-shrink: 0; color: var(--color-brand); }
+    .screenshot-stage { position: relative; padding: 38px; }
+    .screenshot-stage::before { content: ""; position: absolute; inset: 0; border: 1px solid var(--color-border); border-radius: var(--radius-lg); background: var(--white); }
+    .screenshot-stage::after {
+      content: ""; position: absolute; inset: 0; border-radius: var(--radius-lg); pointer-events: none;
+      background-image: radial-gradient(var(--slate-300) 0.8px, transparent 0.8px); background-size: 18px 18px; opacity: 0.4;
+      mask-image: linear-gradient(135deg, black, transparent 70%);
+    }
+    .desktop-shot { position: relative; z-index: 1; overflow: hidden; border: 7px solid var(--navy-800); border-radius: 18px; background: var(--navy-900); box-shadow: var(--shadow-lg); }
+    .desktop-shot img { width: 100%; aspect-ratio: 696 / 800; object-fit: cover; }
+    .shot-caption {
+      position: absolute; right: 12px; bottom: 20px; z-index: 2;
+      display: flex; align-items: center; gap: 8px; padding: 11px 14px;
+      border: 1px solid var(--color-border); border-radius: 12px; background: var(--white); box-shadow: var(--shadow-md);
+      color: var(--color-heading); font-size: 12px; font-weight: 650;
+    }
+    .shot-caption svg { width: 17px; height: 17px; color: var(--amber-600); }
 
-  /* 下载 CTA */
-  .cta-panel {
-    margin-top: 40px; text-align: center; padding: 72px 28px; border-radius: 26px;
-    background: radial-gradient(600px 300px at 50% 0%, rgba(236,72,153,0.18), transparent 70%),
-                rgba(0,0,0,0.03);
-    border: 1px solid rgba(0,0,0,0.07);
-  }
-  .cta-panel h3 { font-size: clamp(26px, 4vw, 36px); font-weight: 700; }
-  .cta-panel p { margin: 14px 0 28px; color: var(--grey); font-size: 17px; }
+    /* Radar */
+    .radar-grid { display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr); align-items: center; gap: 70px; }
+    .radar-points { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 30px; }
+    .radar-point { padding: 15px; border: 1px solid var(--color-border); border-radius: 13px; background: var(--slate-50); }
+    .radar-point strong { display: block; color: var(--color-heading); font-size: 13px; }
+    .radar-point span { display: block; margin-top: 3px; color: var(--color-muted); font-size: 11px; }
+    .radar-stage { position: relative; min-height: 580px; }
+    .radar-stage::before { content: ""; position: absolute; inset: 8% 4%; border-radius: 50%; background: radial-gradient(circle, var(--blue-100), oklch(0.94 0.035 225 / 0%) 68%); }
+    .phone-pair { position: relative; z-index: 1; display: flex; align-items: center; justify-content: center; gap: 20px; }
+    .phone {
+      position: relative; width: min(45%, 244px); padding: 7px; overflow: hidden;
+      border: 1px solid var(--slate-300); border-radius: 30px; background: var(--navy-900); box-shadow: var(--shadow-lg);
+    }
+    .phone::before { content: ""; position: absolute; top: 12px; left: 50%; z-index: 2; width: 54px; height: 5px; border-radius: 5px; background: oklch(1 0 0 / 25%); transform: translateX(-50%); }
+    .phone img { width: 100%; border-radius: 23px; aspect-ratio: 383 / 800; object-fit: cover; }
+    .phone:nth-child(2) { transform: translateY(34px); }
+    .radar-mini {
+      position: absolute; right: -12px; bottom: 2px; z-index: 2; width: 176px; height: 176px;
+      padding: 12px; overflow: hidden; border: 1px solid var(--blue-100); border-radius: 26px;
+      color: var(--color-brand); background: oklch(1 0 0 / 95%); box-shadow: 0 18px 50px oklch(0.58 0.16 235 / 18%); backdrop-filter: blur(12px);
+    }
+    .radar-mini::after { content: "SCANNING"; position: absolute; right: 13px; bottom: 8px; color: var(--color-brand-strong); font-size: 7px; font-weight: 700; letter-spacing: .14em; opacity: .65; }
+    .radar-mini svg { width: 100%; height: 100%; overflow: visible; }
+    .radar-sweep { transform-origin: 100px 100px; animation: radar-spin 8s linear infinite; will-change: transform; }
+    .radar-beam { opacity: .34; }
+    .radar-scanner-dot { transform-box: fill-box; transform-origin: center; animation: radar-pulse 1.8s ease-out infinite; }
+    @keyframes radar-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+    @keyframes radar-pulse { 0% { opacity: .9; transform: scale(.7); } 70%, 100% { opacity: 0; transform: scale(2.4); } }
 
-  footer { padding: 48px 0 60px; text-align: center; color: var(--grey); font-size: 13px; border-top: 1px solid rgba(0,0,0,0.06); }
-  footer a { color: var(--pink); text-decoration: none; }
+    /* Ranking */
+    .ranking-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 0.85fr); align-items: center; gap: 80px; }
+    .ranking-visual { position: relative; min-height: 490px; padding: 34px 86px 34px 0; }
+    .ranking-panel { position: relative; z-index: 1; padding: 26px; border: 1px solid var(--color-border); border-radius: var(--radius-md); background: var(--white); box-shadow: var(--shadow-md); }
+    .ranking-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 24px; }
+    .ranking-panel-head strong { color: var(--color-heading); font-size: 16px; }
+    .ranking-panel-head span { padding: 4px 9px; border-radius: 999px; color: var(--color-brand-strong); background: var(--blue-50); font-size: 10px; font-weight: 650; }
+    .rank-list { display: grid; gap: 18px; }
+    .rank-item-top { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; color: var(--color-body); font-size: 12px; }
+    .rank-item-top b { color: var(--color-heading); font-size: 13px; }
+    .rank-track { height: 8px; overflow: hidden; border-radius: 99px; background: var(--slate-100); }
+    .rank-bar { width: var(--w); height: 100%; border-radius: inherit; background: var(--color-brand); transform-origin: left; }
+    .rank-item:nth-child(2) .rank-bar { opacity: 0.86; }
+    .rank-item:nth-child(3) .rank-bar { opacity: 0.72; }
+    .rank-item:nth-child(4) .rank-bar { opacity: 0.58; }
+    .rank-item:nth-child(5) .rank-bar { opacity: 0.44; }
+    .rank-shot { position: absolute; right: 0; bottom: 0; z-index: 2; width: 210px; overflow: hidden; border: 6px solid var(--white); border-radius: 18px; box-shadow: var(--shadow-lg); transform: rotate(3deg); }
+    .rank-shot img { width: 100%; aspect-ratio: 800 / 755; object-fit: cover; }
 
-  /* 滚动渐显（默认可见，避免 JS 未触发时内容消失） */
-  .reveal { opacity: 1; transform: translateY(0); transition: opacity .7s ease, transform .7s ease; }
-  .reveal.visible { opacity: 1; transform: translateY(0); }
+    /* Glass UI and custom benchmark showcases */
+    .experience-section { display: flex; align-items: center; min-height: 82dvh; }
+    .experience-grid { display: grid; grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr); align-items: center; gap: 80px; }
+    .glass-stage {
+      position: relative; display: grid; place-items: center; min-height: 530px; overflow: hidden;
+      border: 1px solid oklch(1 0 0 / 16%); border-radius: var(--radius-lg);
+      background: radial-gradient(circle at 20% 15%, oklch(0.68 0.15 220 / 70%), transparent 42%), radial-gradient(circle at 85% 85%, oklch(0.58 0.16 235 / 65%), transparent 45%), var(--navy-900);
+      box-shadow: var(--shadow-lg);
+    }
+    .glass-stage::before {
+      content: ""; position: absolute; inset: 0;
+      background-image: linear-gradient(oklch(1 0 0 / 5%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 5%) 1px, transparent 1px);
+      background-size: 42px 42px; mask-image: linear-gradient(135deg, black, transparent 80%);
+    }
+    .glass-panel {
+      position: relative; width: min(86%, 410px); padding: 25px; border: 1px solid oklch(1 0 0 / 30%);
+      border-radius: 28px; color: var(--white); background: oklch(1 0 0 / 13%);
+      box-shadow: inset 0 1px 0 oklch(1 0 0 / 24%), 0 26px 70px oklch(0.16 0.05 255 / 30%);
+      backdrop-filter: blur(24px) saturate(135%); -webkit-backdrop-filter: blur(24px) saturate(135%);
+    }
+    .glass-panel-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .glass-panel-head span { color: oklch(1 0 0 / 78%); font-size: 11px; }
+    .glass-panel-head b { padding: 5px 10px; border: 1px solid oklch(1 0 0 / 20%); border-radius: 999px; background: oklch(1 0 0 / 12%); font-size: 10px; }
+    .glass-total { margin-top: 24px; font-size: 38px; font-weight: 750; line-height: 1; letter-spacing: -.05em; }
+    .glass-total small { margin-left: 8px; color: oklch(1 0 0 / 76%); font-size: 11px; font-weight: 500; letter-spacing: 0; }
+    .glass-pills { display: grid; gap: 11px; margin-top: 25px; }
+    .glass-pill {
+      display: flex; align-items: center; justify-content: space-between; gap: 14px; min-height: 57px; padding: 10px 16px;
+      border: 1px solid oklch(1 0 0 / 20%); border-radius: 999px; background: oklch(1 0 0 / 11%);
+      box-shadow: inset 0 1px 0 oklch(1 0 0 / 12%); backdrop-filter: blur(12px);
+    }
+    .glass-pill span { color: oklch(1 0 0 / 82%); font-size: 11px; }
+    .glass-pill strong { font-size: 12px; font-weight: 650; }
+    .glass-floating {
+      position: absolute; right: 20px; bottom: 24px; padding: 12px 16px; border: 1px solid oklch(1 0 0 / 28%);
+      border-radius: 16px; color: var(--white); background: oklch(1 0 0 / 16%); backdrop-filter: blur(18px);
+      box-shadow: 0 12px 34px oklch(0.16 0.05 255 / 22%);
+    }
+    .glass-floating small { display: block; color: oklch(1 0 0 / 75%); font-size: 9px; }
+    .glass-floating strong { display: block; margin-top: 2px; font-size: 12px; }
+    .benchmark-stage { position: relative; padding: 30px 0; }
+    .benchmark-stage::before { content: ""; position: absolute; inset: 0 10%; border-radius: 50%; background: radial-gradient(circle, var(--blue-100), transparent 70%); }
+    .benchmark-card { position: relative; padding: 28px; border: 1px solid var(--color-border); border-radius: 28px; background: var(--white); box-shadow: var(--shadow-lg); }
+    .benchmark-card-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .benchmark-card-head strong { color: var(--color-heading); font-size: 16px; }
+    .benchmark-card-head span { padding: 5px 10px; border-radius: 999px; color: var(--color-brand-strong); background: var(--blue-50); font-size: 10px; font-weight: 650; }
+    .benchmark-game { margin-top: 22px; padding: 24px; border-radius: 21px; color: var(--white); background: var(--navy-900); }
+    .benchmark-game small { color: var(--slate-300); font-size: 10px; }
+    .benchmark-game h3 { margin-top: 5px; font-size: 27px; font-weight: 720; letter-spacing: -.035em; }
+    .benchmark-game p { margin-top: 7px; color: var(--slate-300); font-size: 12px; }
+    .benchmark-options { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin-top: 16px; }
+    .benchmark-option { padding: 15px; border: 1px solid var(--color-border); border-radius: 16px; background: var(--slate-50); }
+    .benchmark-option small { display: block; color: var(--color-muted); font-size: 10px; }
+    .benchmark-option strong { display: block; margin-top: 4px; color: var(--color-heading); font-size: 13px; }
+    @media (max-width: 800px) {
+      .experience-section { min-height: 0; }
+      .experience-grid { grid-template-columns: 1fr; gap: 46px; }
+      .freedom-copy { order: -1; }
+      .glass-stage, .benchmark-stage { width: min(100%, 620px); margin-inline: auto; }
+    }
+    @media (max-width: 560px) {
+      .glass-stage { min-height: 445px; }
+      .glass-panel { width: 92%; padding: 19px; }
+      .glass-total { font-size: 32px; }
+      .glass-floating { right: 8px; bottom: 14px; }
+      .benchmark-stage { padding-block: 8px; }
+      .benchmark-card { padding: 20px 16px; }
+      .benchmark-game { padding: 20px; }
+      .benchmark-game h3 { font-size: 23px; }
+      .benchmark-options { gap: 9px; }
+      .benchmark-option { padding: 12px; }
+    }
 
-  @media (max-width: 600px) {
-    .hero { padding: 80px 0 60px; }
-    section { padding: 52px 0; }
-    .phone { min-width: 0; max-width: 100%; }
-    .stats { gap: 40px; }
-    .stat b { font-size: 52px; }
-  }
-</style>
+    /* Stats */
+    .stats-section { padding-block: 90px; border-block: 1px solid var(--color-border); background: var(--white); }
+    .stats-layout { display: grid; grid-template-columns: 0.85fr 1.6fr; align-items: center; gap: 70px; }
+    .stats-copy h2 { color: var(--color-heading); font-size: clamp(30px, 3.5vw, 44px); line-height: 1.25; letter-spacing: -0.04em; }
+    .stats-copy p { margin-top: 14px; color: var(--color-muted); font-size: 15px; }
+    .stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); }
+    .stat { padding-inline: 24px; border-left: 1px solid var(--color-border); }
+    .stat b { display: block; color: var(--color-heading); font-size: clamp(36px, 4vw, 54px); font-weight: 750; line-height: 1.1; letter-spacing: -0.05em; }
+    .stat span { display: block; margin-top: 10px; color: var(--color-muted); font-size: 12px; }
+
+    /* Download and footer */
+    .download-section { padding-block: 104px; background: var(--slate-50); }
+    .download-panel {
+      position: relative; overflow: hidden; padding: 74px 48px; border-radius: var(--radius-lg);
+      color: var(--slate-300); background: var(--navy-900); text-align: center;
+    }
+    .download-panel::before {
+      content: ""; position: absolute; inset: 0;
+      background-image: linear-gradient(oklch(1 0 0 / 4%) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 4%) 1px, transparent 1px);
+      background-size: 48px 48px; mask-image: radial-gradient(circle at center, black, transparent 75%);
+    }
+    .download-panel::after { content: ""; position: absolute; top: -250px; left: 50%; width: 650px; height: 500px; border-radius: 50%; background: radial-gradient(circle, oklch(0.58 0.16 235 / 28%), transparent 68%); transform: translateX(-50%); }
+    .download-content { position: relative; z-index: 1; }
+    .download-content .eyebrow { color: oklch(0.82 0.09 220); }
+    .download-content h2 { margin-top: 14px; color: var(--white); font-size: clamp(34px, 4vw, 50px); line-height: 1.2; letter-spacing: -0.045em; }
+    .download-content p { margin: 16px auto 0; color: var(--slate-300); font-size: 16px; }
+    .download-content .button-row { justify-content: center; margin-top: 30px; }
+    .download-content .button-secondary { color: var(--white); border-color: oklch(1 0 0 / 22%); background: oklch(1 0 0 / 8%); }
+    .download-content .button-secondary:hover { border-color: oklch(1 0 0 / 35%); background: oklch(1 0 0 / 12%); }
+    .site-footer { padding-block: 58px 28px; background: var(--white); }
+    .footer-grid { display: grid; grid-template-columns: 1.5fr repeat(3, 1fr); gap: 48px; }
+    .footer-brand p { max-width: 290px; margin-top: 16px; color: var(--color-muted); font-size: 13px; }
+    .footer-column h3 { color: var(--color-heading); font-size: 13px; font-weight: 700; }
+    .footer-column ul { display: grid; gap: 10px; margin-top: 16px; padding: 0; list-style: none; }
+    .footer-column a { display: inline-flex; align-items: center; min-height: 30px; color: var(--color-muted); font-size: 13px; transition: color 180ms ease-out; }
+    .footer-column a:hover { color: var(--color-brand-strong); }
+    .footer-bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 46px; padding-top: 22px; border-top: 1px solid var(--color-border); color: var(--color-muted); font-size: 12px; }
+
+    /* Content stays visible at all times; only the chart bars animate on entry. */
+    .reveal { opacity: 1; }
+    .js .ranking-panel .rank-bar { transform: scaleX(0); transition: transform 700ms ease-out; }
+    .js .ranking-panel.visible .rank-bar { transform: scaleX(1); }
+    .js .ranking-panel .rank-item:nth-child(2) .rank-bar { transition-delay: 70ms; }
+    .js .ranking-panel .rank-item:nth-child(3) .rank-bar { transition-delay: 140ms; }
+    .js .ranking-panel .rank-item:nth-child(4) .rank-bar { transition-delay: 210ms; }
+    .js .ranking-panel .rank-item:nth-child(5) .rank-bar { transition-delay: 280ms; }
+
+    @media (max-width: 1024px) {
+      .nav-links { gap: 18px; }
+      .hero-grid { gap: 36px; }
+      .hero h1 { font-size: clamp(46px, 6vw, 64px); }
+      .hero-visual { padding-left: 0; }
+      .product-main { padding: 18px; }
+      .showcase-grid, .ranking-grid { gap: 48px; }
+      .radar-grid { gap: 38px; }
+      .stats-layout { grid-template-columns: 1fr; gap: 40px; }
+      .stats-copy { text-align: center; }
+      .stat:first-child { border-left: 0; }
+    }
+
+    @media (max-width: 800px) {
+      .container { width: min(100% - 36px, var(--container)); }
+      .section { padding-block: 80px; }
+      .nav { min-height: 64px; }
+      .nav-links {
+        position: absolute; top: calc(100% + 8px); right: 0; left: 0;
+        display: none; flex-direction: column; align-items: stretch; gap: 2px;
+        padding: 10px; border: 1px solid var(--color-border); border-radius: 16px;
+        background: var(--white); box-shadow: var(--shadow-md);
+      }
+      .nav-links[data-open="true"] { display: flex; }
+      .nav-links a { padding-inline: 14px; border-radius: 9px; }
+      .nav-links a:hover { background: var(--slate-50); }
+      .nav-links a::after { display: none; }
+      .nav-actions { margin-left: auto; }
+      .nav-github { display: none; }
+      .menu-toggle { display: grid; }
+      .hero { padding-block: 64px 76px; }
+      .hero-grid { grid-template-columns: 1fr; gap: 52px; }
+      .hero-copy { max-width: 650px; }
+      .hero h1 { font-size: clamp(48px, 10vw, 72px); }
+      .hero-visual { width: min(100%, 610px); margin-inline: auto; }
+      .workflow-inner { grid-template-columns: repeat(4, 1fr); padding-block: 20px; }
+      .workflow-title { grid-column: 1 / -1; margin-bottom: 12px; text-align: center; }
+      .workflow-step { font-size: 12px; }
+      .features-head { display: block; }
+      .features-head > p { margin-top: 18px; }
+      .feature-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .showcase-grid, .ranking-grid, .radar-grid { grid-template-columns: 1fr; gap: 48px; }
+      .showcase-copy { max-width: 650px; }
+      .screenshot-stage { width: min(100%, 580px); margin-inline: auto; }
+      .radar-copy { max-width: 650px; }
+      .radar-stage { width: min(100%, 620px); margin-inline: auto; }
+      .ranking-copy { order: -1; max-width: 650px; }
+      .ranking-visual { width: min(100%, 650px); margin-inline: auto; }
+      .footer-grid { grid-template-columns: 1.5fr repeat(3, 1fr); gap: 24px; }
+    }
+
+    @media (max-width: 560px) {
+      .container { width: min(100% - 32px, var(--container)); }
+      .section { padding-block: 64px; }
+      .section-heading h2, .showcase-copy h2 { font-size: 34px; }
+      .section-heading p { font-size: 16px; }
+      .brand-name { font-size: 18px; }
+      .hero { padding-block: 52px 64px; }
+      .hero h1 { margin-top: 18px; font-size: clamp(56px, 17vw, 76px); line-height: 1; }
+      .hero-tagline { margin-top: 14px; font-size: 24px; }
+      .hero-description { margin-top: 18px; font-size: 16px; }
+      .hero .button-row { display: grid; grid-template-columns: 1fr; }
+      .button { min-height: 50px; padding-inline: 16px; font-size: 14px; }
+      .hero-notes { gap: 10px 16px; }
+      .hero-visual { padding: 22px 8px 30px; }
+      .product-window { width: min(100%, 330px); border-width: 6px; border-radius: 32px; transform: none; }
+      .product-body { grid-template-columns: minmax(0, 1fr); min-height: 0; }
+      .product-main { padding: 18px 13px 22px; }
+      .product-heading strong { font-size: 14px; }
+      .product-total { font-size: 17px; }
+      .part-row { grid-template-columns: 29px minmax(0, 1fr) auto; gap: 8px; padding: 10px 8px; }
+      .part-icon { width: 28px; height: 28px; }
+      .part-name span, .part-price { font-size: 10px; }
+      .float-speed { top: 0; left: -4px; }
+      .float-check { right: -4px; bottom: 2px; }
+      .float-card { padding: 9px 11px; }
+      .float-card strong { font-size: 11px; }
+      .workflow-inner { grid-template-columns: repeat(2, 1fr); gap: 8px; }
+      .workflow-step { justify-content: flex-start; padding-left: 20px; }
+      .feature-grid { grid-template-columns: 1fr; gap: 14px; margin-top: 36px; }
+      .feature-card { min-height: 0; padding: 24px; }
+      .feature-card h3 { margin-top: 18px; }
+      .screenshot-stage { padding: 22px; }
+      .desktop-shot { border-width: 5px; border-radius: 14px; }
+      .shot-caption { right: 4px; bottom: 8px; }
+      .radar-points { margin-top: 24px; }
+      .radar-stage { min-height: 500px; }
+      .phone-pair { gap: 12px; }
+      .phone { width: min(46%, 210px); border-radius: 24px; }
+      .phone img { border-radius: 18px; }
+      .phone:nth-child(2) { transform: translateY(22px); }
+      .radar-mini { right: -4px; bottom: 0; width: 136px; height: 136px; border-radius: 20px; }
+      .radar-mini::after { right: 10px; bottom: 6px; font-size: 6px; }
+      .ranking-visual { min-height: 430px; padding: 10px 36px 54px 0; }
+      .ranking-panel { padding: 20px 16px; }
+      .rank-shot { width: 150px; border-width: 4px; border-radius: 13px; }
+      .rank-item-top { font-size: 10px; }
+      .rank-item-top b { font-size: 11px; }
+      .stats-section { padding-block: 64px; }
+      .stats-layout { gap: 34px; }
+      .stats { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 0; }
+      .stat { padding-inline: 16px; text-align: center; }
+      .stat:nth-child(3) { border-left: 0; }
+      .stat b { font-size: 42px; }
+      .download-section { padding-block: 64px; }
+      .download-panel { padding: 54px 22px; border-radius: 24px; }
+      .download-content .button-row { display: grid; grid-template-columns: 1fr; }
+      .footer-grid { grid-template-columns: repeat(2, 1fr); gap: 34px 20px; }
+      .footer-brand { grid-column: 1 / -1; }
+      .footer-bottom { flex-direction: column; gap: 6px; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+      .js .reveal { opacity: 1; transform: none; }
+      .js .ranking-panel .rank-bar { transform: scaleX(1); }
+      .product-window, .phone:nth-child(2), .rank-shot { transform: none; }
+    }
+  </style>
 </head>
 <body>
+  <a class="skip-link" href="#main">跳转到主要内容</a>
 
-<div class="bg">
-  <div class="orb orb1"></div>
-  <div class="orb orb2"></div>
-  <div class="orb orb3"></div>
-  <div class="orb orb4"></div>
-  <div class="orb orb5"></div>
-  <div class="orb orb6"></div>
-  <div class="orb orb7"></div>
-</div>
-
-<header>
-  <div class="wrap nav">
-    <div class="logo"><span class="dot">D</span> DIYAss</div>
-    <a class="gh" href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener">GitHub ↗</a>
-  </div>
-</header>
-
-<!-- Hero -->
-<section class="hero">
-  <div class="kicker">免费 · 开源 · 持续更新 · 装机工具</div>
-  <h1>DIYAss</h1>
-  <div class="tagline">丝滑装机，一键搞定</div>
-  <div class="sub">选件总价实时跳动，兼容问题即时提醒，每一步都顺滑无感</div>
-  <div class="cta">
-    <a class="btn btn-primary" href="https://github.com/shixer230-ai/DIYAss/releases/latest" target="_blank" rel="noopener">下载 APK</a>
-    <a class="btn btn-ghost" href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener">查看开源代码</a>
-  </div>
-</section>
-
-<!-- 功能特色 -->
-<section class="reveal">
-  <div class="wrap">
-    <div class="features">
-      <div class="feature">
-        <div class="ico">🖥️</div>
-        <h3>整机方案生成</h3>
-        <p>按槽位选 CPU、显卡、主板，总价实时跳动，方案秒速成型</p>
+  <header class="site-header">
+    <nav class="container nav" aria-label="主导航">
+      <a class="brand" href="#top" aria-label="DIYAss 首页">
+        <span class="brand-mark" aria-hidden="true"><img src="/diyass-icon.png" alt="" width="36" height="36"></span>
+        <span class="brand-name">DIYAss</span>
+      </a>
+      <div class="nav-links" id="primary-nav" data-open="false">
+        <a href="#features">功能特色</a>
+        <a href="#compatibility">兼容检查</a>
+        <a href="#radar">雷达分析</a>
+        <a href="#stats">硬件库</a>
       </div>
-      <div class="feature">
-        <div class="ico">✅</div>
-        <h3>兼容性检查</h3>
-        <p>插槽、内存代别、电源功率即时校验，选错立刻黄牌提示</p>
-        <div class="shots">
-          <div class="phone"><img src="compat-check.jpg" alt="兼容性检查"></div>
-        </div>
+      <div class="nav-actions">
+        <a class="nav-github" href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener noreferrer">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.55v-2.23c-3.22.7-3.9-1.37-3.9-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.72 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.19a11 11 0 0 1 5.79 0c2.2-1.5 3.17-1.19 3.17-1.19.63 1.59.23 2.77.12 3.06.74.81 1.18 1.85 1.18 3.11 0 4.45-2.7 5.43-5.28 5.71.42.36.79 1.06.79 2.14v3.17c0 .31.21.66.8.55A11.5 11.5 0 0 0 12 .7Z"/></svg>
+          GitHub
+        </a>
+        <button class="menu-toggle" type="button" aria-label="打开导航菜单" aria-controls="primary-nav" aria-expanded="false">
+          <svg class="menu-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+          <svg class="close-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg>
+        </button>
       </div>
-      <div class="feature">
-        <div class="ico">📷</div>
-        <h3>截图导入</h3>
-        <p>购物车截图一丢，硬件自动识别成方案，免去逐个手填</p>
+    </nav>
+  </header>
+
+  <main id="main">
+    <section class="hero" id="top">
+      <div class="hero-aurora" aria-hidden="true">
+        <span class="aurora-orb aurora-orb-one"></span>
+        <span class="aurora-orb aurora-orb-two"></span>
+        <span class="aurora-orb aurora-orb-three"></span>
       </div>
-      <div class="feature">
-        <div class="ico">🕸️</div>
-        <h3>六维雷达图</h3>
-        <p>性能 + 场景六维雷达图丝滑展开，短板木桶一眼看清</p>
-        <div class="radar-show">
-          <div class="shots">
-            <div class="phone"><img src="radar-performance.jpg" alt="性能六维雷达图"></div>
-            <div class="phone"><img src="radar-scene.jpg" alt="场景六维雷达图"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <div class="eyebrow"><span class="eyebrow-dot"></span>免费开源的 Android 装机助手</div>
+          <h1>DIYAss</h1>
+          <div class="hero-tagline">丝滑装机，一键搞定</div>
+          <p class="hero-description">从选件、兼容性检查到性能分析，把复杂的硬件参数变成清晰的选择，让每一个装机方案都更省心、更可靠</p>
+          <div class="button-row">
+            <a class="button button-primary" href="https://github.com/shixer230-ai/DIYAss/releases/latest" target="_blank" rel="noopener noreferrer">
+              下载 Android 版
+              <svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a class="button button-secondary" href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .7a11.5 11.5 0 0 0-3.64 22.4c.58.1.79-.25.79-.55v-2.23c-3.22.7-3.9-1.37-3.9-1.37-.52-1.34-1.28-1.7-1.28-1.7-1.05-.72.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.57-.29-5.27-1.28-5.27-5.72 0-1.26.45-2.3 1.19-3.11-.12-.29-.52-1.47.11-3.06 0 0 .97-.31 3.18 1.19a11 11 0 0 1 5.79 0c2.2-1.5 3.17-1.19 3.17-1.19.63 1.59.23 2.77.12 3.06.74.81 1.18 1.85 1.18 3.11 0 4.45-2.7 5.43-5.28 5.71.42.36.79 1.06.79 2.14v3.17c0 .31.21.66.8.55A11.5 11.5 0 0 0 12 .7Z"/></svg>
+              查看开源代码
+            </a>
           </div>
-          <svg class="radar-deco" viewBox="0 0 200 200" aria-hidden="true">
-            <defs>
-              <linearGradient id="rg" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0%" stop-color="#EC4899" stop-opacity="0.55"/>
-                <stop offset="100%" stop-color="#8B5CF6" stop-opacity="0.15"/>
-              </linearGradient>
-            </defs>
-            <polygon points="100,12 176,56 176,144 100,188 24,144 24,56" fill="none" stroke="currentColor" stroke-width="1.2" opacity="0.4"/>
-            <polygon points="100,34 158,68 158,132 100,166 42,132 42,68" fill="none" stroke="currentColor" stroke-width="1" opacity="0.3"/>
-            <polygon points="100,56 140,80 140,120 100,144 60,120 60,80" fill="none" stroke="currentColor" stroke-width="1" opacity="0.22"/>
-            <line x1="100" y1="12" x2="100" y2="188" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-            <line x1="24" y1="56" x2="176" y2="144" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-            <line x1="176" y1="56" x2="24" y2="144" stroke="currentColor" stroke-width="1" opacity="0.25"/>
-            <polygon points="100,80 126,95 126,121 100,136 74,121 74,95" fill="url(#rg)"/>
-          </svg>
+          <div class="hero-notes" aria-label="产品特点">
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>完全免费</span>
+            <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>数据本地保存</span>
+          </div>
+        </div>
+
+        <div class="hero-visual reveal" aria-label="DIYAss Android 装机方案功能示意">
+          <div class="float-card float-speed" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>
+            <div><small>方案生成</small><strong>快速，更省心</strong></div>
+          </div>
+          <div class="product-window">
+            <div class="window-bar">
+              <span class="window-dot"></span><span class="window-dot"></span><span class="window-dot"></span>
+              <span class="window-title">DIYAss · 我的装机方案</span><span class="window-status">已保存</span>
+            </div>
+            <div class="product-body">
+              <div class="product-sidebar" aria-hidden="true">
+                <span class="side-symbol active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 9h8M8 13h5"/></svg></span>
+                <span class="side-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3v18M3 12h18M5.6 5.6l12.8 12.8M18.4 5.6 5.6 18.4"/></svg></span>
+                <span class="side-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19V3"/></svg></span>
+                <span class="side-symbol"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>
+              </div>
+              <div class="product-main">
+                <div class="product-heading"><div><small>当前方案</small><strong>主流游戏主机</strong></div><div class="product-total">¥ 4,017</div></div>
+                <div class="compat-banner"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v4M12 17h.01"/></svg>已发现 1 项兼容性问题，点击查看详情</div>
+                <div class="parts-list">
+                  <div class="part-row"><span class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="6" y="6" width="12" height="12" rx="2"/><path d="M9 2v4M15 2v4M9 18v4M15 18v4M2 9h4M2 15h4M18 9h4M18 15h4"/></svg></span><div class="part-name"><small>CPU</small><span>AMD 锐龙 7 5700X</span></div><span class="part-price">¥ 899</span></div>
+                  <div class="part-row"><span class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 9h4v6H7zM15 9h2M15 13h2"/></svg></span><div class="part-name"><small>显卡</small><span>RX 9060 XT 8G</span></div><span class="part-price">¥ 2,699</span></div>
+                  <div class="part-row"><span class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="5" y="3" width="14" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></span><div class="part-name"><small>主板</small><span>B85M-G · 华硕</span></div><span class="part-price">¥ 299</span></div>
+                  <div class="part-row"><span class="part-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c4 4 7 6.5 7 11a7 7 0 1 1-14 0c0-4.5 3-7 7-11Z"/><path d="M9 15a3 3 0 0 0 3 3"/></svg></span><div class="part-name"><small>散热</small><span>RL500 ARGB · 天极风</span></div><span class="part-price">¥ 120</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="float-card float-check" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4 6v6c0 5 3.4 8 8 9 4.6-1 8-4 8-9V6l-8-3Z"/><path d="m8 12 3 3 5-6"/></svg>
+            <div><small>智能检测</small><strong>8 项硬件已检查</strong></div>
+          </div>
         </div>
       </div>
-      <div class="feature">
-        <div class="ico">🏆</div>
-        <h3>性价比排行</h3>
-        <p>性价比、跑分、功耗多维排序，切换项目即时刷新</p>
-        <div class="rank-demo">
-          <div class="rank-row"><span class="rank-name">7500F + 6750XT</span><div class="rank-track"><div class="rank-bar" style="--w: 88%; --d: 0s;"></div></div><b>88</b></div>
-          <div class="rank-row"><span class="rank-name">12400F + 4060</span><div class="rank-track"><div class="rank-bar" style="--w: 82%; --d: 0.12s;"></div></div><b>82</b></div>
-          <div class="rank-row"><span class="rank-name">5600 + 6600</span><div class="rank-track"><div class="rank-bar" style="--w: 76%; --d: 0.36s;"></div></div><b>76</b></div>
-          <div class="rank-row"><span class="rank-name">7500F + 4060</span><div class="rank-track"><div class="rank-bar" style="--w: 68%; --d: 0.36s;"></div></div><b>68</b></div>
-          <div class="rank-row"><span class="rank-name">7600 + 4060Ti</span><div class="rank-track"><div class="rank-bar" style="--w: 58%; --d: 0.48s;"></div></div><b>58</b></div>
+    </section>
+
+    <div class="workflow" aria-label="装机流程">
+      <div class="container workflow-inner">
+        <div class="workflow-title">一套流程，完成装机决策</div>
+        <div class="workflow-step"><span>1</span>选择硬件</div>
+        <div class="workflow-step"><span>2</span>检查兼容</div>
+        <div class="workflow-step"><span>3</span>分析性能</div>
+        <div class="workflow-step"><span>4</span>保存方案</div>
+      </div>
+    </div>
+
+    <section class="section" id="features">
+      <div class="container">
+        <div class="features-head reveal">
+          <div class="section-heading">
+            <div class="eyebrow">Core Features</div>
+            <h2>装机所需的，<br>不止一个配置单</h2>
+          </div>
+          <p>把繁琐的查资料、比价格和算性能交给工具，把最终决定留给你</p>
         </div>
-        <div class="shots">
-          <div class="phone"><img src="rank.jpg" alt="性价比排行"></div>
+        <div class="feature-grid">
+          <article class="feature-card reveal">
+            <span class="feature-tag">BUILD</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M8 7h8M8 11h8M8 15h4M17 16v3M15.5 17.5h3"/></svg></div>
+            <h3>整机方案生成</h3><p>按槽位选择 CPU、显卡、主板，总价实时更新，方案快速成型</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-tag">IMPORT</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="3"/><circle cx="9" cy="10" r="2"/><path d="m3 17 5-4 4 3 3-3 6 5M16 2v4M14 4h4"/></svg></div>
+            <h3>截图导入</h3><p>购物车截图一键导入，硬件自动识别成方案，免去逐个手填</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-tag">AI INSIGHT</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3ZM19 15l.8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15ZM5 14l.8 2.2L8 17l-2.2.8L5 20l-.8-2.2L2 17l2.2-.8L5 14Z"/></svg></div>
+            <h3>AI 分析</h3><p>检测性能瓶颈、电源稳定性与矿卡、魔改风险，提前帮你避坑</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-tag">COMPARE</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+            <h3>性价比排行</h3><p>性价比、跑分、功耗多维排序，切换项目即可直观比较</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-tag">EXTEND</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v4M12 17v4M3 12h4M17 12h4M5.6 5.6l2.8 2.8M15.6 15.6l2.8 2.8M18.4 5.6l-2.8 2.8M8.4 15.6l-2.8 2.8"/><circle cx="12" cy="12" r="4"/></svg></div>
+            <h3>自定义扩展</h3><p>自由添加硬件、填写性能分、自定义排行项目，硬件库随你扩充</p>
+          </article>
+          <article class="feature-card reveal">
+            <span class="feature-tag">CLOUD</span>
+            <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 18h10a4 4 0 0 0 .7-7.94A6 6 0 0 0 6.25 8.1 4.5 4.5 0 0 0 7 18Z"/><path d="m9 14 3-3 3 3M12 11v7"/></svg></div>
+            <h3>云同步 · 云方案</h3><p>账号云同步，方案上传云端，按获赞排序，让好方案被看见</p>
+          </article>
         </div>
       </div>
-      <div class="feature">
-        <div class="ico">🤖</div>
-        <h3>AI 分析</h3>
-        <p>瓶颈、电源稳定性、矿卡 / 魔改风险一键检测，帮你避坑</p>
-      </div>
-      <div class="feature">
-        <div class="ico">🧩</div>
-        <h3>自定义扩展</h3>
-        <p>自定义添加硬件、填写性能分、自定义排行项目，硬件库随你扩充</p>
-      </div>
-      <div class="feature">
-        <div class="ico">☁️</div>
-        <h3>云同步 · 云方案</h3>
-        <p>账号云同步，方案上传云端，按获赞排序，好方案自己浮上来</p>
-      </div>
-    </div>
-  </div>
-</section>
+    </section>
 
-<!-- 数据亮点 -->
-<section class="reveal">
-  <div class="wrap">
-    <div class="sec-head">
-      <div class="sec-title">一个不断成长的<span class="accent">硬件库</span></div>
-      <div class="sec-desc">跑分数据持续补充，主流硬件型号覆盖</div>
-    </div>
-    <div class="stats">
-      <div class="stat"><b data-count="400" data-suffix="+">0</b><span>硬件型号</span></div>
-      <div class="stat"><b data-count="8">0</b><span>品类覆盖</span></div>
-      <div class="stat"><b data-count="6">0</b><span>雷达图维度</span></div>
-      <div class="stat"><b data-count="0">0</b><span>内购收费</span></div>
-    </div>
-  </div>
-</section>
-
-<!-- 下载 / 赞助 -->
-<section class="reveal">
-  <div class="wrap">
-    <div class="cta-panel">
-      <h3>立即下载，开始装机</h3>
-      <p>完全免费 · 无内购 · 数据本地保存</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/shixer230-ai/DIYAss/releases/latest" target="_blank" rel="noopener">下载 APK</a>
-        <a class="btn btn-ghost" href="https://afdian.com/a/DIYAss" target="_blank" rel="noopener">支持开发者</a>
+    <section class="section section-alt" id="compatibility">
+      <div class="container showcase-grid">
+        <div class="showcase-copy reveal">
+          <div class="eyebrow">Compatibility Check</div>
+          <h2>选错硬件，<br>在下单前就知道</h2>
+          <p>插槽、内存代别、电源功率即时校验与其收货后反复排查，不如在搭配时就发现问题</p>
+          <ul class="check-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>CPU 与主板插槽匹配检查</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>内存代别与平台兼容性提醒</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>整机功耗与电源功率即时校验</li>
+          </ul>
+        </div>
+        <div class="screenshot-stage reveal">
+          <div class="desktop-shot"><img src="rank.jpg" width="696" height="800" loading="lazy" alt="DIYAss 整机硬件清单与兼容性提醒界面"></div>
+          <div class="shot-caption"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m12 3 10 18H2L12 3Z"/><path d="M12 9v4M12 17h.01"/></svg>问题定位清晰，修改更直接</div>
+        </div>
       </div>
+    </section>
+
+    <section class="section" id="radar">
+      <div class="container radar-grid">
+        <div class="radar-copy showcase-copy reveal">
+          <div class="eyebrow">Performance Radar</div>
+          <h2>六项维度，<br>看清每一处短板</h2>
+          <p>性能与场景双视角，六维雷达图直观展开不只看跑分高低，也看这套配置是否真正适合你</p>
+          <div class="radar-points">
+            <div class="radar-point"><strong>性能六维</strong><span>硬件能力一目了然</span></div>
+            <div class="radar-point"><strong>场景六维</strong><span>游戏与创作按需评估</span></div>
+            <div class="radar-point"><strong>方案对比</strong><span>快速发现配置差异</span></div>
+            <div class="radar-point"><strong>短板识别</strong><span>避免明显性能瓶颈</span></div>
+          </div>
+        </div>
+        <div class="radar-stage reveal">
+          <div class="phone-pair">
+            <div class="phone"><img src="radar-performance.jpg" width="383" height="800" loading="lazy" alt="DIYAss 场景六维雷达图界面"></div>
+            <div class="phone"><img src="radar-scene.jpg" width="383" height="800" loading="lazy" alt="DIYAss 性能六维雷达图界面"></div>
+          </div>
+          <div class="radar-mini" aria-hidden="true">
+            <svg viewBox="0 0 200 200">
+              <defs>
+                <linearGradient id="radar-fill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#329bd2" stop-opacity=".45"/><stop offset="1" stop-color="#2673c9" stop-opacity=".14"/></linearGradient>
+                <linearGradient id="radar-scan" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#32c5f4" stop-opacity="0"/><stop offset="1" stop-color="#32c5f4" stop-opacity=".16"/></linearGradient>
+              </defs>
+              <g fill="none" stroke="currentColor" stroke-width="1" opacity=".24"><polygon points="100,12 176,56 176,144 100,188 24,144 24,56"/><polygon points="100,42 150,71 150,129 100,158 50,129 50,71"/><polygon points="100,72 124,86 124,114 100,128 76,114 76,86"/><path d="M100 12v176M24 56l152 88M176 56 24 144"/></g>
+              <polygon points="100,30 151,68 165,140 100,156 47,132 57,72" fill="url(#radar-fill)" stroke="currentColor" stroke-width="2"/>
+              <g fill="currentColor"><circle cx="100" cy="30" r="3"/><circle cx="151" cy="68" r="3"/><circle cx="165" cy="140" r="3"/><circle cx="100" cy="156" r="3"/><circle cx="47" cy="132" r="3"/><circle cx="57" cy="72" r="3"/></g>
+              <g class="radar-sweep">
+                <path d="M100 100V12A88 88 0 0 0 56 25Z" fill="url(#radar-scan)"/>
+                <path class="radar-beam" d="M100 100V12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+                <circle cx="100" cy="12" r="2" fill="currentColor" opacity=".28"/>
+              </g>
+              <circle cx="100" cy="100" r="3" fill="currentColor"/>
+              <circle class="radar-scanner-dot" cx="100" cy="100" r="5" fill="none" stroke="currentColor" stroke-width="1.5"/>
+              <circle class="radar-scanner-dot" cx="100" cy="100" r="5" fill="none" stroke="currentColor" stroke-width="1" style="animation-delay:.9s"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt" id="ranking">
+      <div class="container ranking-grid">
+        <div class="ranking-visual reveal">
+          <div class="ranking-panel reveal">
+            <div class="ranking-panel-head"><strong>性价比排行</strong><span>实时对比</span></div>
+            <div class="rank-list">
+              <div class="rank-item"><div class="rank-item-top"><span>7500F + 6750XT</span><b>88</b></div><div class="rank-track"><div class="rank-bar" style="--w:88%"></div></div></div>
+              <div class="rank-item"><div class="rank-item-top"><span>12400F + RTX 4060</span><b>82</b></div><div class="rank-track"><div class="rank-bar" style="--w:82%"></div></div></div>
+              <div class="rank-item"><div class="rank-item-top"><span>5600 + RX 6600</span><b>76</b></div><div class="rank-track"><div class="rank-bar" style="--w:76%"></div></div></div>
+              <div class="rank-item"><div class="rank-item-top"><span>7500F + RTX 4060</span><b>68</b></div><div class="rank-track"><div class="rank-bar" style="--w:68%"></div></div></div>
+              <div class="rank-item"><div class="rank-item-top"><span>7600 + RTX 4060 Ti</span><b>58</b></div><div class="rank-track"><div class="rank-bar" style="--w:58%"></div></div></div>
+            </div>
+          </div>
+          <div class="rank-shot"><img src="compat-check.jpg" width="800" height="755" loading="lazy" alt="DIYAss 分析项目与方案性价比数据界面"></div>
+        </div>
+        <div class="ranking-copy showcase-copy reveal">
+          <div class="eyebrow">Value Ranking</div>
+          <h2>不止看价格，<br>更看每一分钱的价值</h2>
+          <p>性价比、跑分、功耗多维排序，不同硬件组合直观对比切换分析项目，快速找到更适合预算的方案</p>
+          <ul class="check-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>多个方案同屏比较</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>自定义排行项目与性能分</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="section experience-section" id="design">
+      <div class="container experience-grid">
+        <div class="showcase-copy reveal">
+          <div class="eyebrow">Glass UI Design</div>
+          <h2>玻璃质感的<br>UI 设计</h2>
+          <p>半透明材质、柔和模糊与清晰层级，让硬件信息在光影之间自然呈现，操作重点始终保持醒目</p>
+          <ul class="check-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>半透明玻璃材质与细腻背景模糊</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>胶囊式信息层级贴合移动端操作习惯</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>柔和光影之下保持清晰的内容对比</li>
+          </ul>
+        </div>
+        <div class="glass-stage reveal" aria-label="玻璃质感 UI 设计示意">
+          <div class="glass-panel">
+            <div class="glass-panel-head"><span>我的装机方案</span><b>已保存</b></div>
+            <div class="glass-total">¥ 4,017<small>整机总价</small></div>
+            <div class="glass-pills">
+              <div class="glass-pill"><span>CPU · AMD 锐龙 7</span><strong>¥ 899</strong></div>
+              <div class="glass-pill"><span>显卡 · RX 9060 XT</span><strong>¥ 2,699</strong></div>
+              <div class="glass-pill"><span>主板 · B85M-G</span><strong>¥ 299</strong></div>
+            </div>
+          </div>
+          <div class="glass-floating"><small>GLASS EFFECT</small><strong>柔和模糊 · 清晰层级</strong></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section section-alt experience-section" id="freedom">
+      <div class="container experience-grid">
+        <div class="benchmark-stage reveal">
+          <div class="benchmark-card">
+            <div class="benchmark-card-head"><strong>自定义游戏 Benchmark</strong><span>功能示意</span></div>
+            <div class="benchmark-game"><small>当前测试项目</small><h3>赛博朋克 2077</h3><p>为这一款游戏建立独立的性能评估项目</p></div>
+            <div class="benchmark-options">
+              <div class="benchmark-option"><small>测试类型</small><strong>游戏 Benchmark</strong></div>
+              <div class="benchmark-option"><small>性能数据</small><strong>自定义录入</strong></div>
+              <div class="benchmark-option"><small>应用场景</small><strong>3A 游戏</strong></div>
+              <div class="benchmark-option"><small>排名方式</small><strong>自定义项目排名</strong></div>
+            </div>
+          </div>
+        </div>
+        <div class="showcase-copy freedom-copy reveal">
+          <div class="eyebrow">Custom Benchmark</div>
+          <h2>自由的<br>装机体验</h2>
+          <p>不只使用固定跑分，你可以为某一款具体游戏创建独立 Benchmark，把常玩的游戏纳入场景评估，让配置分析更贴近真实需求</p>
+          <ul class="check-list">
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>自定义游戏名称与测试项目</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>为具体游戏单独记录性能表现</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="m5 12 4 4L19 6"/></svg>将自定义 Benchmark 用于性能排名</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats-section" id="stats">
+      <div class="container stats-layout">
+        <div class="stats-copy reveal"><h2>一个不断成长的<br>硬件数据库</h2><p>跑分数据持续补充，覆盖更多主流硬件型号</p></div>
+        <div class="stats reveal">
+          <div class="stat"><b data-count="400" data-suffix="+">400+</b><span>硬件型号</span></div>
+          <div class="stat"><b data-count="8">8</b><span>品类覆盖</span></div>
+          <div class="stat"><b data-count="6">6</b><span>雷达图维度</span></div>
+          <div class="stat"><b data-count="0">0</b><span>内购收费</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="download-section" id="download">
+      <div class="container">
+        <div class="download-panel reveal">
+          <div class="download-content">
+            <div class="eyebrow">Build Your Next PC</div>
+            <h2>下一台电脑，从清晰的方案开始</h2>
+            <p>完全免费 · 无内购 · 仅支持 Android 移动端</p>
+            <div class="button-row">
+              <a class="button button-primary" href="https://github.com/shixer230-ai/DIYAss/releases/latest" target="_blank" rel="noopener noreferrer">立即下载 Android 版<svg class="arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+              <a class="button button-secondary" href="https://afdian.com/a/DIYAss" target="_blank" rel="noopener noreferrer">支持开发者</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <a class="brand" href="#top" aria-label="返回 DIYAss 首页顶部">
+            <span class="brand-mark" aria-hidden="true"><img src="/diyass-icon.png" alt="" width="36" height="36" loading="lazy"></span>
+            <span class="brand-name">DIYAss</span>
+          </a>
+          <p>免费开源的 Android 装机方案生成与分析工具，让每一次硬件选择都有据可依</p>
+        </div>
+        <div class="footer-column"><h3>产品</h3><ul><li><a href="#features">功能特色</a></li><li><a href="#radar">雷达分析</a></li><li><a href="#download">下载 Android 版</a></li></ul></div>
+        <div class="footer-column"><h3>开源社区</h3><ul><li><a href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener noreferrer">GitHub</a></li><li><a href="https://github.com/shixer230-ai/DIYAss/releases/latest" target="_blank" rel="noopener noreferrer">版本发布</a></li><li><a href="https://github.com/shixer230-ai/DIYAss/issues" target="_blank" rel="noopener noreferrer">反馈问题</a></li></ul></div>
+        <div class="footer-column"><h3>支持</h3><ul><li><a href="https://afdian.com/a/DIYAss" target="_blank" rel="noopener noreferrer">爱发电</a></li><li><a href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener noreferrer">参与贡献</a></li></ul></div>
+      </div>
+      <div class="footer-bottom"><span>© <span id="year">2026</span> DIYAss · 免费开源</span><span>丝滑装机，一键搞定</span></div>
     </div>
-  </div>
-</section>
+  </footer>
 
-<footer>
-  <div class="wrap">
-    DIYAss · 免费开源 · <a href="https://github.com/shixer230-ai/DIYAss" target="_blank" rel="noopener">github.com/shixer230-ai/DIYAss</a><br>
-    装机方案，一键搞定
-  </div>
-</footer>
+  <script>
+    const menuButton = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
 
-<script>
-  // 滚动渐显
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); }
+    function setMenu(open) {
+      menuButton.setAttribute('aria-expanded', String(open));
+      menuButton.setAttribute('aria-label', open ? '关闭导航菜单' : '打开导航菜单');
+      navLinks.dataset.open = String(open);
+    }
+
+    menuButton.addEventListener('click', () => {
+      setMenu(menuButton.getAttribute('aria-expanded') !== 'true');
     });
-  }, { threshold: 0.12 });
-  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => setMenu(false)));
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && menuButton.getAttribute('aria-expanded') === 'true') {
+        setMenu(false);
+        menuButton.focus();
+      }
+    });
+    document.addEventListener('click', event => {
+      if (!event.target.closest('.nav') && menuButton.getAttribute('aria-expanded') === 'true') setMenu(false);
+    });
+    window.matchMedia('(min-width: 801px)').addEventListener('change', event => {
+      if (event.matches) setMenu(false);
+    });
 
-  // 数字递增：从 0 滚到目标值
-  const counters = document.querySelectorAll('.stat b[data-count]');
-  const counterIO = new IntersectionObserver((entries) => {
-    entries.forEach(e => {
-      if (!e.isIntersecting) return;
-      const el = e.target;
-      const target = parseInt(el.dataset.count, 10);
-      const suffix = el.dataset.suffix || '';
-      const duration = 1400;
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const revealItems = document.querySelectorAll('.reveal');
+    if (reducedMotion || !('IntersectionObserver' in window)) {
+      revealItems.forEach(item => item.classList.add('visible'));
+    } else {
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12, rootMargin: '0px 0px -30px' });
+      revealItems.forEach(item => revealObserver.observe(item));
+    }
+
+    const counters = document.querySelectorAll('[data-count]');
+    function animateCounter(element) {
+      const target = Number.parseInt(element.dataset.count, 10);
+      const suffix = element.dataset.suffix || '';
+      if (reducedMotion || target === 0) {
+        element.textContent = target + suffix;
+        return;
+      }
+      const duration = 1100;
       const start = performance.now();
       function tick(now) {
-        const p = Math.min((now - start) / duration, 1);
-        const eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * eased) + (p >= 1 ? suffix : '');
-        if (p < 1) requestAnimationFrame(tick);
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        element.textContent = Math.round(target * eased) + (progress === 1 ? suffix : '');
+        if (progress < 1) requestAnimationFrame(tick);
       }
       requestAnimationFrame(tick);
-      counterIO.unobserve(el);
-    });
-  }, { threshold: 0.4 });
-  counters.forEach(el => counterIO.observe(el));
-</script>
+    }
+    if ('IntersectionObserver' in window) {
+      const counterObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            animateCounter(entry.target);
+            counterObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.5 });
+      counters.forEach(counter => counterObserver.observe(counter));
+    } else {
+      counters.forEach(animateCounter);
+    }
 
+    document.getElementById('year').textContent = new Date().getFullYear();
+  </script>
 </body>
 </html>
