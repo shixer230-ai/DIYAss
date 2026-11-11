@@ -1,3 +1,5 @@
+import 'dart:math' as math;
+
 import '../models/build_plan.dart';
 import '../models/hardware_spec.dart';
 import 'compat_check.dart';
@@ -59,6 +61,10 @@ const double kGpuWeight = 0.6;
 /// 性价比参考整机价（元）：总价 = 此值时，综合性能直接作为性价比分
 const double kValueRefPrice = 6500;
 
+/// 性能轴放宽指数：得分 = 归一化比例 ^ 此值，小于 1 会让中端硬件得分更高
+/// 越小越宽松；满分仍为 100%，超过 100% 的附加分也会被同步压缩
+const double kLeniencyExponent = 0.6;
+
 /// 电源余量充足 = 额定功率 ≥ 整机功耗 × 此比例
 const double kPsuHeadroomRatio = 1.3;
 
@@ -88,31 +94,31 @@ List<RadarAxis> computeRadarScores(BuildPlan plan, List<HardwareSpec> lib) {
   final power = _planPower(plan, lib);
   final compat = computeCompatLevel(plan, lib);
   final total = plan.total;
-  final perf = _compositePerf(
-    single: single,
-    maxSingle: maxSingle,
-    multi: multi,
-    multiRef: multiRef,
-    gpu: gpuScore,
-    gpuRef: gpuRef,
-  );
+
+  // 性能三项先归一化再放宽（幂运算压缩），中端硬件也能拿到较高分，满分仍为 100%
+  final s = _soften(_ratio(single, maxSingle));
+  final m = _soften(_ratioAbove(multi, multiRef));
+  final g = _soften(_ratioAbove(gpuScore, gpuRef));
+
+  // 性价比用放宽后的综合性能，让「性价比」轴一并变宽松
+  final perf = kCpuSingleWeight * s + kCpuMultiWeight * m + kGpuWeight * g;
 
   return [
     RadarAxis(
       label: '单核性能',
-      score: _ratio(single, maxSingle),
+      score: s,
       rawText: single == null ? '—' : _fmt(single),
       numValue: single,
     ),
     RadarAxis(
       label: '多核性能',
-      score: _ratioAbove(multi, multiRef),
+      score: m,
       rawText: multi == null ? '—' : _fmt(multi),
       numValue: multi,
     ),
     RadarAxis(
       label: '显卡性能',
-      score: _ratioAbove(gpuScore, gpuRef),
+      score: g,
       rawText: gpuScore == null ? '—' : _fmt(gpuScore),
       numValue: gpuScore,
     ),
@@ -159,28 +165,32 @@ CompatLevel computeCompatLevel(BuildPlan plan, List<HardwareSpec> lib) {
   return CompatLevel(3 + bonuses.length, note, const [], bonuses);
 }
 
-/// 能力雷达图：基于 CPU / 显卡 / 内存容量，给出六个场景维度（0..1，越大越强）
+/// 能力雷达图：基于 CPU / 显卡 / 内存容量 / CPU 三级缓存，给出六个场景维度（0..1，越大越强）
 /// 六维：3A 游戏 / 网游 / 视频创作 / 综合性能 / AI 创作 / 稳定性
-/// 游戏与综合类维度用「短板打底、强项加成」，避免顶级显卡配差 CPU 时虚高
+/// 游戏与综合类维度用「短板打底、强项加成」，避免顶级显卡配差 CPU 时虚高；
+/// 三级缓存（如 3D V-Cache）对游戏帧率影响明显，故游戏与综合维度给其一定权重
 List<RadarAxis> computeCapabilityScores(BuildPlan plan, List<HardwareSpec> lib) {
   final single = plan['cpu'] == null ? null : valueOf(plan['cpu']!, 'CPU-Z 单核', lib);
   final multi = plan['cpu'] == null ? null : valueOf(plan['cpu']!, 'CPU-Z 多核', lib);
   final gpu = plan['gpu'] == null ? null : valueOf(plan['gpu']!, '3DMark Time Spy', lib);
   final vram = _specNum(plan['gpu'], '显存', lib);
   final ramGb = _specNum(plan['ram'], '容量', lib);
+  final l3 = _specNum(plan['cpu'], '三级缓存', lib); // CPU 三级缓存容量（MB）
 
   final maxSingle = _maxBench(lib, 'CPU-Z 单核');
   final multiRef = _nthBench(lib, 'CPU-Z 多核', kTopRefRank);
   final gpuRef = _nthBench(lib, '3DMark Time Spy', kTopRefRank);
   final maxVram = _maxSpecNum(lib, '显卡', '显存');
   final maxRam = _maxSpecNum(lib, '内存', '容量');
+  final maxL3 = _maxSpecNum(lib, 'CPU', '三级缓存');
 
-  // 各输入项归一化：单核/显存/内存用最高分，多核/显卡用第 5 名（可超 100%）
+  // 各输入项归一化：单核/显存/内存/三级缓存用最高分，多核/显卡用第 5 名（可超 100%）
   final s = _ratio(single, maxSingle); // 单核
   final m = _ratioAbove(multi, multiRef); // 多核
   final g = _ratioAbove(gpu, gpuRef); // 显卡
   final v = _ratio(vram, maxVram); // 显存
   final r = _ratio(ramGb, maxRam); // 内存容量
+  final c = _ratio(l3, maxL3); // CPU 三级缓存容量
 
   // 稳定性：兼容性等级 + 功耗反向得分（比性能六维更严格，基础合格只给 45 分）
   const stabilityLevels = [0.0, 0.25, 0.45, 0.70, 0.95];
@@ -199,7 +209,7 @@ List<RadarAxis> computeCapabilityScores(BuildPlan plan, List<HardwareSpec> lib) 
   }
 
   // 综合性能 = 加权平均 50% + 最弱项 50%，突出木桶效应
-  final weighted = 0.25 * s + 0.25 * m + 0.4 * g + 0.1 * r;
+  final weighted = 0.2 * s + 0.2 * m + 0.1 * c + 0.4 * g + 0.1 * r;
   final weakest = [s, m, g].reduce((a, b) => a < b ? a : b);
   final overall = 0.5 * weighted + 0.5 * weakest;
 
@@ -219,8 +229,8 @@ List<RadarAxis> computeCapabilityScores(BuildPlan plan, List<HardwareSpec> lib) 
   }
 
   return [
-    cap('3A 游戏', mix(m, g)),
-    cap('网游', 0.75 * s + 0.15 * m + 0.1 * g),
+    cap('3A 游戏', mix(0.85 * m + 0.15 * c, g)),
+    cap('网游', 0.45 * s + 0.10 * m + 0.35 * c + 0.10 * g),
     cap('视频创作', videoScore),
     cap('综合性能', overall),
     cap('AI 创作', 0.45 * g + 0.35 * v + 0.2 * r),
@@ -321,19 +331,10 @@ double _ratioAbove(double? v, double? ref) {
   return (v / ref).clamp(0.0, kMaxOverScore).toDouble();
 }
 
-/// 综合性能 = 20% 单核 + 20% 多核 + 60% 显卡（各自归一化到 0..1 基准，缺数据按 0）
-double _compositePerf({
-  required double? single,
-  required double? maxSingle,
-  required double? multi,
-  required double? multiRef,
-  required double? gpu,
-  required double? gpuRef,
-}) {
-  final s = (single == null || maxSingle == null || maxSingle <= 0) ? 0.0 : single / maxSingle;
-  final m = (multi == null || multiRef == null || multiRef <= 0) ? 0.0 : multi / multiRef;
-  final g = (gpu == null || gpuRef == null || gpuRef <= 0) ? 0.0 : gpu / gpuRef;
-  return kCpuSingleWeight * s + kCpuMultiWeight * m + kGpuWeight * g;
+/// 性能轴放宽：把归一化比例做幂运算压缩，中端硬件也能拿到较高分
+double _soften(double ratio) {
+  if (ratio <= 0) return 0;
+  return math.pow(ratio, kLeniencyExponent).toDouble().clamp(0.0, kMaxOverScore);
 }
 
 double _clamp(double v) => v.clamp(0.0, 1.0).toDouble();

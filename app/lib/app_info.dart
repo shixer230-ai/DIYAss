@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '4.0.0';
+const String kAppVersion = '4.1.0';
 
 /// 捐赠/增加云服务额度的赞助链接（爱发电等网页）；留空时「增加云服务额度」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,12 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('4.1.0', [
+    '硬件库全部 CPU / 显卡补上「发行日期」，详情页可看发布年份',
+    '兼容性新增：CPU 与显卡发行相差超 10 年，提示代差过大、兼容性下降',
+    '性能六维雷达图放宽，中端配置更容易拿高分',
+    '「我的添加」新增可选字段：CPU 三级缓存、显卡显存 / 位宽，参与能力雷达图',
+  ]),
   VersionLogEntry('4.0.0', [
     '更换全新应用图标',
     '免责声明新增「隐私与数据」说明',

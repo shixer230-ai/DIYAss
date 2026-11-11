@@ -53,6 +53,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-14900K',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '24核32线程'),
       SpecEntry('基础/睿频', '3.2 / 6.0 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -74,6 +75,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-14700K',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '20核28线程'),
       SpecEntry('基础/睿频', '3.4 / 5.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -95,6 +97,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-14600KF',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '3.5 / 5.3 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -116,6 +119,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-13400F',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '2.5 / 4.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -137,6 +141,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-12900K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '3.2 / 5.2 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -158,6 +163,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 7950X',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '4.5 / 5.7 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -179,6 +185,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 7800X3D',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '4.2 / 5.0 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -200,6 +207,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 7700X',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '4.5 / 5.4 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -221,6 +229,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 7600X',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '4.7 / 5.3 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -242,6 +251,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5600X',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.7 / 4.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -264,6 +274,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-13900K',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '24核32线程'),
       SpecEntry('基础/睿频', '3.0 / 5.8 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -285,6 +296,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-13700K',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '3.4 / 5.4 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -306,6 +318,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-13600KF',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '3.5 / 5.1 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -327,6 +340,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-12700K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '12核20线程'),
       SpecEntry('基础/睿频', '3.6 / 5.0 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -348,6 +362,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12600K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '3.7 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -369,6 +384,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12400F',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '2.5 / 4.4 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -390,6 +406,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-12100F',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.3 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -411,6 +428,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 7900X',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '4.7 / 5.6 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -432,6 +450,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 5800X3D',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.4 / 4.5 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -453,6 +472,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 5700X',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.4 / 4.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -474,6 +494,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 5900X',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '3.7 / 4.8 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -495,6 +516,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5600',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.5 / 4.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -516,6 +538,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5500',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.2 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -537,6 +560,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 7500F',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.7 / 5.0 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -559,6 +583,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 9950X',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '4.3 / 5.7 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -580,6 +605,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 9950X3D',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '4.3 / 5.7 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -601,6 +627,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 9900X',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '4.4 / 5.6 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -622,6 +649,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 9700X',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.8 / 5.5 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -643,6 +671,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 9600X',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.9 / 5.4 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -664,6 +693,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 9800X3D',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '4.7 / 5.2 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -685,6 +715,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 Ultra 9 285K',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '24核24线程（8P+16E）'),
       SpecEntry('基础/睿频', '3.7 / 5.7 GHz'),
       SpecEntry('插槽', 'LGA1851'),
@@ -706,6 +737,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 Ultra 7 265K',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '20核20线程（8P+12E）'),
       SpecEntry('基础/睿频', '3.9 / 5.5 GHz'),
       SpecEntry('插槽', 'LGA1851'),
@@ -727,6 +759,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 Ultra 5 245K',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '14核14线程（6P+8E）'),
       SpecEntry('基础/睿频', '4.2 / 5.2 GHz'),
       SpecEntry('插槽', 'LGA1851'),
@@ -750,6 +783,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-12700',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '12核20线程'),
       SpecEntry('基础/睿频', '2.1 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -771,6 +805,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12400',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '2.5 / 4.4 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -792,6 +827,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-12100',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.3 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -815,6 +851,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 3950X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '3.5 / 4.7 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -836,6 +873,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 3900X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '3.8 / 4.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -857,6 +895,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 3800X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.9 / 4.5 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -878,6 +917,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 3700X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.6 / 4.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -899,6 +939,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 3600X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.8 / 4.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -920,6 +961,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 3600',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.2 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -941,6 +983,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 3 3300X',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.8 / 4.3 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -962,6 +1005,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 3 3100',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.6 / 3.9 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -985,6 +1029,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E5-2666 V3',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '10核20线程'),
       SpecEntry('基础/睿频', '2.9 / 3.5 GHz'),
       SpecEntry('插槽', 'LGA2011-3'),
@@ -1006,6 +1051,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E5-2678 V3',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '2.5 / 3.3 GHz'),
       SpecEntry('插槽', 'LGA2011-3'),
@@ -1027,6 +1073,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E5-2680 V4',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('核心/线程', '14核28线程'),
       SpecEntry('基础/睿频', '2.4 / 3.3 GHz'),
       SpecEntry('插槽', 'LGA2011-3'),
@@ -1048,6 +1095,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E5-2696 V3',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '18核36线程'),
       SpecEntry('基础/睿频', '2.3 / 3.6 GHz'),
       SpecEntry('插槽', 'LGA2011-3'),
@@ -1069,6 +1117,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E3-1231 V3',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -1090,6 +1139,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E3-1230 V3',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.3 / 3.7 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -1111,6 +1161,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '至强 E3-1270 V3',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.5 / 3.9 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -1134,6 +1185,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4090',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '24GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '16384'),
@@ -1152,6 +1204,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4080',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '16GB GDDR6X'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '9728'),
@@ -1170,6 +1223,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4070 Ti Super',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '16GB GDDR6X'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '8448'),
@@ -1188,6 +1242,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4070',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '12GB GDDR6X'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '5888'),
@@ -1206,6 +1261,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4060 Ti',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '4352'),
@@ -1224,6 +1280,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4060',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '3072'),
@@ -1242,6 +1299,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3060',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '3584'),
@@ -1260,6 +1318,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3050',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2560'),
@@ -1278,6 +1337,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7900 XTX',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '24GB GDDR6'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '6144'),
@@ -1296,6 +1356,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7800 XT',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '3840'),
@@ -1314,6 +1375,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7600',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -1333,6 +1395,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4090 D',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '24GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '14592'),
@@ -1351,6 +1414,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4080 Super',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '16GB GDDR6X'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '10240'),
@@ -1369,6 +1433,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 4070 Super',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '12GB GDDR6X'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '7168'),
@@ -1387,6 +1452,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3090',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '24GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '10496'),
@@ -1405,6 +1471,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3080',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '10GB GDDR6X'),
       SpecEntry('位宽', '320-bit'),
       SpecEntry('流处理器', '8704'),
@@ -1423,6 +1490,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3070',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '5888'),
@@ -1441,6 +1509,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1660 Super',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '6GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1408'),
@@ -1458,6 +1527,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7900 XT',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '20GB GDDR6'),
       SpecEntry('位宽', '320-bit'),
       SpecEntry('流处理器', '5376'),
@@ -1476,6 +1546,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7700 XT',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '3456'),
@@ -1494,6 +1565,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6750 XT',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '2560'),
@@ -1512,6 +1584,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6650 XT',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -1530,6 +1603,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6600',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '1792'),
@@ -1549,6 +1623,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5090',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '32GB GDDR7'),
       SpecEntry('位宽', '512-bit'),
       SpecEntry('流处理器', '21760'),
@@ -1567,6 +1642,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5080',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR7'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '10752'),
@@ -1585,6 +1661,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5070 Ti',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR7'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '8960'),
@@ -1603,6 +1680,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5070',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '12GB GDDR7'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '6144'),
@@ -1621,6 +1699,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5060 Ti',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR7'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '4608'),
@@ -1639,6 +1718,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 5060',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '8GB GDDR7'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '3840'),
@@ -1659,6 +1739,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc A380 6GB',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '6GB GDDR6'),
       SpecEntry('位宽', '96-bit'),
       SpecEntry('Xe核心', '8'),
@@ -1676,6 +1757,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc A580 8GB',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('Xe核心', '24'),
@@ -1694,6 +1776,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc A750 8GB',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('Xe核心', '28'),
@@ -1712,6 +1795,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc A770 16GB',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('Xe核心', '32'),
@@ -1730,6 +1814,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc B580 12GB',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('Xe核心', '20'),
@@ -1748,6 +1833,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: 'Arc B570 10GB',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '10GB GDDR6'),
       SpecEntry('位宽', '160-bit'),
       SpecEntry('Xe核心', '18'),
@@ -3798,6 +3884,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-2500K',
     specs: [
+      SpecEntry('发行日期', '2011'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.3 / 3.7 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3817,6 +3904,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-2600K',
     specs: [
+      SpecEntry('发行日期', '2011'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3836,6 +3924,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-2700K',
     specs: [
+      SpecEntry('发行日期', '2011'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.5 / 3.9 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3855,6 +3944,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-3470',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.2 / 3.6 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3874,6 +3964,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-3570K',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3893,6 +3984,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-3770K',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.5 / 3.9 GHz'),
       SpecEntry('插槽', 'LGA1155'),
@@ -3912,6 +4004,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-4590',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.3 / 3.7 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -3931,6 +4024,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-4670K',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -3950,6 +4044,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-4770K',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.5 / 3.9 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -3969,6 +4064,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-4790K',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '4.0 / 4.4 GHz'),
       SpecEntry('插槽', 'LGA1150'),
@@ -3988,6 +4084,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-6500',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.2 / 3.6 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4007,6 +4104,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-6600K',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.5 / 3.9 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4026,6 +4124,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-6700K',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '4.0 / 4.2 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4045,6 +4144,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-7500',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4064,6 +4164,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-7700K',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '4.2 / 4.5 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4083,6 +4184,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-8100',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.6 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4102,6 +4204,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-8400',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '2.8 / 4.0 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4121,6 +4224,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-8600K',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '3.6 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4140,6 +4244,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-8700',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.2 / 4.6 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4159,6 +4264,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-8700K',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.7 / 4.7 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4178,6 +4284,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-9100F',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.6 / 4.2 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4197,6 +4304,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-9400F',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '2.9 / 4.1 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4216,6 +4324,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-9600K',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '3.7 / 4.6 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4235,6 +4344,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-9700K',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '8核8线程'),
       SpecEntry('基础/睿频', '3.6 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4254,6 +4364,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-9900K',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.6 / 5.0 GHz'),
       SpecEntry('插槽', 'LGA1151'),
@@ -4273,6 +4384,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-10100F',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.6 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4292,6 +4404,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-10400F',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '2.9 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4311,6 +4424,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-10600K',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '4.1 / 4.8 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4330,6 +4444,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-10700K',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.8 / 5.1 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4349,6 +4464,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-10900K',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '10核20线程'),
       SpecEntry('基础/睿频', '3.7 / 5.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4368,6 +4484,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-11400F',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '2.6 / 4.4 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4387,6 +4504,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-11600K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.9 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4406,6 +4524,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-11700K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.6 / 5.0 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4425,6 +4544,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-11900K',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.5 / 5.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -4444,6 +4564,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-13100F',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.4 / 4.5 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -4463,6 +4584,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-13500',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '2.5 / 4.8 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -4482,6 +4604,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-13700F',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '2.1 / 5.2 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -4501,6 +4624,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-14500',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '2.6 / 5.0 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -4520,6 +4644,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-14700F',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '20核28线程'),
       SpecEntry('基础/睿频', '2.1 / 5.4 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -4541,6 +4666,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'FX-6300',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '3.5 / 4.1 GHz'),
       SpecEntry('插槽', 'AM3+'),
@@ -4560,6 +4686,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'FX-8320',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '8核8线程'),
       SpecEntry('基础/睿频', '3.5 / 4.0 GHz'),
       SpecEntry('插槽', 'AM3+'),
@@ -4579,6 +4706,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'FX-8350',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('核心/线程', '8核8线程'),
       SpecEntry('基础/睿频', '4.0 / 4.2 GHz'),
       SpecEntry('插槽', 'AM3+'),
@@ -4598,6 +4726,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 1700',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.0 / 3.7 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4617,6 +4746,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 1700X',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.4 / 3.8 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4636,6 +4766,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 1800X',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.6 / 4.0 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4655,6 +4786,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 1600',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.2 / 3.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4674,6 +4806,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 1600X',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.0 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4693,6 +4826,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 3 1200',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.1 / 3.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4712,6 +4846,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 2700',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.2 / 4.1 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4731,6 +4866,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 2700X',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.7 / 4.3 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4750,6 +4886,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 2600',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.4 / 3.9 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4769,6 +4906,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 2600X',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.2 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4788,6 +4926,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5600G',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.9 / 4.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4807,6 +4946,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 5700G',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.8 / 4.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4826,6 +4966,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 5700X3D',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.0 / 4.1 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4845,6 +4986,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 5800X',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.8 / 4.7 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4864,6 +5006,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 5950X',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '3.4 / 4.9 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -4883,6 +5026,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 7950X3D',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '16核32线程'),
       SpecEntry('基础/睿频', '4.2 / 5.7 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -4902,6 +5046,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 7700',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.8 / 5.3 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -4921,6 +5066,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 7600',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.8 / 5.1 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -4941,6 +5087,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 560 Ti',
     specs: [
+      SpecEntry('发行日期', '2011'),
       SpecEntry('显存', '1GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '384'),
@@ -4956,6 +5103,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 570',
     specs: [
+      SpecEntry('发行日期', '2010'),
       SpecEntry('显存', '1.25GB GDDR5'),
       SpecEntry('位宽', '320-bit'),
       SpecEntry('流处理器', '480'),
@@ -4971,6 +5119,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 580',
     specs: [
+      SpecEntry('发行日期', '2010'),
       SpecEntry('显存', '1.5GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '512'),
@@ -4986,6 +5135,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 650',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '1GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '384'),
@@ -5001,6 +5151,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 660',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '960'),
@@ -5016,6 +5167,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 670',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1344'),
@@ -5031,6 +5183,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 680',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1536'),
@@ -5046,6 +5199,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 750 Ti',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '640'),
@@ -5061,6 +5215,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 760',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1152'),
@@ -5076,6 +5231,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 770',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1536'),
@@ -5091,6 +5247,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 780',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5106,6 +5263,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 780 Ti',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '2880'),
@@ -5121,6 +5279,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 960',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '1024'),
@@ -5136,6 +5295,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 970',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1664'),
@@ -5151,6 +5311,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 980',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5166,6 +5327,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 980 Ti',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '6GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '2816'),
@@ -5181,6 +5343,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1050',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '640'),
@@ -5196,6 +5359,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1050 Ti',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '768'),
@@ -5211,6 +5375,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1060 3GB',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1152'),
@@ -5226,6 +5391,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1060 6GB',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '6GB GDDR5'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1280'),
@@ -5241,6 +5407,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1070',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1920'),
@@ -5256,6 +5423,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1070 Ti',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2432'),
@@ -5271,6 +5439,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1080',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '8GB GDDR5X'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5286,6 +5455,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1080 Ti',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '11GB GDDR5X'),
       SpecEntry('位宽', '352-bit'),
       SpecEntry('流处理器', '3584'),
@@ -5301,6 +5471,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1650',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '896'),
@@ -5316,6 +5487,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1650 Super',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '4GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '1280'),
@@ -5331,6 +5503,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1660',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '6GB GDDR5'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1408'),
@@ -5346,6 +5519,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1660 Ti',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '6GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1536'),
@@ -5361,6 +5535,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2060',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '6GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '1920'),
@@ -5376,6 +5551,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2060 Super',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2176'),
@@ -5391,6 +5567,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2070',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5406,6 +5583,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2070 Super',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5421,6 +5599,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2080',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2944'),
@@ -5436,6 +5615,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2080 Super',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '3072'),
@@ -5451,6 +5631,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2080 Ti',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('显存', '11GB GDDR6'),
       SpecEntry('位宽', '352-bit'),
       SpecEntry('流处理器', '4352'),
@@ -5466,6 +5647,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3060 Ti',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '4864'),
@@ -5481,6 +5663,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3070 Ti',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '8GB GDDR6X'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '6144'),
@@ -5496,6 +5679,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3080 Ti',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '12GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '10240'),
@@ -5511,6 +5695,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3090 Ti',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '24GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '10752'),
@@ -5528,6 +5713,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon HD 7750',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '1GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '512'),
@@ -5543,6 +5729,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon HD 7850',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1024'),
@@ -5558,6 +5745,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon HD 7870',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1280'),
@@ -5573,6 +5761,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon HD 7950',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '1792'),
@@ -5588,6 +5777,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon HD 7970',
     specs: [
+      SpecEntry('发行日期', '2012'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5603,6 +5793,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 270X',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1280'),
@@ -5618,6 +5809,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 280X',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '3GB GDDR5'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5633,6 +5825,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 290',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '512-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5648,6 +5841,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 290X',
     specs: [
+      SpecEntry('发行日期', '2013'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '512-bit'),
       SpecEntry('流处理器', '2816'),
@@ -5663,6 +5857,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 380',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '1792'),
@@ -5678,6 +5873,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 390',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '512-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5693,6 +5889,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 390X',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '512-bit'),
       SpecEntry('流处理器', '2816'),
@@ -5708,6 +5905,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 460',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '896'),
@@ -5723,6 +5921,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 470',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5738,6 +5937,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 480',
     specs: [
+      SpecEntry('发行日期', '2016'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5753,6 +5953,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 560',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '1024'),
@@ -5768,6 +5969,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 570',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5783,6 +5985,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 580',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5798,6 +6001,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 590',
     specs: [
+      SpecEntry('发行日期', '2018'),
       SpecEntry('显存', '8GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5813,6 +6017,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX Vega 56',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '8GB HBM2'),
       SpecEntry('位宽', '2048-bit'),
       SpecEntry('流处理器', '3584'),
@@ -5828,6 +6033,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX Vega 64',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '8GB HBM2'),
       SpecEntry('位宽', '2048-bit'),
       SpecEntry('流处理器', '4096'),
@@ -5843,6 +6049,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 5500 XT',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '1408'),
@@ -5858,6 +6065,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 5600 XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '6GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5873,6 +6081,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 5700',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2304'),
@@ -5888,6 +6097,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 5700 XT',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5903,6 +6113,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6500 XT',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '4GB GDDR6'),
       SpecEntry('位宽', '64-bit'),
       SpecEntry('流处理器', '1024'),
@@ -5918,6 +6129,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6600 XT',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -5933,6 +6145,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6700 XT',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '2560'),
@@ -5948,6 +6161,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6800',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '3840'),
@@ -5963,6 +6177,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6800 XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '4608'),
@@ -5978,6 +6193,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6900 XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '5120'),
@@ -5993,6 +6209,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7900 GRE',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '5120'),
@@ -6010,6 +6227,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-12900KS',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '3.4 / 5.5 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6029,6 +6247,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12600KF',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '3.7 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6048,6 +6267,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-12700KF',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('核心/线程', '12核20线程'),
       SpecEntry('基础/睿频', '3.6 / 5.0 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6067,6 +6287,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12500',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.0 / 4.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6086,6 +6307,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-13600K',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '3.5 / 5.1 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6105,6 +6327,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-13700KF',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '3.4 / 5.4 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6124,6 +6347,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-13900KF',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '24核32线程'),
       SpecEntry('基础/睿频', '3.0 / 5.8 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6143,6 +6367,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-14400F',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '2.5 / 4.7 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6162,6 +6387,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-14600K',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '14核20线程'),
       SpecEntry('基础/睿频', '3.5 / 5.3 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6181,6 +6407,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-14700KF',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '20核28线程'),
       SpecEntry('基础/睿频', '3.4 / 5.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6200,6 +6427,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-14900KS',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '24核32线程'),
       SpecEntry('基础/睿频', '3.2 / 6.2 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6219,6 +6447,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 Ultra 5 245KF',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '14核14线程（6P+8E）'),
       SpecEntry('基础/睿频', '4.2 / 5.2 GHz'),
       SpecEntry('插槽', 'LGA1851'),
@@ -6238,6 +6467,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 Ultra 7 265KF',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '20核20线程（8P+12E）'),
       SpecEntry('基础/睿频', '3.9 / 5.5 GHz'),
       SpecEntry('插槽', 'LGA1851'),
@@ -6259,6 +6489,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 8500G',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.5 / 5.0 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6278,6 +6509,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 8600G',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '4.3 / 5.0 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6297,6 +6529,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 8700G',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '4.2 / 5.1 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6316,6 +6549,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5500GT',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.4 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6335,6 +6569,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 5600GT',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.6 / 4.6 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6354,6 +6589,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 7900',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '3.7 / 5.4 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6373,6 +6609,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 7900X3D',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '4.4 / 5.6 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6392,6 +6629,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 7600X3D',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '4.1 / 4.7 GHz'),
       SpecEntry('插槽', 'AM5'),
@@ -6412,6 +6650,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GT 1030',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '64-bit'),
       SpecEntry('流处理器', '384'),
@@ -6427,6 +6666,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 750',
     specs: [
+      SpecEntry('发行日期', '2014'),
       SpecEntry('显存', '1GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '512'),
@@ -6442,6 +6682,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 950',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '2GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '768'),
@@ -6457,6 +6698,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1630',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '4GB GDDR6'),
       SpecEntry('位宽', '64-bit'),
       SpecEntry('流处理器', '512'),
@@ -6472,6 +6714,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3080 12GB',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '12GB GDDR6X'),
       SpecEntry('位宽', '384-bit'),
       SpecEntry('流处理器', '8960'),
@@ -6489,6 +6732,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6400',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '4GB GDDR6'),
       SpecEntry('位宽', '64-bit'),
       SpecEntry('流处理器', '768'),
@@ -6504,6 +6748,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6750 GRE',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '2560'),
@@ -6519,6 +6764,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 7600 XT',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -6534,6 +6780,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 550',
     specs: [
+      SpecEntry('发行日期', '2017'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '512'),
@@ -6551,6 +6798,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-12490F',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.0 / 4.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6570,6 +6818,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-13490F',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '2.5 / 4.8 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6589,6 +6838,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-13700',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '16核24线程'),
       SpecEntry('基础/睿频', '2.1 / 5.2 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6608,6 +6858,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i9-13900',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '24核32线程'),
       SpecEntry('基础/睿频', '2.0 / 5.6 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6627,6 +6878,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-14400',
     specs: [
+      SpecEntry('发行日期', '2024'),
       SpecEntry('核心/线程', '10核16线程'),
       SpecEntry('基础/睿频', '2.5 / 4.7 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6646,6 +6898,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i7-12700F',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('核心/线程', '12核20线程'),
       SpecEntry('基础/睿频', '2.1 / 4.9 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6665,6 +6918,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i5-10400',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '2.9 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -6684,6 +6938,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-10100',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.6 / 4.3 GHz'),
       SpecEntry('插槽', 'LGA1200'),
@@ -6703,6 +6958,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'Intel',
     model: '酷睿 i3-13100',
     specs: [
+      SpecEntry('发行日期', '2023'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.4 / 4.5 GHz'),
       SpecEntry('插槽', 'LGA1700'),
@@ -6724,6 +6980,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 3500X',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '6核6线程'),
       SpecEntry('基础/睿频', '3.6 / 4.1 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6743,6 +7000,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 9 3900XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '12核24线程'),
       SpecEntry('基础/睿频', '3.8 / 4.7 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6762,6 +7020,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 7 3800XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '8核16线程'),
       SpecEntry('基础/睿频', '3.9 / 4.7 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6781,6 +7040,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 3600XT',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('核心/线程', '6核12线程'),
       SpecEntry('基础/睿频', '3.8 / 4.5 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6800,6 +7060,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 3 3200G',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '4核4线程'),
       SpecEntry('基础/睿频', '3.6 / 4.0 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6819,6 +7080,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: '锐龙 5 3400G',
     specs: [
+      SpecEntry('发行日期', '2019'),
       SpecEntry('核心/线程', '4核8线程'),
       SpecEntry('基础/睿频', '3.7 / 4.2 GHz'),
       SpecEntry('插槽', 'AM4'),
@@ -6840,6 +7102,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 3060 8GB',
     specs: [
+      SpecEntry('发行日期', '2022'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '3584'),
@@ -6855,6 +7118,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce RTX 2060 12GB',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '12GB GDDR6'),
       SpecEntry('位宽', '192-bit'),
       SpecEntry('流处理器', '2176'),
@@ -6870,6 +7134,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'NVIDIA',
     model: 'GeForce GTX 1650 GDDR6',
     specs: [
+      SpecEntry('发行日期', '2020'),
       SpecEntry('显存', '4GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '896'),
@@ -6885,6 +7150,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 6700',
     specs: [
+      SpecEntry('发行日期', '2021'),
       SpecEntry('显存', '10GB GDDR6'),
       SpecEntry('位宽', '160-bit'),
       SpecEntry('流处理器', '2304'),
@@ -6900,6 +7166,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 9070 XT',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '6144'),
@@ -6918,6 +7185,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 9070',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '5376'),
@@ -6936,6 +7204,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 9060 XT 16GB',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '16GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -6954,6 +7223,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon RX 9060 XT 8GB',
     specs: [
+      SpecEntry('发行日期', '2025'),
       SpecEntry('显存', '8GB GDDR6'),
       SpecEntry('位宽', '128-bit'),
       SpecEntry('流处理器', '2048'),
@@ -6973,6 +7243,7 @@ const List<HardwareSpec> kHardwareCatalog = [
     brand: 'AMD',
     model: 'Radeon R9 380X',
     specs: [
+      SpecEntry('发行日期', '2015'),
       SpecEntry('显存', '4GB GDDR5'),
       SpecEntry('位宽', '256-bit'),
       SpecEntry('流处理器', '2048'),

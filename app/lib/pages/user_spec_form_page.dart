@@ -8,6 +8,9 @@ import '../theme/app_theme.dart';
 
 const _categories = ['CPU', '主板', '显卡', '内存', '硬盘', '电源', '机箱', '其他'];
 
+/// 参与能力雷达图的关键规格条目名（三级缓存 / 显存 / 位宽），编辑时据此回填
+const _extraSpecLabels = ['三级缓存', '显存', '位宽'];
+
 /// 自定义添加硬件型号到「我的添加」：填品类、型号、品牌、参数规格和性价比跑分
 /// 全部字段合并为一张大圆角卡片，字段间用横线分割，不再用胶囊输入框
 /// 传入 [spec] 时进入编辑模式（预填已有内容，保存时覆盖原条目）
@@ -37,16 +40,36 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
   final List<_EntryPair> _specPairs = [];
   final Map<String, TextEditingController> _valueControllers = {};
   final _powerController = TextEditingController();
+  final Map<String, TextEditingController> _extraControllers = {};
 
   /// 当前品类参与「分析」排行的性价比项目
   List<ValueItem> get _valueItems =>
       kValueItems.where((e) => e.category == _category).toList();
+
+  /// 当前品类可选的「关键规格」字段（参与能力雷达图）
+  /// label 与预置库 / 雷达计算的精确名一致，保证自定义型号能被能力雷达图读到
+  List<({String label, String hint})> get _extraFields {
+    switch (_category) {
+      case 'CPU':
+        return [(label: '三级缓存', hint: '如：36MB')];
+      case '显卡':
+        return [
+          (label: '显存', hint: '如：16GB'),
+          (label: '位宽', hint: '如：256-bit'),
+        ];
+      default:
+        return const [];
+    }
+  }
 
   @override
   void initState() {
     super.initState();
     for (final item in kValueItems) {
       _valueControllers[item.label] = TextEditingController();
+    }
+    for (final label in _extraSpecLabels) {
+      _extraControllers[label] = TextEditingController();
     }
     final src = widget.spec;
     if (src == null) {
@@ -63,13 +86,15 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
     }
   }
 
-  /// 编辑态：把已有规格拆成「功耗条目 + 参数规格」，功耗单独进功耗输入框
+  /// 编辑态：把已有规格拆成「功耗 / 关键规格 / 参数规格」，功耗与关键规格单独进对应输入框
   void _prefillSpecs(HardwareSpec src) {
     final powerLabel = _powerLabel;
     final specs = <SpecEntry>[];
     for (final e in src.specs) {
       if (powerLabel != null && e.label == powerLabel) {
         _powerController.text = e.value;
+      } else if (_extraSpecLabels.contains(e.label)) {
+        _extraControllers[e.label]?.text = e.value;
       } else {
         specs.add(e);
       }
@@ -108,6 +133,9 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
     for (final c in _valueControllers.values) {
       c.dispose();
     }
+    for (final c in _extraControllers.values) {
+      c.dispose();
+    }
     super.dispose();
   }
 
@@ -143,6 +171,16 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
     return [SpecEntry(label, text)];
   }
 
+  /// 收集关键规格：只取当前品类对应字段里填了内容的，label 用预置库 / 雷达计算的精确名
+  List<SpecEntry> _collectExtraSpecs() {
+    final result = <SpecEntry>[];
+    for (final f in _extraFields) {
+      final text = _extraControllers[f.label]?.text.trim() ?? '';
+      if (text.isNotEmpty) result.add(SpecEntry(f.label, text));
+    }
+    return result;
+  }
+
   Future<void> _save() async {
     if (!_formKey.currentState!.validate()) return;
     final editing = widget.spec != null;
@@ -154,7 +192,7 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
       category: _category,
       brand: _brand,
       model: _modelController.text.trim(),
-      specs: [..._collect(_specPairs), ..._collectPower()],
+      specs: [..._collect(_specPairs), ..._collectPower(), ..._collectExtraSpecs()],
       benchmarks: _collectValueBenches(),
     );
     setState(() => _saving = true);
@@ -246,6 +284,10 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
                     if (_powerLabel != null) ...[
                       const Divider(height: 1),
                       _powerEditor(),
+                    ],
+                    if (_extraFields.isNotEmpty) ...[
+                      const Divider(height: 1),
+                      _extraSpecEditor(),
                     ],
                   ],
                 ),
@@ -382,6 +424,36 @@ class _UserSpecFormPageState extends State<UserSpecFormPage> {
           controller: _powerController,
           decoration: _plain('功耗', hint: '如：65W / 450W'),
         ),
+      ],
+    );
+  }
+
+  /// 关键规格：CPU 三级缓存 / 显卡显存、位宽（影响能力雷达图），可选填
+  Widget _extraSpecEditor() {
+    final theme = Theme.of(context);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          '关键规格（用于「能力」雷达图）',
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.bold,
+            color: theme.colorScheme.primary,
+          ),
+        ),
+        Text(
+          '三级缓存、显存、位宽会影响「能力」雷达图的游戏与 AI 等维度；填了更准，不填可跳过',
+          style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+        ),
+        const SizedBox(height: 8),
+        for (final f in _extraFields)
+          Padding(
+            padding: const EdgeInsets.only(bottom: 8),
+            child: TextField(
+              controller: _extraControllers[f.label],
+              decoration: _plain(f.label, hint: f.hint),
+            ),
+          ),
       ],
     );
   }
