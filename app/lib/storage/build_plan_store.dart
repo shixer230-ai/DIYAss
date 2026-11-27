@@ -18,7 +18,21 @@ class BuildPlanStore {
     final prefs = await SharedPreferences.getInstance();
     final raw = prefs.getString(_plansKey);
     if (raw != null && raw.isNotEmpty) {
-      return decodeMapList(raw).map((e) => BuildPlan.fromJson(e)).toList();
+      final plans =
+          decodeMapList(raw).map((e) => BuildPlan.fromJson(e)).toList();
+      // 旧版本写入的默认方案价格全为 0：若用户尚未给它填过任何价格，自动升级为带参考价的新版默认方案；
+      // 只要用户改过任一配件价格（total > 0），一律保留原样不覆盖。
+      final defaultsById = {for (final d in kDefaultPlans) d.id: d};
+      var upgraded = false;
+      for (var i = 0; i < plans.length; i++) {
+        final d = defaultsById[plans[i].id];
+        if (d != null && plans[i].total <= 0) {
+          plans[i] = BuildPlan.fromJson(d.toJson());
+          upgraded = true;
+        }
+      }
+      if (upgraded) await saveAll(plans);
+      return plans;
     }
     // 迁移旧版单个方案（key = build_plan）
     final legacy = prefs.getString(_legacyKey);

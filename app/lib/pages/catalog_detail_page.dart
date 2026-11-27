@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
+import '../data/reference_prices.dart';
 import '../models/hardware_item.dart';
 import '../models/hardware_spec.dart';
 import '../storage/hardware_store.dart';
 import '../storage/user_spec_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
+import '../utils/copy_model.dart';
 import 'user_spec_form_page.dart';
 
 const _platforms = ['京东', '淘宝', '拼多多', '天猫', '其他'];
@@ -97,6 +99,7 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final spec = _spec;
+    final refPrice = lookupReferencePrice(spec.category, spec.model);
 
     return Scaffold(
       appBar: AppBar(title: Text(spec.model)),
@@ -125,8 +128,41 @@ class _CatalogDetailPageState extends State<CatalogDetailPage> {
                   ],
                 ),
               ),
+              const SizedBox(width: 8),
+              CopyModelPill(model: spec.model, brand: spec.brand),
             ],
           ),
+          if (refPrice != null) ...[
+            const SizedBox(height: 14),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary.withValues(alpha: 0.08),
+                borderRadius: BorderRadius.circular(999),
+                border: Border.all(
+                  color: theme.colorScheme.primary.withValues(alpha: 0.22),
+                ),
+              ),
+              child: Row(
+                children: [
+                  Text(
+                    '参考价（$kRefPriceDate）',
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                  const Spacer(),
+                  Text(
+                    '约 ¥${refPrice.toStringAsFixed(0)}',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
           const SizedBox(height: 20),
           _sectionTitle(theme, '参数规格'),
           ...spec.specs.map((e) => _entryRow(theme, e)),
@@ -217,7 +253,11 @@ class _AddPriceDialog extends StatefulWidget {
 
 class _AddPriceDialogState extends State<_AddPriceDialog> {
   final _formKey = GlobalKey<FormState>();
-  final _priceController = TextEditingController();
+  late final double? _refPrice =
+      lookupReferencePrice(widget.spec.category, widget.spec.model);
+  late final TextEditingController _priceController = TextEditingController(
+    text: _refPrice == null ? '' : _refPrice.toStringAsFixed(0),
+  );
   String _platform = _platforms.first;
 
   @override
@@ -246,9 +286,12 @@ class _AddPriceDialogState extends State<_AddPriceDialog> {
               autofocus: true,
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 labelText: '价格（元）*',
                 hintText: '例如：1399',
+                helperText: _refPrice == null
+                    ? null
+                    : '已预填 $kRefPriceDate 参考价，可改为实付价',
               ),
               validator: (v) {
                 final t = v?.trim() ?? '';

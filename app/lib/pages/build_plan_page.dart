@@ -7,6 +7,7 @@ import '../cloud/auth_service.dart';
 import '../cloud/cloud_sync.dart';
 import '../analysis/value_index.dart';
 import '../data/hardware_library.dart';
+import '../data/reference_prices.dart';
 import '../models/build_plan.dart';
 import '../models/hardware_item.dart';
 import '../models/hardware_spec.dart';
@@ -14,6 +15,7 @@ import '../storage/build_plan_store.dart';
 import '../storage/hardware_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
+import '../utils/copy_model.dart';
 import 'component_picker_page.dart';
 
 /// 整机方案的一个槽位
@@ -917,6 +919,7 @@ class _BuildPlanPageState extends State<BuildPlanPage>
       ),
       children: [
         _totalLine(theme, filled, plan.total),
+        if (plan.hasRefPrices) _refPriceBanner(theme),
         _compatCard(theme, plan),
         const SizedBox(height: 4),
         _slotsCard(plan),
@@ -972,6 +975,34 @@ class _BuildPlanPageState extends State<BuildPlanPage>
           Text(
             '已选 $filled / ${kBuildSlots.length} 项',
             style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// 参考价提示胶囊：方案里仍有「参考价」配件时温和提醒，用户改为实付价后自动消失
+  Widget _refPriceBanner(ThemeData theme) {
+    final scheme = theme.colorScheme;
+    return Container(
+      margin: const EdgeInsets.only(bottom: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      decoration: BoxDecoration(
+        color: scheme.primary.withValues(alpha: 0.08),
+        borderRadius: BorderRadius.circular(999),
+        border: Border.all(color: scheme.primary.withValues(alpha: 0.22)),
+      ),
+      child: Row(
+        children: [
+          Icon(Icons.info_outline, size: 17, color: scheme.primary),
+          const SizedBox(width: 8),
+          Expanded(
+            child: Text(
+              '浅色价格为 $kRefPriceDate 市场参考价，点击输入框可改为实付价',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: scheme.onSurfaceVariant,
+              ),
+            ),
           ),
         ],
       ),
@@ -1272,30 +1303,45 @@ class _SlotRowState extends State<_SlotRow> {
             ),
             if (comp != null) ...[
               SizedBox(
-                width: 96,
+                width: 90,
                 child: TextField(
                   controller: _price,
                   keyboardType: const TextInputType.numberWithOptions(
                     decimal: true,
                   ),
+                  style: comp.isRefPrice
+                      ? TextStyle(color: theme.colorScheme.onSurfaceVariant)
+                      : null,
                   onChanged: _onPriceChanged,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     prefixText: '¥ ',
+                    labelText: comp.isRefPrice ? '参考价' : null,
+                    labelStyle: comp.isRefPrice
+                        ? TextStyle(
+                            fontSize: 11,
+                            color: theme.colorScheme.onSurfaceVariant,
+                          )
+                        : null,
                     hintText: '价格',
                     isDense: true,
-                    contentPadding: EdgeInsets.symmetric(
+                    contentPadding: const EdgeInsets.symmetric(
                       horizontal: 8,
                       vertical: 8,
                     ),
-                    border: OutlineInputBorder(
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(999)),
                     ),
                   ),
                 ),
               ),
+              const SizedBox(width: 2),
+              CopyModelButton(model: comp.model, brand: comp.brand),
               IconButton(
                 onPressed: widget.onClear,
                 tooltip: '移除${widget.slot.label}',
+                padding: EdgeInsets.zero,
+                visualDensity: VisualDensity.compact,
+                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
                 icon: Icon(
                   Icons.close,
                   size: 18,
@@ -1434,26 +1480,41 @@ class _StorageDriveRowState extends State<_StorageDriveRow> {
             ),
           ),
           SizedBox(
-            width: 96,
+            width: 90,
             child: TextField(
               controller: _price,
               keyboardType: const TextInputType.numberWithOptions(decimal: true),
+              style: comp.isRefPrice
+                  ? TextStyle(color: theme.colorScheme.onSurfaceVariant)
+                  : null,
               onChanged: _onPriceChanged,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
                 prefixText: '¥ ',
+                labelText: comp.isRefPrice ? '参考价' : null,
+                labelStyle: comp.isRefPrice
+                    ? TextStyle(
+                        fontSize: 11,
+                        color: theme.colorScheme.onSurfaceVariant,
+                      )
+                    : null,
                 hintText: '价格',
                 isDense: true,
                 contentPadding:
-                    EdgeInsets.symmetric(horizontal: 8, vertical: 8),
-                border: OutlineInputBorder(
+                    const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                border: const OutlineInputBorder(
                   borderRadius: BorderRadius.all(Radius.circular(999)),
                 ),
               ),
             ),
           ),
+          const SizedBox(width: 2),
+          CopyModelButton(model: comp.model, brand: comp.brand),
           IconButton(
             onPressed: widget.onClear,
             tooltip: '移除硬盘',
+            padding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             icon: Icon(
               Icons.close,
               size: 18,

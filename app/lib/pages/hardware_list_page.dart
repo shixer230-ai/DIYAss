@@ -7,6 +7,7 @@ import '../storage/build_plan_store.dart';
 import '../storage/hardware_store.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
+import '../utils/copy_model.dart';
 import 'hardware_form_page.dart';
 
 /// 硬件清单主页：展示已录入的硬件，可新增、删除，也可进入硬件库选型号
@@ -396,9 +397,14 @@ class _HardwareListPageState extends State<HardwareListPage>
               color: theme.colorScheme.primary,
             ),
           ),
+          const SizedBox(width: 4),
+          CopyModelButton(model: item.model, brand: item.brand),
           IconButton(
             onPressed: () => _confirmDelete(item),
             tooltip: '删除',
+            padding: EdgeInsets.zero,
+            visualDensity: VisualDensity.compact,
+            constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
             icon: const Icon(Icons.delete_outline, size: 20),
           ),
         ],

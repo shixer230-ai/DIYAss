@@ -7,6 +7,7 @@ import '../analysis/radar_axis.dart';
 import '../models/build_plan.dart';
 import '../models/hardware_spec.dart';
 import '../theme/app_theme.dart';
+import '../utils/copy_model.dart';
 
 /// 六维雷达图页：展示某个方案在六个维度上的得分轮廓
 /// 六维：单核 / 多核 / 显卡 / 功耗 / 性价比 / 兼容性，越靠外越好
@@ -190,25 +191,35 @@ class _RadarChartPageState extends State<RadarChartPage>
           ),
           const SizedBox(height: 8),
           for (final c in parts)
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 3),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 56,
-                    child: Text(
-                      c.category,
-                      style: theme.textTheme.bodySmall?.copyWith(
-                        color: theme.colorScheme.primary,
-                        fontWeight: FontWeight.w600,
+            InkWell(
+              borderRadius: BorderRadius.circular(12),
+              onTap: () => copyHardwareModel(context, c.model, brand: c.brand),
+              child: Padding(
+                padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 2),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(
+                      width: 56,
+                      child: Text(
+                        c.category,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w600,
+                        ),
                       ),
                     ),
-                  ),
-                  Expanded(
-                    child: Text(c.model, style: theme.textTheme.bodyMedium),
-                  ),
-                ],
+                    Expanded(
+                      child: Text(c.model, style: theme.textTheme.bodyMedium),
+                    ),
+                    const SizedBox(width: 8),
+                    Icon(
+                      Icons.copy_rounded,
+                      size: 15,
+                      color: theme.colorScheme.onSurfaceVariant,
+                    ),
+                  ],
+                ),
               ),
             ),
         ],

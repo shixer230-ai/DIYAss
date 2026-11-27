@@ -3,6 +3,7 @@ import 'package:liquid_glass_bottom_navbar_plus/liquid_glass_bottom_navbar_plus.
 
 import '../data/hardware_catalog.dart';
 import '../data/hardware_library.dart';
+import '../data/reference_prices.dart';
 import '../models/build_plan.dart';
 import '../models/hardware_item.dart';
 import '../models/hardware_spec.dart';
@@ -136,13 +137,15 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
   }
 
   void _pickSpec(HardwareSpec spec) {
-    // 价格留空（0），回方案详情页在该行内联填写
+    // 有收录市场参考价时自动带入（标记 isRefPrice = true），未收录则留空待填
+    final ref = lookupReferencePrice(spec.category, spec.model);
     final comp = PlanComponent(
       category: spec.category,
       brand: spec.brand,
       model: spec.model,
-      price: 0,
+      price: ref ?? 0,
       platform: '',
+      isRefPrice: ref != null,
     );
     Navigator.pop(context, (false, comp));
   }
@@ -357,7 +360,7 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
               leading: CategoryBadge(category: specs[i].category),
               title: Text(specs[i].model),
               subtitle: Text(specs[i].brand),
-              trailing: const Icon(Icons.chevron_right),
+              trailing: _specTrailing(theme, specs[i]),
               onTap: () => _pickSpec(specs[i]),
             ),
           ],
@@ -461,6 +464,24 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
     );
   }
 
+  Widget _specTrailing(ThemeData theme, HardwareSpec spec) {
+    final ref = lookupReferencePrice(spec.category, spec.model);
+    if (ref == null) return const Icon(Icons.chevron_right);
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        Text(
+          '约 ¥${_fmt(ref)}',
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+          ),
+        ),
+        const SizedBox(width: 4),
+        const Icon(Icons.chevron_right),
+      ],
+    );
+  }
+
   Widget _specCard(ThemeData theme, HardwareSpec spec) {
     return Card(
       margin: const EdgeInsets.only(bottom: 8),
@@ -468,7 +489,7 @@ class _ComponentPickerPageState extends State<ComponentPickerPage> {
         leading: CategoryBadge(category: spec.category),
         title: Text(spec.model),
         subtitle: Text(spec.brand),
-        trailing: const Icon(Icons.chevron_right),
+        trailing: _specTrailing(theme, spec),
         onTap: () => _pickSpec(spec),
       ),
     );

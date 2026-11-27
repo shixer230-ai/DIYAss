@@ -5,6 +5,7 @@ import '../cloud/cloud_sync.dart';
 import '../models/cloud_plan.dart';
 import '../theme/app_theme.dart';
 import '../utils/category_icons.dart';
+import '../utils/copy_model.dart';
 import 'build_plan_page.dart' show kBuildSlots;
 
 /// 云方案详情：展示方案名、日期、点赞数与完整配件清单；本人上传的可删除
@@ -106,7 +107,7 @@ class _CloudPlanDetailPageState extends State<CloudPlanDetailPage> {
           ),
           const SizedBox(height: 16),
           Card(
-            child: Column(children: _rows(theme)),
+            child: Column(children: _rows(context, theme)),
           ),
         ],
       ),
@@ -114,19 +115,19 @@ class _CloudPlanDetailPageState extends State<CloudPlanDetailPage> {
   }
 
   /// 按槽位顺序列出已选配件（跳过空槽位），行间用分割线隔开
-  List<Widget> _rows(ThemeData theme) {
+  List<Widget> _rows(BuildContext context, ThemeData theme) {
     final p = widget.plan.plan;
     final rows = <Widget>[];
     for (final slot in kBuildSlots) {
       if (slot.key == 'storage') {
         for (final c in p.storages) {
-          rows.add(_row(theme, '硬盘', c.model, c.brand, c.price));
+          rows.add(_row(context, theme, '硬盘', c.model, c.brand, c.price));
         }
         continue;
       }
       final c = p[slot.key];
       if (c == null) continue;
-      rows.add(_row(theme, slot.category, c.model, c.brand, c.price));
+      rows.add(_row(context, theme, slot.category, c.model, c.brand, c.price));
     }
     final out = <Widget>[];
     for (var i = 0; i < rows.length; i++) {
@@ -137,42 +138,48 @@ class _CloudPlanDetailPageState extends State<CloudPlanDetailPage> {
   }
 
   Widget _row(
+    BuildContext context,
     ThemeData theme,
     String category,
     String model,
     String brand,
     double price,
   ) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-      child: Row(
-        children: [
-          CategoryBadge(category: category),
-          const SizedBox(width: 12),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  model,
-                  style: const TextStyle(fontWeight: FontWeight.w600),
-                ),
-                if (brand.isNotEmpty)
+    return InkWell(
+      onTap: () => copyHardwareModel(context, model, brand: brand),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+        child: Row(
+          children: [
+            CategoryBadge(category: category),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
                   Text(
-                    brand,
-                    style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    model,
+                    style: const TextStyle(fontWeight: FontWeight.w600),
                   ),
-              ],
+                  if (brand.isNotEmpty)
+                    Text(
+                      brand,
+                      style: theme.textTheme.bodySmall?.copyWith(color: Colors.grey),
+                    ),
+                ],
+              ),
             ),
-          ),
-          Text(
-            '¥${_fmt(price)}',
-            style: TextStyle(
-              fontWeight: FontWeight.bold,
-              color: theme.colorScheme.primary,
+            Text(
+              '¥${_fmt(price)}',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: theme.colorScheme.primary,
+              ),
             ),
-          ),
-        ],
+            const SizedBox(width: 4),
+            CopyModelButton(model: model, brand: brand),
+          ],
+        ),
       ),
     );
   }

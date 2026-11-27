@@ -11,12 +11,16 @@ class PlanComponent {
   final double price;
   final String platform;
 
+  /// 是否为内置市场参考价（true = 浅色展示并提示可改为实付价；用户手动改价后置为 false）
+  final bool isRefPrice;
+
   const PlanComponent({
     required this.category,
     required this.brand,
     required this.model,
     required this.price,
     required this.platform,
+    this.isRefPrice = false,
   });
 
   factory PlanComponent.fromJson(Map<String, dynamic> json) {
@@ -26,6 +30,7 @@ class PlanComponent {
       model: asString(json['model']),
       price: asDouble(json['price']),
       platform: asString(json['platform']),
+      isRefPrice: json['isRefPrice'] == true,
     );
   }
 
@@ -36,6 +41,7 @@ class PlanComponent {
       'model': model,
       'price': price,
       'platform': platform,
+      if (isRefPrice) 'isRefPrice': true,
     };
   }
 }
@@ -81,6 +87,11 @@ class BuildPlan {
 
   /// 已选硬件件数（含多块硬盘），用于列表展示「N 件」
   int get filledCount => components.length + storages.length;
+
+  /// 方案里是否包含仍处于「参考价」状态的配件
+  bool get hasRefPrices =>
+      components.values.any((c) => c.isRefPrice) ||
+      storages.any((c) => c.isRefPrice);
 
   factory BuildPlan.fromJson(Map<String, dynamic> json) {
     final comps = <String, PlanComponent>{};

@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '4.1.0';
+const String kAppVersion = '4.1.1';
 
 /// 捐赠/增加云服务额度的赞助链接（爱发电等网页）；留空时「增加云服务额度」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,11 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('4.1.1', [
+    '新增一键「复制型号」：整机方案、硬件详情、云方案、清单、雷达图页均可快速复制查价',
+    '预置 5 套方案及热门配件补入市场参考价（浅色标记，点击改为实付价即切换正常样式）',
+    '硬件库新增致态 Ti600 500GB / 1TB，修正玄武 500K 为铜牌，优化中端与入门预设方案搭配',
+  ]),
   VersionLogEntry('4.1.0', [
     '硬件库全部 CPU / 显卡补上「发行日期」，详情页可看发布年份',
     '兼容性新增：CPU 与显卡发行相差超 10 年，提示代差过大、兼容性下降',
