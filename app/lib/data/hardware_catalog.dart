@@ -25,22 +25,24 @@ String brandGroupOf(String category, String brand) {
   return '其它';
 }
 
-/// 关键词搜索：型号 / 品牌 / 品类 / 参数 / 跑分里包含关键词即命中（不区分大小写）
+/// 关键词搜索：型号 / 品牌 / 品类 / 参数 / 跑分里包含关键词即命中（不区分大小写，忽略空格差异）
 bool hardwareMatches(HardwareSpec spec, String query) {
   final q = query.trim().toLowerCase();
   if (q.isEmpty) return false;
-  if (spec.model.toLowerCase().contains(q)) return true;
-  if (spec.brand.toLowerCase().contains(q)) return true;
-  if (spec.category.toLowerCase().contains(q)) return true;
+  final qCompact = q.replaceAll(RegExp(r'\s+'), '');
+  bool hit(String text) {
+    final lower = text.toLowerCase();
+    if (lower.contains(q)) return true;
+    return qCompact.isNotEmpty &&
+        lower.replaceAll(RegExp(r'\s+'), '').contains(qCompact);
+  }
+
+  if (hit(spec.model) || hit(spec.brand) || hit(spec.category)) return true;
   for (final s in spec.specs) {
-    if (s.label.toLowerCase().contains(q) || s.value.toLowerCase().contains(q)) {
-      return true;
-    }
+    if (hit(s.label) || hit(s.value)) return true;
   }
   for (final b in spec.benchmarks) {
-    if (b.label.toLowerCase().contains(q) || b.value.toLowerCase().contains(q)) {
-      return true;
-    }
+    if (hit(b.label) || hit(b.value)) return true;
   }
   return false;
 }
@@ -2944,24 +2946,6 @@ const List<HardwareSpec> kHardwareCatalog = [
       SpecEntry('顺序读取', '约 3500 MB/s'),
       SpecEntry('顺序写入', '约 3100 MB/s'),
       SpecEntry('随机读取 4K', '约 550K IOPS'),
-    ],
-  ),
-  HardwareSpec(
-    id: 'ssd_ti600_1tb',
-    category: '硬盘',
-    brand: '致态',
-    model: 'Ti600 1TB',
-    specs: [
-      SpecEntry('接口', 'PCIe 4.0 ×4 NVMe'),
-      SpecEntry('容量', '1TB'),
-      SpecEntry('颗粒', 'TLC'),
-      SpecEntry('缓存', '无缓存（SLC Cache）'),
-      SpecEntry('质保', '5年'),
-    ],
-    benchmarks: [
-      SpecEntry('顺序读取', '约 7300 MB/s'),
-      SpecEntry('顺序写入', '约 6800 MB/s'),
-      SpecEntry('随机读取 4K', '约 950K IOPS'),
     ],
   ),
   HardwareSpec(
@@ -7288,5 +7272,397 @@ const List<HardwareSpec> kHardwareCatalog = [
     benchmarks: [
       SpecEntry('3DMark Fire Strike', '约 7800'),
     ],
+  ),
+
+  // ===== 2025-2026 新品补充：Intel Core Ultra 200S Plus / 非 K =====
+  HardwareSpec(
+    id: 'cpu_u7_270k_plus',
+    category: 'CPU',
+    brand: 'Intel',
+    model: '酷睿 Ultra 7 270K Plus',
+    specs: [
+      SpecEntry('发行日期', '2026'),
+      SpecEntry('核心/线程', '24核24线程（8P+16E）'),
+      SpecEntry('基础/睿频', '3.7 / 5.5 GHz'),
+      SpecEntry('插槽', 'LGA1851'),
+      SpecEntry('三级缓存', '36MB'),
+      SpecEntry('默认TDP', '125W'),
+      SpecEntry('内存支持', 'DDR5-7200'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 895'),
+      SpecEntry('CPU-Z 多核', '约 17200'),
+      SpecEntry('Cinebench R23 单核', '约 2150'),
+      SpecEntry('Geekbench 6 单核', '约 3140'),
+      SpecEntry('Cinebench R23 多核', '约 39800'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_u5_250k_plus',
+    category: 'CPU',
+    brand: 'Intel',
+    model: '酷睿 Ultra 5 250K Plus',
+    specs: [
+      SpecEntry('发行日期', '2026'),
+      SpecEntry('核心/线程', '18核18线程（6P+12E）'),
+      SpecEntry('基础/睿频', '4.2 / 5.3 GHz'),
+      SpecEntry('插槽', 'LGA1851'),
+      SpecEntry('三级缓存', '30MB'),
+      SpecEntry('默认TDP', '125W'),
+      SpecEntry('内存支持', 'DDR5-7200'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 865'),
+      SpecEntry('CPU-Z 多核', '约 13800'),
+      SpecEntry('Cinebench R23 单核', '约 2075'),
+      SpecEntry('Geekbench 6 单核', '约 3030'),
+      SpecEntry('Cinebench R23 多核', '约 31500'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_u5_250kf_plus',
+    category: 'CPU',
+    brand: 'Intel',
+    model: '酷睿 Ultra 5 250KF Plus',
+    specs: [
+      SpecEntry('发行日期', '2026'),
+      SpecEntry('核心/线程', '18核18线程（6P+12E）'),
+      SpecEntry('基础/睿频', '4.2 / 5.3 GHz'),
+      SpecEntry('插槽', 'LGA1851'),
+      SpecEntry('三级缓存', '30MB'),
+      SpecEntry('默认TDP', '125W'),
+      SpecEntry('内存支持', 'DDR5-7200'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 865'),
+      SpecEntry('CPU-Z 多核', '约 13800'),
+      SpecEntry('Cinebench R23 单核', '约 2075'),
+      SpecEntry('Geekbench 6 单核', '约 3030'),
+      SpecEntry('Cinebench R23 多核', '约 31500'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_u5_225f',
+    category: 'CPU',
+    brand: 'Intel',
+    model: '酷睿 Ultra 5 225F',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('核心/线程', '10核10线程（6P+4E）'),
+      SpecEntry('基础/睿频', '3.3 / 4.9 GHz'),
+      SpecEntry('插槽', 'LGA1851'),
+      SpecEntry('三级缓存', '20MB'),
+      SpecEntry('默认TDP', '65W'),
+      SpecEntry('内存支持', 'DDR5-6400'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 805'),
+      SpecEntry('CPU-Z 多核', '约 7200'),
+      SpecEntry('Cinebench R23 单核', '约 1930'),
+      SpecEntry('Geekbench 6 单核', '约 2820'),
+      SpecEntry('Cinebench R23 多核', '约 16800'),
+    ],
+  ),
+
+  // ===== 2025-2026 新品补充：AMD 锐龙 9000X3D / 9000 / 7000 =====
+  HardwareSpec(
+    id: 'cpu_r9_9950x3d2',
+    category: 'CPU',
+    brand: 'AMD',
+    model: '锐龙 9 9950X3D2',
+    specs: [
+      SpecEntry('别名', '9950X3D V2'),
+      SpecEntry('发行日期', '2026'),
+      SpecEntry('核心/线程', '16核32线程'),
+      SpecEntry('基础/睿频', '4.3 / 5.6 GHz'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('三级缓存', '192MB（双 CCD 3D V-Cache）'),
+      SpecEntry('默认TDP', '200W'),
+      SpecEntry('内存支持', 'DDR5-5600'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 800'),
+      SpecEntry('CPU-Z 多核', '约 17300'),
+      SpecEntry('Cinebench R23 单核', '约 2000'),
+      SpecEntry('Geekbench 6 单核', '约 3000'),
+      SpecEntry('Cinebench R23 多核', '约 42800'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_r7_9850x3d',
+    category: 'CPU',
+    brand: 'AMD',
+    model: '锐龙 7 9850X3D',
+    specs: [
+      SpecEntry('发行日期', '2026'),
+      SpecEntry('核心/线程', '8核16线程'),
+      SpecEntry('基础/睿频', '4.7 / 5.6 GHz'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('三级缓存', '96MB（3D V-Cache）'),
+      SpecEntry('默认TDP', '120W'),
+      SpecEntry('内存支持', 'DDR5-5600'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 810'),
+      SpecEntry('CPU-Z 多核', '约 9600'),
+      SpecEntry('Cinebench R23 单核', '约 2025'),
+      SpecEntry('Geekbench 6 单核', '约 3040'),
+      SpecEntry('Cinebench R23 多核', '约 24300'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_r9_9900x3d',
+    category: 'CPU',
+    brand: 'AMD',
+    model: '锐龙 9 9900X3D',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('核心/线程', '12核24线程'),
+      SpecEntry('基础/睿频', '4.4 / 5.5 GHz'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('三级缓存', '128MB（3D V-Cache）'),
+      SpecEntry('默认TDP', '120W'),
+      SpecEntry('内存支持', 'DDR5-5600'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 795'),
+      SpecEntry('CPU-Z 多核', '约 13200'),
+      SpecEntry('Cinebench R23 单核', '约 1990'),
+      SpecEntry('Geekbench 6 单核', '约 2980'),
+      SpecEntry('Cinebench R23 多核', '约 32800'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_r5_9500f',
+    category: 'CPU',
+    brand: 'AMD',
+    model: '锐龙 5 9500F',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('核心/线程', '6核12线程'),
+      SpecEntry('基础/睿频', '3.8 / 5.0 GHz'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('三级缓存', '32MB'),
+      SpecEntry('默认TDP', '65W'),
+      SpecEntry('内存支持', 'DDR5-5600'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 780'),
+      SpecEntry('CPU-Z 多核', '约 6200'),
+      SpecEntry('Cinebench R23 单核', '约 1950'),
+      SpecEntry('Geekbench 6 单核', '约 2920'),
+      SpecEntry('Cinebench R23 多核', '约 15400'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'cpu_r5_7400f',
+    category: 'CPU',
+    brand: 'AMD',
+    model: '锐龙 5 7400F',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('核心/线程', '6核12线程'),
+      SpecEntry('基础/睿频', '3.7 / 4.7 GHz'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('三级缓存', '32MB'),
+      SpecEntry('默认TDP', '65W'),
+      SpecEntry('内存支持', 'DDR5-5200'),
+    ],
+    benchmarks: [
+      SpecEntry('CPU-Z 单核', '约 685'),
+      SpecEntry('CPU-Z 多核', '约 5600'),
+      SpecEntry('Cinebench R23 单核', '约 1710'),
+      SpecEntry('Geekbench 6 单核', '约 2480'),
+      SpecEntry('Cinebench R23 多核', '约 13500'),
+    ],
+  ),
+
+  // ===== 2025-2026 新品补充：显卡 =====
+  HardwareSpec(
+    id: 'gpu_rtx5090d',
+    category: '显卡',
+    brand: 'NVIDIA',
+    model: 'GeForce RTX 5090 D',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('显存', '32GB GDDR7'),
+      SpecEntry('位宽', '512-bit'),
+      SpecEntry('流处理器', '21760'),
+      SpecEntry('功耗', '575W'),
+      SpecEntry('建议电源', '1000W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 44500'),
+      SpecEntry('3DMark Fire Strike', '约 69000'),
+      SpecEntry('3DMark Port Royal', '约 36000'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rtx5090d_v2',
+    category: '显卡',
+    brand: 'NVIDIA',
+    model: 'GeForce RTX 5090 D V2',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('显存', '24GB GDDR7'),
+      SpecEntry('位宽', '384-bit'),
+      SpecEntry('流处理器', '21760'),
+      SpecEntry('功耗', '575W'),
+      SpecEntry('建议电源', '1000W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 43000'),
+      SpecEntry('3DMark Fire Strike', '约 67000'),
+      SpecEntry('3DMark Port Royal', '约 34500'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rtx5060ti_8g',
+    category: '显卡',
+    brand: 'NVIDIA',
+    model: 'GeForce RTX 5060 Ti 8GB',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('显存', '8GB GDDR7'),
+      SpecEntry('位宽', '128-bit'),
+      SpecEntry('流处理器', '4608'),
+      SpecEntry('功耗', '180W'),
+      SpecEntry('建议电源', '500W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 15800'),
+      SpecEntry('3DMark Fire Strike', '约 25200'),
+      SpecEntry('3DMark Port Royal', '约 7600'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rtx5050',
+    category: '显卡',
+    brand: 'NVIDIA',
+    model: 'GeForce RTX 5050',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('显存', '8GB GDDR6'),
+      SpecEntry('位宽', '128-bit'),
+      SpecEntry('流处理器', '2560'),
+      SpecEntry('功耗', '130W'),
+      SpecEntry('建议电源', '450W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 10200'),
+      SpecEntry('3DMark Fire Strike', '约 19000'),
+      SpecEntry('3DMark Port Royal', '约 4600'),
+    ],
+  ),
+  HardwareSpec(
+    id: 'gpu_rx9070gre',
+    category: '显卡',
+    brand: 'AMD',
+    model: 'Radeon RX 9070 GRE',
+    specs: [
+      SpecEntry('发行日期', '2025'),
+      SpecEntry('显存', '12GB GDDR6'),
+      SpecEntry('位宽', '192-bit'),
+      SpecEntry('流处理器', '3072'),
+      SpecEntry('功耗', '220W'),
+      SpecEntry('建议电源', '650W'),
+    ],
+    benchmarks: [
+      SpecEntry('3DMark Time Spy', '约 22000'),
+      SpecEntry('3DMark Fire Strike', '约 42000'),
+      SpecEntry('3DMark Port Royal', '约 11500'),
+    ],
+  ),
+
+  // ===== 2025-2026 新品补充：主板（B850 / X870 / B860）=====
+  HardwareSpec(
+    id: 'mb_b850m_tuf',
+    category: '主板',
+    brand: '华硕',
+    model: 'TUF GAMING B850M-PLUS WiFi',
+    specs: [
+      SpecEntry('芯片组', 'AMD B850'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('内存支持', 'DDR5-8000+（4槽）'),
+      SpecEntry('M.2 接口', '3个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '14+2+1相'),
+      SpecEntry('板型', 'M-ATX'),
+    ],
+    benchmarks: [],
+  ),
+  HardwareSpec(
+    id: 'mb_b850m_mortar',
+    category: '主板',
+    brand: '微星',
+    model: 'MAG B850M MORTAR WiFi',
+    specs: [
+      SpecEntry('芯片组', 'AMD B850'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('内存支持', 'DDR5-8200+（4槽）'),
+      SpecEntry('M.2 接口', '3个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '12+2+1相'),
+      SpecEntry('板型', 'M-ATX'),
+    ],
+    benchmarks: [],
+  ),
+  HardwareSpec(
+    id: 'mb_b850m_aorus_ice',
+    category: '主板',
+    brand: '技嘉',
+    model: 'B850M AORUS ELITE WiFi6E ICE',
+    specs: [
+      SpecEntry('芯片组', 'AMD B850'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('内存支持', 'DDR5-8200+（4槽）'),
+      SpecEntry('M.2 接口', '2个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '12+2+2相'),
+      SpecEntry('板型', 'M-ATX'),
+    ],
+    benchmarks: [],
+  ),
+  HardwareSpec(
+    id: 'mb_x870_tomahawk',
+    category: '主板',
+    brand: '微星',
+    model: 'MAG X870 TOMAHAWK WiFi',
+    specs: [
+      SpecEntry('芯片组', 'AMD X870'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('内存支持', 'DDR5-8400+（4槽）'),
+      SpecEntry('M.2 接口', '4个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '14+2+1相'),
+      SpecEntry('板型', 'ATX'),
+    ],
+    benchmarks: [],
+  ),
+  HardwareSpec(
+    id: 'mb_x870e_strix',
+    category: '主板',
+    brand: '华硕',
+    model: 'ROG STRIX X870E-E GAMING WiFi',
+    specs: [
+      SpecEntry('芯片组', 'AMD X870E'),
+      SpecEntry('插槽', 'AM5'),
+      SpecEntry('内存支持', 'DDR5-8400+（4槽）'),
+      SpecEntry('M.2 接口', '5个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '18+2+2相'),
+      SpecEntry('板型', 'ATX'),
+    ],
+    benchmarks: [],
+  ),
+  HardwareSpec(
+    id: 'mb_b860m_tuf',
+    category: '主板',
+    brand: '华硕',
+    model: 'TUF GAMING B860M-PLUS WiFi',
+    specs: [
+      SpecEntry('芯片组', 'Intel B860'),
+      SpecEntry('插槽', 'LGA1851'),
+      SpecEntry('内存支持', 'DDR5-8600+（4槽）'),
+      SpecEntry('M.2 接口', '3个（PCIe 5.0/4.0）'),
+      SpecEntry('供电', '12+1+2+1相'),
+      SpecEntry('板型', 'M-ATX'),
+    ],
+    benchmarks: [],
   ),
 ];

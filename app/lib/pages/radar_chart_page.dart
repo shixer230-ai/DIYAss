@@ -360,8 +360,9 @@ class _RadarChartPageState extends State<RadarChartPage>
             _explainLine(theme, '未上榜', '缺数据、或型号匹配不到硬件库的方案不上榜'),
             const SizedBox(height: 8),
             _explainHeader(theme, '六维雷达图（本页）'),
-            _explainLine(theme, '单核', '得分 = 该项跑分 ÷ 硬件库内最高分，满分 = 库里最强'),
-            _explainLine(theme, '多核 / 显卡', '得分 = 该项跑分 ÷ 硬件库内第 5 名，第 5 名记 100%，更强的会超过 100% 并高亮'),
+            _explainLine(theme, '单核', '融合 Geekbench 6（45%）+ Cinebench R23（35%）+ CPU-Z（20%），各自按库内最高分归一化后加权，避免单一工具偏科'),
+            _explainLine(theme, '多核', '融合 Cinebench R23（70%）+ CPU-Z（30%），各自按库内第 5 名归一化（缺 R23 时自动按 CPU-Z 兜底），超 100% 高亮'),
+            _explainLine(theme, '显卡', '3DMark Time Spy ÷ 库内第 5 名，第 5 名记 100%，更强的会超过 100% 并高亮'),
             _explainLine(theme, '功耗', '越低越满，${kPowerFull.round()}W 以内记满分，${kPowerCeiling.round()}W 记 0 分'),
             _explainLine(theme, '性价比', '综合性能（20% 单核 + 20% 多核 + 60% 显卡）÷ 相对价格，参考整机价 ${kValueRefPrice.round()} 元'),
             _explainLine(

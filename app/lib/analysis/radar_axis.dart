@@ -30,6 +30,7 @@ class RadarAxis {
     final s = _fmt(n);
     if (label == '功耗') return '${s}W';
     if (label == '性价比') return '综合 ${n.round()}';
+    if (label == '单核性能' || label == '多核性能') return '多基准 ${n.round()}';
     return s;
   }
 }
@@ -77,18 +78,29 @@ const int kTopRefRank = 5;
 /// 超过 100% 的得分上限（附加分最多显示到 200%）
 const double kMaxOverScore = 2.0;
 
+/// 单核多基准权重：降低 CPU-Z 占比（其对 Intel 偏高），以 Geekbench 6 与 Cinebench R23 为主
+const List<(String label, double weight)> kSingleBenchWeights = [
+  ('Geekbench 6 单核', 0.45),
+  ('Cinebench R23 单核', 0.35),
+  ('CPU-Z 单核', 0.20),
+];
+
+/// 多核多基准权重：以持续渲染负载 Cinebench R23 为主，CPU-Z 辅佐（缺 R23 时自动按可用项重分配权重）
+const List<(String label, double weight)> kMultiBenchWeights = [
+  ('Cinebench R23 多核', 0.70),
+  ('CPU-Z 多核', 0.30),
+];
+
 /// 计算一个方案在六维雷达图上的得分（0..1，越大越好）
+/// 单核融合 GB6 / R23 / CPU-Z，多核融合 R23 / CPU-Z，消除单一 CPU-Z 对 Intel 的偏科；
 /// 单核用最高分、多核/显卡用第 5 名做参照；功耗反向；性价比用加权综合性能；兼容性用 1-5 级
 List<RadarAxis> computeRadarScores(BuildPlan plan, List<HardwareSpec> lib) {
   final cpu = plan['cpu'];
   final gpu = plan['gpu'];
 
-  final single = cpu == null ? null : valueOf(cpu, 'CPU-Z 单核', lib);
-  final multi = cpu == null ? null : valueOf(cpu, 'CPU-Z 多核', lib);
+  final singleRatio = _cpuSingleRatio(cpu, lib);
+  final multiRatio = _cpuMultiRatio(cpu, lib);
   final gpuScore = gpu == null ? null : valueOf(gpu, '3DMark Time Spy', lib);
-
-  final maxSingle = _maxBench(lib, 'CPU-Z 单核');
-  final multiRef = _nthBench(lib, 'CPU-Z 多核', kTopRefRank);
   final gpuRef = _nthBench(lib, '3DMark Time Spy', kTopRefRank);
 
   final power = _planPower(plan, lib);
@@ -96,8 +108,8 @@ List<RadarAxis> computeRadarScores(BuildPlan plan, List<HardwareSpec> lib) {
   final total = plan.total;
 
   // 性能三项先归一化再放宽（幂运算压缩），中端硬件也能拿到较高分，满分仍为 100%
-  final s = _soften(_ratio(single, maxSingle));
-  final m = _soften(_ratioAbove(multi, multiRef));
+  final s = _soften(singleRatio ?? 0);
+  final m = _soften(multiRatio ?? 0);
   final g = _soften(_ratioAbove(gpuScore, gpuRef));
 
   // 性价比用放宽后的综合性能，让「性价比」轴一并变宽松
@@ -107,14 +119,14 @@ List<RadarAxis> computeRadarScores(BuildPlan plan, List<HardwareSpec> lib) {
     RadarAxis(
       label: '单核性能',
       score: s,
-      rawText: single == null ? '—' : _fmt(single),
-      numValue: single,
+      rawText: singleRatio == null ? '—' : '多基准 ${(singleRatio * 100).round()}',
+      numValue: singleRatio == null ? null : singleRatio * 100,
     ),
     RadarAxis(
       label: '多核性能',
       score: m,
-      rawText: multi == null ? '—' : _fmt(multi),
-      numValue: multi,
+      rawText: multiRatio == null ? '—' : '多基准 ${(multiRatio * 100).round()}',
+      numValue: multiRatio == null ? null : multiRatio * 100,
     ),
     RadarAxis(
       label: '显卡性能',
@@ -170,23 +182,20 @@ CompatLevel computeCompatLevel(BuildPlan plan, List<HardwareSpec> lib) {
 /// 游戏与综合类维度用「短板打底、强项加成」，避免顶级显卡配差 CPU 时虚高；
 /// 三级缓存（如 3D V-Cache）对游戏帧率影响明显，故游戏与综合维度给其一定权重
 List<RadarAxis> computeCapabilityScores(BuildPlan plan, List<HardwareSpec> lib) {
-  final single = plan['cpu'] == null ? null : valueOf(plan['cpu']!, 'CPU-Z 单核', lib);
-  final multi = plan['cpu'] == null ? null : valueOf(plan['cpu']!, 'CPU-Z 多核', lib);
+  final cpu = plan['cpu'];
   final gpu = plan['gpu'] == null ? null : valueOf(plan['gpu']!, '3DMark Time Spy', lib);
   final vram = _specNum(plan['gpu'], '显存', lib);
   final ramGb = _specNum(plan['ram'], '容量', lib);
-  final l3 = _specNum(plan['cpu'], '三级缓存', lib); // CPU 三级缓存容量（MB）
+  final l3 = _specNum(cpu, '三级缓存', lib); // CPU 三级缓存容量（MB）
 
-  final maxSingle = _maxBench(lib, 'CPU-Z 单核');
-  final multiRef = _nthBench(lib, 'CPU-Z 多核', kTopRefRank);
   final gpuRef = _nthBench(lib, '3DMark Time Spy', kTopRefRank);
   final maxVram = _maxSpecNum(lib, '显卡', '显存');
   final maxRam = _maxSpecNum(lib, '内存', '容量');
   final maxL3 = _maxSpecNum(lib, 'CPU', '三级缓存');
 
-  // 各输入项归一化：单核/显存/内存/三级缓存用最高分，多核/显卡用第 5 名（可超 100%）
-  final s = _ratio(single, maxSingle); // 单核
-  final m = _ratioAbove(multi, multiRef); // 多核
+  // 各输入项归一化：单核/多核采用多基准融合，消除单一 CPU-Z 偏科；显存/内存/三级缓存用最高分
+  final s = _cpuSingleRatio(cpu, lib) ?? 0.0; // 单核（GB6 + R23 + CPU-Z）
+  final m = _cpuMultiRatio(cpu, lib) ?? 0.0; // 多核（R23 + CPU-Z）
   final g = _ratioAbove(gpu, gpuRef); // 显卡
   final v = _ratio(vram, maxVram); // 显存
   final r = _ratio(ramGb, maxRam); // 内存容量
@@ -236,6 +245,43 @@ List<RadarAxis> computeCapabilityScores(BuildPlan plan, List<HardwareSpec> lib) 
     cap('AI 创作', 0.45 * g + 0.35 * v + 0.2 * r),
     cap('稳定性', 0.7 * compat + 0.3 * powerScore),
   ];
+}
+
+/// CPU 单核多基准归一化得分（0..1）：融合 Geekbench 6 / Cinebench R23 / CPU-Z；
+/// 仅对当前 CPU 具备的跑分项按原权重比例重归一化，兼容只填了单项的自定义 CPU
+double? _cpuSingleRatio(PlanComponent? cpu, List<HardwareSpec> lib) {
+  if (cpu == null) return null;
+  var weightedSum = 0.0;
+  var totalWeight = 0.0;
+  for (final (label, weight) in kSingleBenchWeights) {
+    final val = valueOf(cpu, label, lib);
+    final maxVal = _maxBench(lib, label);
+    if (val != null && maxVal != null && maxVal > 0) {
+      weightedSum += _clamp(val / maxVal) * weight;
+      totalWeight += weight;
+    }
+  }
+  if (totalWeight <= 0) return null;
+  return _clamp(weightedSum / totalWeight);
+}
+
+/// CPU 多核多基准归一化得分（允许超过 1.0，上限 kMaxOverScore）：
+/// 融合 Cinebench R23 多核（70%）与 CPU-Z 多核（30%），各按库内第 N 名归一化；
+/// 老款或自定义 CPU 缺少 R23 多核时自动按 CPU-Z 多核兜底
+double? _cpuMultiRatio(PlanComponent? cpu, List<HardwareSpec> lib) {
+  if (cpu == null) return null;
+  var weightedSum = 0.0;
+  var totalWeight = 0.0;
+  for (final (label, weight) in kMultiBenchWeights) {
+    final val = valueOf(cpu, label, lib);
+    final ref = _nthBench(lib, label, kTopRefRank);
+    if (val != null && ref != null && ref > 0) {
+      weightedSum += _ratioAbove(val, ref) * weight;
+      totalWeight += weight;
+    }
+  }
+  if (totalWeight <= 0) return null;
+  return (weightedSum / totalWeight).clamp(0.0, kMaxOverScore).toDouble();
 }
 
 /// 读取某配件某规格条目的数值（如「额定功率」「建议电源」「供电」），找不到返回 null

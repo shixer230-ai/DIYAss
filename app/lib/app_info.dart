@@ -2,7 +2,7 @@
 // 版本号与署名在此统一维护，避免多处写死
 
 /// 当前对外版本号（显示在「我的」页）
-const String kAppVersion = '4.1.1';
+const String kAppVersion = '4.1.2';
 
 /// 捐赠/增加云服务额度的赞助链接（爱发电等网页）；留空时「增加云服务额度」会提示未配置
 const String kDonateUrl = 'https://afdian.com/a/DIYAss';
@@ -16,6 +16,11 @@ class VersionLogEntry {
 }
 
 const List<VersionLogEntry> kVersionLog = [
+  VersionLogEntry('4.1.2', [
+    '硬件库新增 20 款 2025–2026 国内在售主流新品（Ultra 7 270K Plus / 250K Plus / 9850X3D / 9950X3D2 / 9500F / RTX 5090 D / RX 9070 GRE / B850·X870·B860 主板等），并支持无空格模糊搜索',
+    '重做硬件名称匹配与截图导入识别算法：兼容无前缀（RTX5080 / R7 9850X3D）、非公长名、1T/16G 简写，并防止相似型号串号',
+    '优化六维雷达图 CPU 算法：单核融合 Geekbench 6 / R23 / CPU-Z，多核融合 R23 / CPU-Z，消除单一 CPU-Z 偏科',
+  ]),
   VersionLogEntry('4.1.1', [
     '新增一键「复制型号」：整机方案、硬件详情、云方案、清单、雷达图页均可快速复制查价',
     '预置 5 套方案及热门配件补入市场参考价（浅色标记，点击改为实付价即切换正常样式）',

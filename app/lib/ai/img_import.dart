@@ -122,6 +122,7 @@ Future<BuildPlan?> importPlanFromGallery(BuildContext context) async {
 }
 
 /// 识别单张图片：OCR → 规则解析 →（不够再）云端兜底 → 型号对齐
+/// 若未登录或云端失败，但本地已识别出硬件（例如单张显卡商品截图），直接返回本地结果不报错
 Future<List<PlanComponent>> _recognizePath(String path) async {
   final text = (await ocrImagePath(path)).trim();
   if (text.isEmpty) return const [];
@@ -131,7 +132,16 @@ Future<List<PlanComponent>> _recognizePath(String path) async {
   if (parsed.enough) {
     items = parsed.items;
   } else {
-    items = await parseViaCloud(text);
+    try {
+      final cloudItems = await parseViaCloud(text);
+      items = cloudItems.isNotEmpty ? cloudItems : parsed.items;
+    } catch (_) {
+      if (parsed.items.isNotEmpty) {
+        items = parsed.items;
+      } else {
+        rethrow;
+      }
+    }
   }
   return items.map((c) => _alignToLib(c, lib)).toList();
 }

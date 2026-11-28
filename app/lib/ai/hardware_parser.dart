@@ -1,3 +1,4 @@
+import '../analysis/hardware_matcher.dart';
 import '../models/build_plan.dart';
 import '../models/hardware_spec.dart';
 
@@ -8,24 +9,15 @@ class ParseResult {
   const ParseResult(this.items, this.enough);
 }
 
-/// 从 OCR 文本里用规则匹配本地硬件库，提取硬件条目
-/// 匹配策略：本地库里 model 名（规范化后）完整出现在文本里即命中
-/// 价格不在此提取（电商截图价格与商品的对应关系不可靠），统一填 0 让用户在方案里改
+/// 从 OCR 文本里用智能规则匹配本地硬件库，提取硬件条目：
+/// - 自动兼容无前缀（RTX5080 / 9850X3D / 14700K）、无空格、非公长名、容量简写（1T/16G）等写法
+/// - 价格不在此提取（电商截图价格与商品的对应关系不可靠），统一填 0 让用户在方案里改
 ParseResult parseHardwareFromText(String text, List<HardwareSpec> lib) {
-  final normText = _norm(text);
+  final matched = extractSpecsFromText(text, lib);
   final items = <PlanComponent>[];
   final seenCategories = <String>{};
-  final seen = <String>{};
 
-  for (final spec in lib) {
-    final normModel = _norm(spec.model);
-    // 型号太短不匹配，避免把「i5」「M2」这类短词误判成型号
-    if (normModel.length < 3) continue;
-    if (!normText.contains(normModel)) continue;
-    final key = '${spec.category}|$normModel';
-    if (seen.contains(key)) continue;
-    seen.add(key);
-
+  for (final spec in matched) {
     items.add(PlanComponent(
       category: spec.category,
       brand: spec.brand,
@@ -38,5 +30,3 @@ ParseResult parseHardwareFromText(String text, List<HardwareSpec> lib) {
 
   return ParseResult(items, seenCategories.length >= 2);
 }
-
-String _norm(String s) => s.toLowerCase().replaceAll(RegExp(r'\s+'), '');
